@@ -8,6 +8,8 @@ export default class Modules extends Component {
             // Dummy Data for Modules with Todos
             { name: "Test", color: "#d6cbd3", todos: ['clean', 'swim'] },
             { name: "Another", color: "#eca1a6", todos: ['do', 'this', 'later'] },
+            { name: "Farhan", color: "lightblue", todos: ['do', 'this', 'later'] },
+            { name: "Peter", color: "blue", todos: ['be nice', 'be more nice', 'program', 'do more stuff'] },
             { name: "Sport", color: "pink", todos: ['running', 'marathon', '5K','10K','15k'] },
             { name: "Help", color: "#e3eaa7", todos: ['do', 'this', 'later'] },
         ]
