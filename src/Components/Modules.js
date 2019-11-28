@@ -3,7 +3,7 @@ import SingleModule from './SingleModule';
 import UpperView from './UpperView';
 
 //#Check Pre defined standard colors, maybe change position later
-const areaColors = ['rgba(217, 234, 247, 0.6)', '#dcf2e2', '#e8e7d5', '#e8d9c9', '#f7d9dc'];
+const areaColors = ['rgba(217, 234, 247, 0.5)', 'rgba(220, 242, 226, 0.4)', 'rgba(232, 231, 213, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 217, 220, 0.6)'];
 const areaColorLength = areaColors.length;
 
 export default class Modules extends Component {
@@ -13,7 +13,7 @@ export default class Modules extends Component {
             //#Check Dummy Data for Modules with Todos
             { name: "Not Relevant", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
             { name: "Another", color: areaColors[(1 % areaColorLength)], todos: ['do', 'this', 'later'] },
-            { name: "Farhan", color: areaColors[(2 % areaColorLength)], todos: ['hang myself', 'do', 'this', 'later'] },
+            { name: "Farhan", color: areaColors[(2 % areaColorLength)], todos: ['do', 'this', 'later'] },
             { name: "Peter", color: areaColors[(3 % areaColorLength)], todos: ['be nice', 'be more nice', 'program', 'do more stuff'] },
             { name: "Sport", color: areaColors[(4 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
             { name: "Help", color: areaColors[(5 % areaColorLength)], todos: ['do', 'this', 'later'] },

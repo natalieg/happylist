@@ -29,7 +29,7 @@ body {
 .areaOverview {
     background-color: rgba(236, 232, 222, 0.733);
     padding: 5px;
-    width: 100%;
+    width: 100vw;
     position: relative;
     left: 0;
     margin-bottom: 20px;
@@ -43,6 +43,9 @@ body {
 }
 
 .moduleOverview {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 10px 10px 0px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -58,16 +61,11 @@ body {
     padding: 10px;
     text-align: center;
     max-height: 400px;
-}
-
-.todoItemContainer {
-    background-color: white;
-    border: 5px solid white;
-    border-radius: $areaBorder;
-    margin-top: 10px;
-    height: 200px;
-    overflow-y: auto;
-
+    
+    h2 {
+        margin: 0;
+    }
+ 
     // Scrollbar
     /* width */
     ::-webkit-scrollbar {
@@ -89,6 +87,33 @@ body {
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: darken($backcolor, $amount: 20);
+    }
+}
+
+.areaSummary {
+    margin-top: 0%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid darken($backcolor, $amount: 20);
+}
+
+.todoItemContainer {
+    background-color: white;
+    border: 10px solid white;
+    border-radius: $areaBorder;
+    margin-top: 10px;
+    height: 200px;
+    overflow-y: auto;
+    p {
+        padding: 2px;
+        margin: 4px;
+        transition: .5s;
+    }
+    p::before {
+        content: 'o '
+    }
+    p:hover {
+        background-color: lighten($backcolor, $amount: 20);
+        border-radius: 4px;
     }
 }
 
