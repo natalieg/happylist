@@ -3,7 +3,7 @@ import SingleModule from './SingleModule';
 import UpperView from './UpperView';
 
 //#Check Pre defined standard colors, maybe change position later
-const areaColors = ['#bae1ff', '#baffc9', '#ffffba', '#ffdfba', '#ffb3ba'];
+const areaColors = ['rgba(217, 234, 247, 0.6)', '#dcf2e2', '#e8e7d5', '#e8d9c9', '#f7d9dc'];
 const areaColorLength = areaColors.length;
 
 export default class Modules extends Component {
@@ -11,7 +11,7 @@ export default class Modules extends Component {
     state = {
         modules: [
             //#Check Dummy Data for Modules with Todos
-            { name: "Test", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
+            { name: "Not Relevant", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
             { name: "Another", color: areaColors[(1 % areaColorLength)], todos: ['do', 'this', 'later'] },
             { name: "Farhan", color: areaColors[(2 % areaColorLength)], todos: ['hang myself', 'do', 'this', 'later'] },
             { name: "Peter", color: areaColors[(3 % areaColorLength)], todos: ['be nice', 'be more nice', 'program', 'do more stuff'] },
