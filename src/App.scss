@@ -1,3 +1,16 @@
+body {
+    text-align: center;
+    max-width: 1200px;
+}
+
+// $areacolor-list: #bae1ff #baffc9 #ffffba #ffdfba #ffb3ba #bae1ff;
+
+// @each $current-color in $areacolor-list {
+//     $i: index($areacolor-list, $current-color);
+//     #singleModule-#{$i} {
+//         background-color: $current-color;
+//     }
+// }
 
 .moduleOverview {
     display: flex;
@@ -7,11 +20,18 @@
 
 .singleModule {
     background-color: rgb(233, 178, 178);
-    width: 30%;
+    width: 20%;
     min-width: 200px;
     margin: 10px;
     padding: 10px;
     text-align: center;
+    max-height: 400px;
+}
+
+.todoItemContainer {
+    overflow-y: auto;
+    height: 200px;
+    margin-top: 10px;
 }
 
 .intro {
