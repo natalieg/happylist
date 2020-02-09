@@ -3,7 +3,7 @@ import SingleModule from './SingleModule';
 import UpperView from './UpperView';
 
 //#Check Pre defined standard colors, maybe change position later
-const areaColors = ['rgba(217, 234, 247, 0.5)', 'rgba(220, 242, 226, 0.4)', 'rgba(232, 231, 213, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 217, 220, 0.6)'];
+const areaColors = ['rgba(168, 201, 226, 0.5)', 'rgba(190, 234, 202, 0.4)', 'rgba(245, 242, 189, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 190, 196, 0.6)'];
 const areaColorLength = areaColors.length;
 
 export default class Modules extends Component {
