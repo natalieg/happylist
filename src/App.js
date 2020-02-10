@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Modules from './Components/Modules'
+import Areas from './Components/Areas'
 import './App.scss';
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        <Modules/>
+        <Areas/>
       </div>
     )
   }
