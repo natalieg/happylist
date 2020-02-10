@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function SingleModule(props) {
+export default function SingleArea(props) {
     return (
         <div id={props.id} style={{backgroundColor: props.color}} className={props.className}>
             <h2>{props.name}</h2>

@@ -21,7 +21,7 @@ body {
 
 // @each $current-color in $areacolor-list {
 //     $i: index($areacolor-list, $current-color);
-//     #singleModule-#{$i} {
+//     #singleArea-#{$i} {
 //         background-color: $current-color;
 //     }
 // }
@@ -51,7 +51,7 @@ body {
     flex-wrap: wrap;
 }
 
-.singleModule {
+.singleArea {
     //background-color: rgb(233, 178, 178);
     box-shadow: 2px 2px 10px 0px rgb(88, 88, 88);
     border-radius: $areaBorder;

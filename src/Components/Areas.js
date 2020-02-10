@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SingleModule from './SingleModule';
+import SingleArea from './SingleArea';
 import UpperView from './UpperView';
 
 //#Check Pre defined standard colors, maybe change position later
@@ -49,7 +49,7 @@ export default class Areas extends Component {
             })
 
             return (
-                <SingleModule id={`singleModule-${index + 1}`} className='singleModule' key={index} btnValue={index} click={this.addTodo} color={module.color} name={module.name} taskcount={taskcount} tasks={displayTodos} />
+                <SingleArea id={`singleArea-${index + 1}`} className='singleArea' key={index} btnValue={index} click={this.addTodo} color={module.color} name={module.name} taskcount={taskcount} tasks={displayTodos} />
             )
         })
 
