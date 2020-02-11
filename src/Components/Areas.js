@@ -11,12 +11,11 @@ export default class Areas extends Component {
     state = {
         areas: [
             //#Check Dummy Data for areas with Todos
-            { name: "Not Relevant", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
+            { name: "Very Relevant", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
             { name: "Another", color: areaColors[(1 % areaColorLength)], todos: ['do', 'this', 'later'] },
-            { name: "Farhan", color: areaColors[(2 % areaColorLength)], todos: ['do', 'this', 'later'] },
-            { name: "Peter", color: areaColors[(3 % areaColorLength)], todos: ['be nice', 'be more nice', 'program', 'do more stuff'] },
-            { name: "Sport", color: areaColors[(4 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
-            { name: "Help", color: areaColors[(5 % areaColorLength)], todos: ['do', 'this', 'later'] },
+            { name: "Sport", color: areaColors[(2 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
+            { name: "Sport", color: areaColors[(3 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
+            { name: "Help", color: areaColors[(4 % areaColorLength)], todos: ['do', 'this', 'later'] },
         ],
         allTodoCount: 0,
         dummyCounter: 0
