@@ -11,8 +11,8 @@ const dummyUser = "User22";
  it will be changed to a Logged in User once we have a 
  Login Function
  */
-router.get('/areas', async(req,res,next)=>{
-    let currentUser = await AreaModel.findOne({name: dummyUser});
+router.get('/areas', async (req, res, next) => {
+    let currentUser = await AreaModel.findOne({ name: dummyUser });
     console.log(currentUser.email)
     res.send(currentUser.areas)
 })
@@ -46,6 +46,24 @@ router.post('/newUser', (req, res, next) => {
             console.log(err)
             res.send({ msg: err })
         })
+})
+
+// Create New Area
+router.post('/newArea', (req, res, next) => {
+    let { areaTitle, color, priority, date } = req.body;
+    let newArea = {
+        areaTitle: areaTitle,
+        color: color,
+        priority: priority
+    }
+    AreaModel.findOneAndUpdate({ name: dummyUser }, { $push: { areas: newArea } }, {
+        new: true
+    }).then(response => {
+        console.log(response)
+    }).catch(err => {
+        console.log(err)
+    })
+    res.send("Added Are")
 })
 
 module.exports = router;

@@ -16,6 +16,7 @@ export default class Areas extends Component {
         dummyCounter: 0
     }
 
+    // Loading Areas 
     componentDidMount = async () => {
         this.setState({isLoading: true})
         await apis.getAreaList().then(response => {
