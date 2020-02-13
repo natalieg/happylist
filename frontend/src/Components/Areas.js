@@ -51,7 +51,7 @@ export default class Areas extends Component {
             let taskcount = this.state.areas[index].todos.length;
             allTaskCount = allTaskCount + taskcount;
             let displayTodos = this.state.areas[index].todos.map((todo, ind) => {
-                return <p key={ind}>{todo}</p>
+                return <p key={ind}>{todo.todoName}</p>
             })
 
             return (

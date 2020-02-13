@@ -17,12 +17,6 @@ router.get('/areas', async (req, res, next) => {
     res.send(currentUser.areas)
 })
 
-
-// Test Display
-router.get('/hello', (req, res, next) => {
-    res.send("HI")
-})
-
 // Create New User
 router.post('/newUser', (req, res, next) => {
     let { name, email, password, areas } = req.body;
@@ -48,7 +42,7 @@ router.post('/newUser', (req, res, next) => {
         })
 })
 
-// Create New Area
+// Create new Area
 router.post('/newArea', (req, res, next) => {
     let { areaTitle, color, priority, date } = req.body;
     let newArea = {
@@ -64,6 +58,34 @@ router.post('/newArea', (req, res, next) => {
         console.log(err)
     })
     res.send("Added Are")
+})
+
+// Create new ToDo
+router.post('/newTodo', async (req, res, next) => {
+    let { areaTitle, todoName, parts, partName, time, difficulty } = req.body;
+    let newTodo = {
+        todoName: todoName,
+        parts: parts,
+        partName: partName,
+        time: time,
+        difficulty: difficulty
+    }
+    let updatedAreas = []
+    let user = await AreaModel.findOne({ name: dummyUser });
+    user.areas.forEach(area => {
+        if (area.areaTitle === areaTitle) {
+            area.todos.push(newTodo)
+        }
+        updatedAreas.push(area)
+    });
+    AreaModel.findOneAndUpdate({ name: dummyUser }, { areas: updatedAreas }, {
+        new: true
+    }).then(response => {
+            console.log(response)
+        }).catch(err => {
+            console.log(err)
+        })
+    res.send("YAI")
 })
 
 module.exports = router;
