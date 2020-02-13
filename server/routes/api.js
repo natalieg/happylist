@@ -3,7 +3,20 @@ var router = express.Router();
 const AreaModel = require('../models/AreaModel');
 const uuid = require('uuid');
 
-// TODO Get Areas from DB
+const dummyUser = "User22";
+
+/* TODO Get Areas from DB
+ Get Areas for Logged in User
+ TODO: Right now we are using a {dummyUser} for the User 
+ it will be changed to a Logged in User once we have a 
+ Login Function
+ */
+router.get('/areas', async(req,res,next)=>{
+    let currentUser = await AreaModel.findOne({name: dummyUser});
+    console.log(currentUser.email)
+    res.send(currentUser.areas)
+})
+
 
 // Test Display
 router.get('/hello', (req, res, next) => {

@@ -26,6 +26,9 @@ const areaSchema = new Schema({
     areaTitle: {
         type: String
     },
+    color: {
+        type: String
+    },
     priority: {
         type: String
     },

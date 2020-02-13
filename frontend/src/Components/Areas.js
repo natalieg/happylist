@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SingleArea from './SingleArea';
 import UpperView from './UpperView';
+import apis from '../api'
 
 //#Check Pre defined standard colors, maybe change position later
 const areaColors = ['rgba(168, 201, 226, 0.5)', 'rgba(190, 234, 202, 0.4)', 'rgba(245, 242, 189, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 190, 196, 0.6)'];
@@ -9,16 +10,21 @@ const areaColorLength = areaColors.length;
 export default class Areas extends Component {
 
     state = {
-        areas: [
-            //#Check Dummy Data for areas with Todos
-            { name: "Very Relevant", color: areaColors[(0 % areaColorLength)], todos: ['clean', 'swim'] },
-            { name: "Another", color: areaColors[(1 % areaColorLength)], todos: ['do', 'this', 'later'] },
-            { name: "Sport", color: areaColors[(2 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
-            { name: "Sport", color: areaColors[(3 % areaColorLength)], todos: ['running', 'marathon', '5K', '10K', '15k'] },
-            { name: "Help", color: areaColors[(4 % areaColorLength)], todos: ['do', 'this', 'later'] },
-        ],
+        areas: [],
+        isLoading: false,
         allTodoCount: 0,
         dummyCounter: 0
+    }
+
+    componentDidMount = async () => {
+        this.setState({isLoading: true})
+        await apis.getAreaList().then(response => {
+            console.log(response.data)
+            this.setState({
+                areas: response.data,
+                isLoading:false
+            })
+        })
     }
 
 
@@ -48,7 +54,7 @@ export default class Areas extends Component {
             })
 
             return (
-                <SingleArea id={`singleArea-${index + 1}`} className='singleArea' key={index} btnValue={index} click={this.addTodo} color={module.color} name={module.name} taskcount={taskcount} tasks={displayTodos} />
+                <SingleArea id={`singleArea-${index + 1}`} className='singleArea' key={index} btnValue={index} click={this.addTodo} color={module.color} name={module.areaTitle} taskcount={taskcount} tasks={displayTodos} />
             )
         })
 
