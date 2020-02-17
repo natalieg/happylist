@@ -1,6 +1,8 @@
 $areaBorder: 20px;
 //$backcolor: #ACB2AE;
 $backcolor: rgb(177, 160, 145);
+$buttonMargin: 4px;
+$biggerFont: 1.3em;
 
 body {
     text-align: center;
@@ -25,6 +27,11 @@ body {
 //         background-color: $current-color;
 //     }
 // }
+
+button {
+    font-size: $biggerFont;
+    margin: $buttonMargin
+}
 
 .areaOverview {
     background-color: rgba(236, 232, 222, 0.733);
@@ -88,6 +95,15 @@ body {
     ::-webkit-scrollbar-thumb:hover {
         background: darken($backcolor, $amount: 20);
     }
+    input {
+        width: 90%;
+        margin: $buttonMargin;
+        font-size: $biggerFont
+    }
+}
+
+.newArea {
+    background-color: rgba(79, 161, 127, 0.466);
 }
 
 .areaSummary {
