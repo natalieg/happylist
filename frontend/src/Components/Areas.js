@@ -53,6 +53,7 @@ export default class Areas extends Component {
 
     setNewActive = () => {
         this.setState({newAreaActive: true})
+        console.log("State is", this.state.newAreaActive)
     }
 
     setNewInactive = () => {
@@ -80,7 +81,7 @@ export default class Areas extends Component {
                 {/* #TODO Otherwise show areas that already exist */}
                 <Navbar name="Add Area" click={this.setNewActive}/>
                 <div className='moduleOverview'>
-                    <NewArea visible={this.state.newAreaActive} hide={this.setNewInactive}/>
+                    <NewArea visible={this.state.newAreaActive}/>
                     {displayareas}
                 </div>
             </div>
