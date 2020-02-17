@@ -28,6 +28,30 @@ body {
 //     }
 // }
 
+.navbar {
+    background-color: rgb(62, 62, 66);
+    color: white;
+    
+    a {
+        padding: 5px;
+        color: white;
+        text-decoration: none;
+        transition: .5s;
+    }
+    a:hover {
+        background-color: white;
+        color: rgb(62, 62, 66);
+    }
+    ul {
+        margin: 0;
+        li {
+            padding: 5px;
+            list-style-type: none;
+    
+        }
+    }
+}
+
 button {
     font-size: $biggerFont;
     margin: $buttonMargin
@@ -39,7 +63,7 @@ button {
     width: 100vw;
     position: relative;
     left: 0;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
     box-shadow: 2px 2px 10px 0px rgb(88, 88, 88);
 
     h1 {
