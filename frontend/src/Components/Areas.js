@@ -51,8 +51,9 @@ export default class Areas extends Component {
         this.setState({ areas: allareas });
     }
 
-    setNewActive = () => {
-        this.setState({newAreaActive: true})
+    toggleActive = () => {
+        const visible = this.state.newAreaActive;
+        this.setState({newAreaActive: !visible})
         console.log("State is", this.state.newAreaActive)
     }
 
@@ -79,9 +80,9 @@ export default class Areas extends Component {
             <div>
                 <UpperView areaCount={this.state.areas.length} allTodoCount={this.state.allTaskCount} />
                 {/* #TODO Otherwise show areas that already exist */}
-                <Navbar name="Add Area" click={this.setNewActive}/>
+                <Navbar name={this.state.newAreaActive ? "Cancel New Area" : "Add Area"} click={this.toggleActive}/>
                 <div className='moduleOverview'>
-                    <NewArea visible={this.state.newAreaActive}/>
+                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive}/> : null}
                     {displayareas}
                 </div>
             </div>
