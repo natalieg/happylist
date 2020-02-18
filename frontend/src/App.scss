@@ -166,3 +166,20 @@ button {
     text-align: center;
     padding: 50px;
 }
+
+
+// Animation 
+
+.ani1 {
+    opacity: 1;
+    height: 0px;
+    overflow: hidden;
+    transition: height .5s ease-in;
+}
+
+.ani2 {
+    opacity: 1;
+    height: 160px;
+    overflow: hidden;
+    transition: height .5s ease-in;
+}

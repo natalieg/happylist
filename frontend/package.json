@@ -9,12 +9,16 @@
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-animations": "^1.0.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-transition-group": "^1.2.1",
     "redux": "^4.0.4",
     "sass-loader": "^8.0.0",
-    "style-loader": "^1.0.0"
+    "style-loader": "^1.0.0",
+    "styled-components": "^5.0.1"
   },
   "scripts": {
     "start": "PORT=3010 react-scripts start",
