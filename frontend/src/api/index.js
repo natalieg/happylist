@@ -5,9 +5,11 @@ const api = axios.create({
 })
 
 const getAreaList = () => api.get('/areas')
+const sendNewArea = (data) => api.post('/newArea', data)
 
 const apis = {
-    getAreaList
+    getAreaList,
+    sendNewArea
 }
 
 export default apis

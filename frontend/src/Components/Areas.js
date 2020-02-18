@@ -31,6 +31,16 @@ export default class Areas extends Component {
         })
     }
 
+    handleLoadData = async () => {
+        await apis.getAreaList().then(response => {
+            console.log(response.data)
+            this.setState({
+                areas: response.data,
+                isLoading: false
+            })
+        })
+    }
+
     countTodosFunction = () => {
         let countTodos = 0;
         this.state.areas.forEach(element => {
@@ -82,7 +92,7 @@ export default class Areas extends Component {
                 {/* #TODO Otherwise show areas that already exist */}
                 <Navbar name={this.state.newAreaActive ? "Cancel New Area" : "Add Area"} click={this.toggleActive}/>
                 <div className='moduleOverview'>
-                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive}/> : null}
+                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData}/> : null}
                     {displayareas}
                 </div>
             </div>
