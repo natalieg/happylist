@@ -14,11 +14,9 @@ const todoSchema = {
     },
     time: {
         type: Number,
-        require: true
     },
     difficulty: {
         type: String,
-        require: true
     }
 }
 

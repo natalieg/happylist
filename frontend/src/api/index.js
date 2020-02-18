@@ -6,10 +6,12 @@ const api = axios.create({
 
 const getAreaList = () => api.get('/areas')
 const sendNewArea = (data) => api.post('/newArea', data)
+const sendNewTodo = (data) => api.post('/newTodo', data)
 
 const apis = {
     getAreaList,
-    sendNewArea
+    sendNewArea,
+    sendNewTodo
 }
 
 export default apis

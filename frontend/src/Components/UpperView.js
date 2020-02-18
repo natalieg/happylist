@@ -4,7 +4,6 @@ import Welcome from './Welcome'
 
 export default function UpperView(props) {
     let hasAreas = false;
-    console.log(props.allTodoCount)
     if (props.areaCount > 0) hasAreas = true;
 
     if (hasAreas) {

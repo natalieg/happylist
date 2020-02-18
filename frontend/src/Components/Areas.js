@@ -22,7 +22,7 @@ export default class Areas extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
         await apis.getAreaList().then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.setState({
                 areas: response.data,
                 isLoading: false

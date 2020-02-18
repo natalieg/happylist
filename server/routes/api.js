@@ -57,7 +57,7 @@ router.post('/newArea', (req, res, next) => {
     }).catch(err => {
         console.log(err)
     })
-    res.send("Added Are")
+    res.send("Added Area")
 })
 
 // Create new ToDo
@@ -86,6 +86,20 @@ router.post('/newTodo', async (req, res, next) => {
             console.log(err)
         })
     res.send("YAI")
+})
+
+// Load all Todos for one Area
+router.get('/getTodos', async (req, res, next) => {
+    let user = await AreaModel.findOne({ name: dummyUser });
+    let {areaTitle} = req.body;
+    let todoList = [];
+    user.areas.forEach(area => {
+        if(area.areaTitle === areaTitle){
+            console.log("Found the Area")
+            todoList.push(area.todos)  
+        }
+    })
+    res.send(todoList)
 })
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import NewTodo from './NewTodo'
-
+import apis from '../api'
 
 export default class SingleArea extends Component {
     constructor(props) {
@@ -35,7 +35,7 @@ export default class SingleArea extends Component {
                 <p className='areaSummary'>Tasks: {this.state.area.taskcount}</p>
                 <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
           
-                    {this.state.newTodoVisible ? <NewTodo divClass={this.state.newTodoCss} /> : null}
+                    {this.state.newTodoVisible ? <NewTodo divClass={this.state.newTodoCss} areaTitle={this.state.area.areaName}/> : null}
    
                 <div className='todoItemContainer'>
                     {this.state.area.tasks.length > 0 ? this.state.area.tasks : "No Tasks!"}
