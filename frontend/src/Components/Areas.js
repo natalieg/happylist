@@ -51,10 +51,10 @@ export default class Areas extends Component {
         this.setState({ areas: allareas });
     }
 
+    // Toggles if the form for New Area is visible or not
     toggleActive = () => {
         const visible = this.state.newAreaActive;
         this.setState({newAreaActive: !visible})
-        console.log("State is", this.state.newAreaActive)
     }
 
     setNewInactive = () => {

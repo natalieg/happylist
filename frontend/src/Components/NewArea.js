@@ -11,11 +11,6 @@ export default class NewArea extends Component {
             priority: '',
             cancelClick: props.cancelClick
         }
-
-    }
-
-    setVisibleFalse = () => {
-        this.state.visible = false;
     }
 
     render() {
