@@ -33,7 +33,9 @@ export default class SingleArea extends Component {
                 <p className='areaSummary'>Tasks: {this.state.area.taskcount}</p>
                 <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
                 {this.state.newTodoVisible ? <NewTodo/> : null}
-                <div className='todoItemContainer'>{this.state.area.tasks}</div>
+                <div className='todoItemContainer'>
+                    {this.state.area.tasks.length > 0 ? this.state.area.tasks : "No Tasks!"}
+               </div>
             </div>
         )
     }

@@ -91,7 +91,11 @@ button {
     margin: 10px;
     padding: 10px;
     text-align: center;
-    max-height: 400px;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    transition: .5s;
+    // height: 500px;
     
     h2 {
         margin: 0;
@@ -141,7 +145,8 @@ button {
     border: 10px solid white;
     border-radius: $areaBorder;
     margin-top: 10px;
-    height: 200px;
+    flex-grow : 1;
+    // height: 200px;
     overflow-y: auto;
     p {
         padding: 2px;
