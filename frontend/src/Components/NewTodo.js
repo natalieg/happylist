@@ -4,19 +4,12 @@ export default class NewTodo extends Component {
     render() {
         return (
             <div>
-                <h1>ABC</h1>
                 <form action="">
-                    <label htmlFor="todoName">todoname</label>
-                    <input type="text" name="todoName"/>
-                    <label htmlFor="parts">parts</label>
-                    <input type="text" name="parts"/>
-                    <label htmlFor="partName">partname</label>
-                    <input type="text" name="partName"/>
-                    <label htmlFor="time">time</label>
-                    <input type="text" name="time"/>
-                    <label htmlFor="difficulty">difficulty</label>
-                    <input type="text" name="difficulty"/>
-
+                    <input type="text" name="todoName" placeholder="todoname"/>
+                    <input type="text" name="parts" placeholder="parts"/>
+                    <input type="text" name="partName" placeholder="partname"/>
+                    <input type="text" name="time" placeholder="time"/>   
+                    <input type="text" name="difficulty" placeholder="difficulty"/>
                 </form>
             </div>
         )
