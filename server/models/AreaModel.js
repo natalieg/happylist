@@ -22,6 +22,10 @@ const todoSchema = new Schema ({
         type: Date,
         default: Date.now
     },
+    finished: {
+        type: Boolean,
+        default: false
+    },
     areaId: {
         type: String, 
         require: true

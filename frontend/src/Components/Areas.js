@@ -3,7 +3,7 @@ import SingleArea from './SingleArea';
 import NewArea from './NewArea';
 import UpperView from './UpperView';
 import apis from '../api'
-import Navbar from './Navbar/Navbar';
+import Areabar from './Navbar/Areabar';
 
 //#Check Pre defined standard colors, maybe change position later
 //const areaColors = ['rgba(168, 201, 226, 0.5)', 'rgba(190, 234, 202, 0.4)', 'rgba(245, 242, 189, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 190, 196, 0.6)'];
@@ -64,11 +64,11 @@ export default class Areas extends Component {
     // Toggles if the form for New Area is visible or not
     toggleActive = () => {
         const visible = this.state.newAreaActive;
-        this.setState({newAreaActive: !visible})
+        this.setState({ newAreaActive: !visible })
     }
 
     setNewInactive = () => {
-        this.setState({newAreaActive: false})
+        this.setState({ newAreaActive: false })
     }
 
     render() {
@@ -81,9 +81,9 @@ export default class Areas extends Component {
             })
 
             return (
-                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={index} 
-                btnValue={index} click={this.addTodo} color={module.color} 
-                name={module.areaTitle} taskcount={taskcount} tasks={displayTodos} />
+                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={index}
+                    btnValue={index} click={this.addTodo} color={module.color}
+                    name={module.areaTitle} taskcount={taskcount} tasks={displayTodos} />
             )
         })
 
@@ -91,9 +91,9 @@ export default class Areas extends Component {
             <div>
                 <UpperView areaCount={this.state.areas.length} allTodoCount={this.state.allTaskCount} />
                 {/* #TODO Otherwise show areas that already exist */}
-                <Navbar name={this.state.newAreaActive ? "Cancel New Area" : "Add Area"} click={this.toggleActive}/>
+                    <Areabar nameArea={this.state.newAreaActive ? "Cancel New Area" : "Add Area"} clickArea={this.toggleActive}/>
                 <div className='moduleOverview'>
-                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData}/> : null}
+                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
                     {displayareas}
                 </div>
             </div>
