@@ -6,13 +6,14 @@ export default class NewTodo extends Component {
         super(props)
 
         this.state = {
-            areaTitle: props.areaTitle,
+            areaId: props.areaId,
             todoName: '',
             parts: '',
             partName: '',
             time: '',
             difficulty: '',
             divClass: "ani1",
+            reloadTodo: props.reloadTodo
         }
     }
 
@@ -64,6 +65,7 @@ export default class NewTodo extends Component {
         }).catch(err => {
             console.log(err)
         })
+        this.state.reloadTodo()
     }
 
     render() {

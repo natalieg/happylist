@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const todoSchema = {
+const todoSchema = new Schema ({
     todoName: {
         type: String,
         require: true
@@ -17,8 +17,16 @@ const todoSchema = {
     },
     difficulty: {
         type: String,
+    },
+    areaId: {
+        type: String, 
+        require: true
+    },
+    userId: {
+        type: String,
+        require: true
     }
-}
+})
 
 const areaSchema = new Schema({
     areaTitle: {
@@ -34,9 +42,10 @@ const areaSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    todos: [
-        todoSchema
-    ]
+    userId: {
+        type: String,
+        require: true
+    }
 })
 
 const userSchema = new mongoose.Schema({
@@ -57,9 +66,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         require: true
-    },
-    areas: [areaSchema]
+    }
 })
 
-const AreaModel = mongoose.model('user', userSchema);
-module.exports = AreaModel;
+const UserModel = mongoose.model('user', userSchema);
+const AreaModel = mongoose.model('area', areaSchema);
+const TodoModel = mongoose.model('todo', todoSchema);
+module.exports = {UserModel, AreaModel, TodoModel};

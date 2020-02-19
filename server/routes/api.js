@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const AreaModel = require('../models/AreaModel');
+const { UserModel, AreaModel, TodoModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 
 const dummyUser = "User22";
@@ -12,24 +12,31 @@ const dummyUser = "User22";
  Login Function
  */
 router.get('/areas', async (req, res, next) => {
-    let currentUser = await AreaModel.findOne({ name: dummyUser });
-    console.log(currentUser.email)
-    res.send(currentUser.areas)
+    let currentUser = await UserModel.findOne({ name: dummyUser });
+    let userId = currentUser.id;
+    let allAreas = await AreaModel.find({ userId: userId })
+    let todos = await TodoModel.find({ userId: userId })
+    let areaWithTodo = allAreas.map(area => {
+        let areaTodos = todos.filter(todo => {
+
+            return todo.areaId === area._id.toString()
+        })
+
+        return {...area.toObject(), todos:areaTodos};
+    });
+    res.send(areaWithTodo)
 })
 
 // Create New User
 router.post('/newUser', (req, res, next) => {
     let { name, email, password, areas } = req.body;
     console.log(req.body)
-    let newUser = new AreaModel({
+    let newUser = new UserModel({
         id: uuid.v4(),
         name: name,
         email: email,
         password: password,
-        areas: areas
     })
-    console.log(newUser)
-    console.log(newUser.areas[0].areaTitle)
 
     newUser.save()
         .then(response => {
@@ -44,61 +51,55 @@ router.post('/newUser', (req, res, next) => {
 
 // Create new Area
 router.post('/newArea', (req, res, next) => {
-    let { areaTitle, color, priority, date } = req.body;
-    let newArea = {
+    let { areaTitle, color, priority, userId } = req.body;
+    // FIXME LATER
+    userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    let newArea = new AreaModel({
         areaTitle: areaTitle,
         color: color,
-        priority: priority
-    }
-    AreaModel.findOneAndUpdate({ name: dummyUser }, { $push: { areas: newArea } }, {
-        new: true
-    }).then(response => {
-        console.log(response)
-    }).catch(err => {
-        console.log(err)
+        priority: priority,
+        userId: userId
     })
-    res.send("Added Area")
+    newArea.save()
+        .then(response => {
+            console.log(response)
+            res.send({ msg: 'Saved Area' })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
 })
 
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
-    let { areaTitle, todoName, parts, partName, time, difficulty } = req.body;
-    let newTodo = {
+    let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
+    // FIXME LATER
+    userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    let newTodo = new TodoModel({
         todoName: todoName,
         parts: parts,
         partName: partName,
         time: time,
-        difficulty: difficulty
-    }
-    let updatedAreas = []
-    let user = await AreaModel.findOne({ name: dummyUser });
-    user.areas.forEach(area => {
-        if (area.areaTitle === areaTitle) {
-            area.todos.push(newTodo)
-        }
-        updatedAreas.push(area)
-    });
-    AreaModel.findOneAndUpdate({ name: dummyUser }, { areas: updatedAreas }, {
-        new: true
-    }).then(response => {
+        difficulty: difficulty,
+        userId: userId,
+        areaId: areaId
+    })
+    newTodo.save()
+        .then(response => {
             console.log(response)
-        }).catch(err => {
-            console.log(err)
+            res.send({ msg: 'Saved Todo' })
         })
-    res.send("YAI")
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
 })
 
 // Load all Todos for one Area
-router.get('/getTodos', async (req, res, next) => {
-    let user = await AreaModel.findOne({ name: dummyUser });
-    let {areaTitle} = req.body;
-    let todoList = [];
-    user.areas.forEach(area => {
-        if(area.areaTitle === areaTitle){
-            console.log("Found the Area")
-            todoList.push(area.todos)  
-        }
-    })
+router.post('/getTodos', async (req, res, next) => {
+    let { areaId } = req.body;
+    let todoList = await TodoModel.find({areaId:areaId})
     res.send(todoList)
 })
 

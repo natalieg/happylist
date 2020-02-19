@@ -8,17 +8,30 @@ export default class SingleArea extends Component {
 
         this.state = {
             area: {
-                id: props.id,
+                areaId: props.id,
                 backgroundColor: props.color,
                 className: props.className,
                 areaName: props.name,
-                taskcount: props.taskcount,
-                btnValue: props.btnValue,
-                tasks: props.tasks,
+                btnValue: props.btnValue
             },
+            tasks: props.tasks,
+            taskcount: props.taskcount,
             newTodoVisible: false,
-            newTodoCss: "test2_2"
+            newTodoCss: "test2_2",
+            isLoading: true
         }
+    }
+
+    handleLoadData = async () => {
+        await apis.getAreaTodos({areaId:this.state.area.areaId}).then(response => {
+            let displayTodos = response.data.map((todo, ind) => {
+            return <p key={ind}>{todo.todoName}</p>
+            })
+            this.setState({
+                tasks: displayTodos,
+                isLoading: false
+            })
+        })
     }
 
     toggleNewTodo = () => {
@@ -29,16 +42,20 @@ export default class SingleArea extends Component {
     render() {
         return (
 
-            <div id={this.state.area.id} style={{ backgroundColor: this.state.area.backgroundColor }}
+            <div id={this.state.area.areaId} style={{ backgroundColor: this.state.area.backgroundColor }}
                 className={this.state.area.className}>
                 <h2>{this.state.area.areaName}</h2>
-                <p className='areaSummary'>Tasks: {this.state.area.taskcount}</p>
+                <p className='areaSummary'>Tasks: {this.state.taskcount}</p>
                 <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
           
-                    {this.state.newTodoVisible ? <NewTodo divClass={this.state.newTodoCss} areaTitle={this.state.area.areaName}/> : null}
+                    {this.state.newTodoVisible ? 
+                    <NewTodo divClass={this.state.newTodoCss} 
+                    areaId={this.state.area.areaId} 
+                    reloadTodo={this.handleLoadData}/> 
+                    : null}
    
                 <div className='todoItemContainer'>
-                    {this.state.area.tasks.length > 0 ? this.state.area.tasks : "No Tasks!"}
+                    {this.state.tasks.length > 0 ? this.state.tasks : "No Tasks!"}
                 </div>
             </div>
 

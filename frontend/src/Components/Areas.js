@@ -75,12 +75,13 @@ export default class Areas extends Component {
         // Renders all Areas
         let displayareas = this.state.areas.map((module, index) => {
             let taskcount = this.state.areas[index].todos.length;
+            // Display all the ToDos
             let displayTodos = this.state.areas[index].todos.map((todo, ind) => {
                 return <p key={ind}>{todo.todoName}</p>
             })
 
             return (
-                <SingleArea id={`singleArea-${index + 1}`} className='singleArea' key={index} 
+                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={index} 
                 btnValue={index} click={this.addTodo} color={module.color} 
                 name={module.areaTitle} taskcount={taskcount} tasks={displayTodos} />
             )
