@@ -18,6 +18,10 @@ const todoSchema = new Schema ({
     difficulty: {
         type: Number,
     },
+    date: {
+        type: Date,
+        default: Date.now
+    },
     areaId: {
         type: String, 
         require: true
