@@ -16,7 +16,7 @@ const todoSchema = new Schema ({
         type: Number,
     },
     difficulty: {
-        type: String,
+        type: Number,
     },
     areaId: {
         type: String, 

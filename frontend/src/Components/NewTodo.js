@@ -74,7 +74,7 @@ export default class NewTodo extends Component {
                 <input type="text" name="todoName" placeholder="todoname"
                     value={this.state.todoName}
                     onChange={this.handleInputName} />
-                <input type="text" name="parts" placeholder="parts"
+                <input type="number" name="parts" placeholder="parts"
                     style={{ width: "42%" }}
                     value={this.state.parts}
                     onChange={this.handleInputParts} />
@@ -82,10 +82,10 @@ export default class NewTodo extends Component {
                     style={{ width: "42%" }}
                     value={this.state.partName}
                     onChange={this.handleInputPartName} />
-                <input type="text" name="time" placeholder="time"
+                <input type="number" name="time" placeholder="time"
                     value={this.state.time}
                     onChange={this.handleInputTime} />
-                <input type="text" name="difficulty" placeholder="difficulty"
+                <input type="number" name="difficulty" placeholder="difficulty"
                     value={this.state.difficulty}
                     onChange={this.handleInputDifficulty} />
                 <button onClick={this.handleSendData}>Save</button>
