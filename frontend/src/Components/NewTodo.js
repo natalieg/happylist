@@ -89,7 +89,7 @@ export default class NewTodo extends Component {
                     value={this.state.partName}
                     onChange={this.handleInputPartName} />
                 <input type="number" name="time" placeholder="time"
-                    style={{ width: "65%" }}
+                    style={{ width: "60%" }}
                     value={this.state.time}
                     onChange={this.handleInputTime} />
                     <label>Minutes</label>

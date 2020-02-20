@@ -4,6 +4,8 @@ import NewArea from './NewArea';
 import UpperView from './UpperView';
 import apis from '../api'
 import Areabar from './Navbar/Areabar';
+import GenerateList from './GenerateList'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 //#Check Pre defined standard colors, maybe change position later
 //const areaColors = ['rgba(168, 201, 226, 0.5)', 'rgba(190, 234, 202, 0.4)', 'rgba(245, 242, 189, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 190, 196, 0.6)'];
@@ -15,7 +17,8 @@ export default class Areas extends Component {
         isLoading: false,
         dummyCounter: 0,
         allTaskCount: 0,
-        newAreaActive: false
+        newAreaActive: false,
+        areaActive: true
     }
 
     // Loading Areas 
@@ -67,6 +70,12 @@ export default class Areas extends Component {
         this.setState({ newAreaActive: !visible })
     }
 
+    //Toggle Visibility for Area Overview
+    toggleAreaView = () => {
+        const visible = this.state.areaActive;
+        this.setState({ areaActive: !visible })
+    }
+
     setNewInactive = () => {
         this.setState({ newAreaActive: false })
     }
@@ -87,16 +96,33 @@ export default class Areas extends Component {
             )
         })
 
+
         return (
-            <div>
-                <UpperView areaCount={this.state.areas.length} allTodoCount={this.state.allTaskCount} />
-                {/* #TODO Otherwise show areas that already exist */}
-                    <Areabar nameArea={this.state.newAreaActive ? "Cancel New Area" : "Add Area"} clickArea={this.toggleActive}/>
-                <div className='moduleOverview'>
-                    {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
-                    {displayareas}
+            <Router>
+                <div>
+                    <UpperView areaCount={this.state.areas.length} allTodoCount={this.state.allTaskCount} />
+                    {/* #TODO Otherwise show areas that already exist */}
+                    <Areabar areaActive={this.state.areaActive}
+                        nameArea={this.state.newAreaActive ? "Cancel New Area" : "Add Area"}
+                        clickArea={this.toggleActive}
+                        toggleArea={this.toggleAreaView}
+                    />
+                    <Switch>
+                           {/* Shows all the Areas */}
+                        <Route path="/" exact>
+                            <div className='moduleOverview'>
+                                {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
+                                {displayareas}
+                            </div>
+                        </Route>
+                          {/* Generate options for new List */}
+                        <Route path="/generateList">
+                            <GenerateList/>
+                        </Route>
+                    </Switch>
                 </div>
-            </div>
+            </Router>
+
         )
     }
 }

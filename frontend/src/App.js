@@ -12,7 +12,7 @@ export default class App extends Component {
         <Router>
           <Navbar/>
           <Switch>
-            <Route path="/" exact>
+            <Route path="/">
               <Areas />
             </Route>
             <Route path="/generateList" exact>
