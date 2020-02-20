@@ -14,7 +14,8 @@ const dummyUser = "User22";
 router.get('/areas', async (req, res, next) => {
     let currentUser = await UserModel.findOne({ name: dummyUser });
     let userId = currentUser.id;
-    let allAreas = await AreaModel.find({ userId: userId })
+    let allAreas = await AreaModel.find({ userId: userId }).sort({"date": -1})
+    console.log(allAreas)
     let todos = await TodoModel.find({ userId: userId }).sort({"date": -1})
     let areaWithTodo = allAreas.map(area => {
         let areaTodos = todos.filter(todo => {
@@ -24,6 +25,7 @@ router.get('/areas', async (req, res, next) => {
 
         return {...area.toObject(), todos:areaTodos};
     });
+    console.log(areaWithTodo)
     res.send(areaWithTodo)
 })
 

@@ -35,8 +35,8 @@ export default class Areas extends Component {
     }
 
     handleLoadData = async () => {
+        
         await apis.getAreaList().then(response => {
-            console.log(response.data)
             this.setState({
                 areas: response.data,
                 isLoading: false
@@ -82,20 +82,21 @@ export default class Areas extends Component {
 
     render() {
         // Renders all Areas
-        let displayareas = this.state.areas.map((module, index) => {
+        let displayareas = this.state.areas.map((area, index) => {
             let taskcount = this.state.areas[index].todos.length;
             // Display all the ToDos
             let displayTodos = this.state.areas[index].todos.map((todo, ind) => {
                 return <p key={ind}>{todo.todoName}</p>
             })
-
+            
             return (
-                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={index}
-                    btnValue={index} click={this.addTodo} color={module.color}
-                    name={module.areaTitle} taskcount={taskcount} tasks={displayTodos} />
+                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={this.state.areas[index]._id}
+                    btnValue={index} click={this.addTodo} color={area.color}
+                    name={area.areaTitle} taskcount={taskcount} tasks={displayTodos} />
             )
         })
 
+       
 
         return (
             <Router>

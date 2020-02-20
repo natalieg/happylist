@@ -21,7 +21,14 @@ export default class SingleArea extends Component {
             isLoading: true
         }
     }
-
+    static getDerivedStateFromProps(props, state) {
+        state.areaId= props.id
+        state.backgroundColor= props.color
+        state.className= props.className
+        state.areaName= props.name
+        state.btnValue= props.btnValue
+        return true
+    }
     handleLoadData = async () => {
         await apis.getAreaTodos({areaId:this.state.area.areaId}).then(response => {
             let displayTodos = response.data.map((todo, ind) => {
@@ -40,6 +47,7 @@ export default class SingleArea extends Component {
     }
 
     render() {
+        console.log(this.state.area)
         return (
 
             <div id={this.state.area.areaId} style={{ backgroundColor: this.state.area.backgroundColor }}
