@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import apis from '../api'
+import apis from '../api';
+import { SketchPicker } from 'react-color';
 
 export default class NewArea extends Component {
     constructor(props) {
@@ -20,9 +21,9 @@ export default class NewArea extends Component {
         this.setState({ areaTitle: value })
     }
 
-    handleInputColor = (e) => {
-        const value = e.target.value;
-        this.setState({ color: value })
+    handleInputColor = (color) => {
+        
+        this.setState({ color: color.hex })
     }
 
 
@@ -52,6 +53,10 @@ export default class NewArea extends Component {
                     onChange={this.handleInputTitle}
                     placeholder="Area Name"
                 />
+                <SketchPicker
+                    color={ this.state.color }
+                    onChangeComplete={ this.handleInputColor }
+      />
                     <input
                     name="color"
                     type="text"
