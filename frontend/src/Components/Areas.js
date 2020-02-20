@@ -25,7 +25,7 @@ export default class Areas extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
         await apis.getAreaList().then(response => {
-            // console.log(response.data)
+            console.log(response.data)
             this.setState({
                 areas: response.data,
                 isLoading: false
@@ -95,9 +95,7 @@ export default class Areas extends Component {
                     name={area.areaTitle} taskcount={taskcount} tasks={displayTodos} />
             )
         })
-
-       
-
+        console.log(displayareas)
         return (
             <Router>
                 <div>
@@ -118,7 +116,8 @@ export default class Areas extends Component {
                         </Route>
                           {/* Generate options for new List */}
                         <Route path="/generateList">
-                            <GenerateList/>
+                            {this.state.areas.length === 0 ? "Loading" :<GenerateList areas={this.state.areas}/>}
+                     
                         </Route>
                     </Switch>
                 </div>
