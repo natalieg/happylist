@@ -1,14 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
-export default function Navbar(props) {
+function Navbar() {
     return (
-        <div className="navbar">
+        <div className="navbar upperBar">
             <ul>
                 <li>
-                    <a onClick={props.click} href="#">{props.name}</a>
+                    <Link className="navBtn" to="/">
+                        Areas
+                    </Link>
                 </li>
             </ul>
         </div>
     )
 }
+
+export default Navbar

@@ -5,6 +5,7 @@ $buttonMargin: 4px;
 $biggerFont: 1.3em;
 
 body {
+    width: 100%;
     text-align: center;
     position: absolute;
     margin: 0 auto;
@@ -28,31 +29,58 @@ body {
 //     }
 // }
 
+.upperBar {
+    margin-top: 0px;
+    padding: 4px;
+}
+
 .navbar {
+    height: 32px;
+    font-family: Arial, Helvetica, sans-serif;
     background-color: rgb(62, 62, 66);
     color: white;
-    
-    a {
+
+    .navBtn {
         padding: 5px;
+        margin: 0;
+        background-color: inherit;
+        border: none;
+        font-size: 1.2em;
         color: white;
         text-decoration: none;
         transition: .5s;
     }
-    a:hover {
+
+    .navBtn:hover {
         background-color: white;
         color: rgb(62, 62, 66);
     }
+
+    span {
+        padding: 0 3px;
+    }
+
     ul {
         margin: 0;
+        display: flex;
+        flex-direction: row;
+
         li {
-            padding: 5px;
             list-style-type: none;
-    
+
         }
     }
 }
 
-button {
+// Fix for the Link display
+.padFix {
+    padding-top: 5px;
+    a {
+        padding-bottom: 6px !important;
+    } 
+}
+
+button:not(.navBtn) {
     font-size: $biggerFont;
     margin: $buttonMargin
 }
@@ -96,16 +124,16 @@ button {
     height: 100%;
     transition: .5s;
     // height: 500px;
-    
+
     h2 {
         margin: 0;
     }
- 
+
     // Scrollbar
     /* width */
     ::-webkit-scrollbar {
         width: 10px;
-      }
+    }
 
     /* Track */
     ::-webkit-scrollbar-track {
@@ -123,6 +151,7 @@ button {
     ::-webkit-scrollbar-thumb:hover {
         background: darken($backcolor, $amount: 20);
     }
+
     input {
         width: 90%;
         margin: $buttonMargin;
@@ -145,17 +174,20 @@ button {
     border: 10px solid white;
     border-radius: $areaBorder;
     margin-top: 10px;
-    flex-grow : 1;
+    flex-grow: 1;
     // height: 200px;
     overflow-y: auto;
+
     p {
         padding: 2px;
         margin: 4px;
         transition: .5s;
     }
+
     p::before {
         content: 'o '
     }
+
     p:hover {
         background-color: lighten($backcolor, $amount: 20);
         border-radius: 4px;
@@ -165,6 +197,27 @@ button {
 .intro {
     text-align: center;
     padding: 50px;
+}
+
+.list {
+    max-width: 400px;
+    margin: 0 auto;
+
+    input {
+        font-size: $biggerFont;
+        max-width: 80px;
+        padding-left: 15px;
+        text-align: center;
+    }
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+
+    div {
+        width: 30%;
+    }
 }
 
 

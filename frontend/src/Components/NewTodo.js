@@ -67,13 +67,19 @@ export default class NewTodo extends Component {
         })
         this.state.reloadTodo()
     }
+    checKey = (e) => {
+        if(e.key === "Enter"){
+            this.handleSendData()
+        }
+    }
 
     render() {
         return (
             <div className={this.state.divClass}>
                 <input type="text" name="todoName" placeholder="todoname"
                     value={this.state.todoName}
-                    onChange={this.handleInputName} />
+                    onChange={this.handleInputName} 
+                    onKeyDown={this.checKey}/>
                 <input type="number" name="parts" placeholder="parts"
                     style={{ width: "42%" }}
                     value={this.state.parts}
@@ -83,8 +89,10 @@ export default class NewTodo extends Component {
                     value={this.state.partName}
                     onChange={this.handleInputPartName} />
                 <input type="number" name="time" placeholder="time"
+                    style={{ width: "60%" }}
                     value={this.state.time}
                     onChange={this.handleInputTime} />
+                    <label>Minutes</label>
                 <input type="number" name="difficulty" placeholder="difficulty"
                     value={this.state.difficulty}
                     onChange={this.handleInputDifficulty} />
