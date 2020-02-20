@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import apis from '../api';
-import { SketchPicker } from 'react-color';
+import { CirclePicker as Circle } from 'react-color';
 
 export default class NewArea extends Component {
     constructor(props) {
@@ -9,7 +9,7 @@ export default class NewArea extends Component {
         this.state = {
             visible: '',
             areaTitle: '',
-            color: '',
+            color: 'white',
             priority: '',
             cancelClick: props.cancelClick,
             reloadAreas: props.reloadAreas
@@ -21,9 +21,14 @@ export default class NewArea extends Component {
         this.setState({ areaTitle: value })
     }
 
-    handleInputColor = (color) => {
-        
-        this.setState({ color: color.hex })
+    handleClickColor = (color) => {
+        let rgba = `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},0.4)`
+        console.log(color)
+        this.setState({ color: rgba })
+    }
+
+    handleInputColor = (e) => {
+        this.setState({ color: e.target.value })
     }
 
 
@@ -44,7 +49,7 @@ export default class NewArea extends Component {
 
     render() {
         return (
-            <div className="singleArea newArea">
+            <div className="singleArea newArea" style={{backgroundColor: this.state.color}}>
                 <h1>New Area</h1>
                 <input
                     name="areaTitle"
@@ -53,9 +58,10 @@ export default class NewArea extends Component {
                     onChange={this.handleInputTitle}
                     placeholder="Area Name"
                 />
-                <SketchPicker
+                <Circle
+                    className="colorPicker"
                     color={ this.state.color }
-                    onChangeComplete={ this.handleInputColor }
+                    onChangeComplete={ this.handleClickColor }
       />
                     <input
                     name="color"

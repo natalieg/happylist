@@ -110,8 +110,14 @@ button:not(.navBtn) {
     flex-wrap: wrap;
 }
 
+.colorPicker {
+    transform: scale(.8);
+    margin-left: -10%;
+}
+
 .singleArea {
     //background-color: rgb(233, 178, 178);
+    
     box-shadow: 2px 2px 10px 0px rgb(88, 88, 88);
     border-radius: $areaBorder;
     width: 20%;
@@ -160,7 +166,7 @@ button:not(.navBtn) {
 }
 
 .newArea {
-    background-color: rgba(79, 161, 127, 0.466);
+    // background-color: rgba(79, 161, 127, 0.466);
 }
 
 .areaSummary {
