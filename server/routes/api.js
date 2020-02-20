@@ -71,6 +71,19 @@ router.post('/newArea', (req, res, next) => {
         })
 })
 
+// Delete Area
+router.delete('/deleteArea', async (req,res,next)=>{
+    let areaId = req.body.areaId
+    console.log(req.body)
+    await AreaModel.findByIdAndDelete(areaId)
+    .then(response =>{
+      res.send({msg: 'Area deleted'})
+    })
+    .catch( err=>{
+      res.send({msg: err})
+    })
+  })
+  
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
     let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
