@@ -7,9 +7,12 @@ export default class GenerateList extends Component {
         super()
 
         this.state = {
+            userTime: 60,
+            userMaxTasks: 10,
             areas: [],
+            activeAreas: [],
             todoList: [],
-            activeAreas: []
+            currentTodoListCount: 0
         }
     }
 
@@ -18,34 +21,49 @@ export default class GenerateList extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
         await apis.getAreasWithoutEmpty().then(response => {
-            console.log(response.data)
             let tempActive = [];
             response.data.forEach(element => {
-                tempActive.push({ 
-                    id: element._id, 
-                    state: true, 
-                    areaTitle: element.areaTitle, 
+                tempActive.push({
+                    id: element._id,
+                    state: true,
+                    areaTitle: element.areaTitle,
                     color: element.color,
-                    todoCount: element.todoCount})
+                    todoCount: element.todoCount
+                })
             });
             this.setState({
                 areas: response.data,
                 isLoading: false,
-                activeAreas: tempActive 
+                activeAreas: tempActive
             })
         })
     }
 
-    createTempList = () => {
-        let tempList = []
-        this.state.areas.map((area, index) => {
-            console.log(area.todos)
-            area.todos.forEach(todo => {
-                tempList.push(todo.todoName)
-            });
+    createTodoList = async () => {
+        this.setState({ isLoading: true })
+        let areaIds = []
+        this.state.activeAreas.forEach(area => {
+            if (area.state) {
+                areaIds.push(area.id)
+            }
+        });
+        await apis.generateList({
+            areaIds: areaIds,
+            maxNumber: this.state.userMaxTasks
         })
-        console.log(tempList)
-        this.setState({ todoList: tempList })
+            .then(response => {
+                let tempTodo = [];
+                response.data.forEach(todo => {
+                    tempTodo.push({
+                        todoName: todo.todoName,
+                        color: todo.areaColor
+                    })
+                })
+                this.setState({
+                    todoList: tempTodo,
+                    currentTodoListCount: tempTodo.length
+                })
+            })
     }
 
     //change Selected Areas
@@ -53,7 +71,12 @@ export default class GenerateList extends Component {
         let tempActive = this.state.activeAreas;
         var foundIndex = tempActive.findIndex(x => x.id == e.target.id);
         tempActive[foundIndex].state = !tempActive[foundIndex].state;
-        this.setState({activeAreas: tempActive})
+        this.setState({ activeAreas: tempActive })
+    }
+
+    // FIXME
+    changeStuff=(e)=>{
+
     }
 
     render() {
@@ -61,16 +84,28 @@ export default class GenerateList extends Component {
         if (this.state.activeAreas.length > 0) {
             allAreas = this.state.activeAreas.map((area, index) => {
                 return (
-                    <p key={area.id}><label className="selectArea"
+                    <div key={area.id} className="selectArea"
                         style={{ backgroundColor: area.color }}>
-                        <input type="checkbox" onChange={this.changeActiveAreas} 
-                        checked={area.state} id={area.id} />
-                        {area.areaTitle} Todos: {area.todoCount}
-                    </label></p>
+                        <label>
+                            <input type="checkbox" onChange={this.changeActiveAreas}
+                                checked={area.state} id={area.id} />
+                            {area.areaTitle} : {area.todoCount}
+                        </label></div>
                 )
             })
         }
-
+        let generatedList = null;
+        if (this.state.todoList.length > 0) {
+            generatedList = this.state.todoList.map((todo, index) => {
+                return (
+                    <div key={index} className="singleTodo">
+                        {todo.todoName}
+                        <div className="todoColorRef"
+                            style={{ backgroundColor: todo.color }}></div>
+                    </div>
+                )
+            })
+        }
 
         return (
             <div className="list">
@@ -80,19 +115,25 @@ export default class GenerateList extends Component {
                     <div><label>Tasks</label></div>
                 </div>
                 <div className="row">
-                    <div><input type="number" defaultValue="60" /></div>
-                    <div><input type="number" defaultValue="10" /></div>
+                    <div><input type="number" onChange={this.changeStuff} value={this.state.userTime} /></div>
+                    <div><input type="number" onChange={this.changeStuff} value={this.state.userMaxTasks} /></div>
                 </div>
-                {allAreas}
-                <button onClick={this.createTempList}>Create</button>
+                <div className="selectAreasDiv">
+                    {allAreas}
+                </div>
+                <button onClick={this.createTodoList}>Create</button>
                 <button>Cancel</button>
                 <div>
-                    {this.state.todoList}
+                    {this.state.currentTodoListCount > 0 ?
+                        <div className="visibleListWrapper">
+                            <div>Current Todos: {this.state.currentTodoListCount}</div>
+                            {generatedList}
+                        </div>
+                        : null}
                 </div>
 
                 {/* TODO */}
-                <p>Priority</p>
-                <p>Check/Uncheck Areas</p>
+                {/* <p>Priority</p> */}
             </div>
         )
     }
