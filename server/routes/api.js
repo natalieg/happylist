@@ -119,4 +119,17 @@ router.post('/getTodos', async (req, res, next) => {
     res.send(todoList)
 })
 
+// Delete a specific Todo (using id)
+router.delete('/deleteTodo', async (req,res,next)=>{
+    let {todoId} = req.body;
+    await TodoModel.findByIdAndDelete(todoId)
+    .then(response =>{
+        res.send({msg: 'Todo deleted'})
+      })
+      .catch( err=>{
+        res.send({msg: err})
+      })
+   
+})
+
 module.exports = router;
