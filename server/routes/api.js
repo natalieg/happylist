@@ -77,6 +77,7 @@ router.post('/newArea', (req, res, next) => {
 router.delete('/deleteArea', async (req,res,next)=>{
     let areaId = req.body.areaId
     console.log(req.body)
+    await TodoModel.deleteMany({areaId:areaId})
     await AreaModel.findByIdAndDelete(areaId)
     .then(response =>{
       res.send({msg: 'Area deleted'})
