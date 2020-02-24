@@ -50,6 +50,14 @@ const areaSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    selected: {
+        type: Boolean, 
+        default: true
+    },
+    todoCount: {
+        type: Number,
+        default: 0
+    },
     userId: {
         type: String,
         require: true
