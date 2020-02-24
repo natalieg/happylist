@@ -13,15 +13,15 @@ export default function Areabar(props) {
                         </div>
                     }
                 </li>
-
+{/* 
                 {!props.areaActive && <li className="padFix" onClick={props.toggleArea}>
                     <Link className="navBtn" to="/">
                         Areas
                     </Link>
                     <span>&bull;</span>
                 </li>
-                }    
-                {props.areaActive && <li className="padFix" onClick={props.toggleArea}>
+                }
+                { <li className="padFix" onClick={props.toggleArea}>
                     <Link className="navBtn" to="/generateList">
                         Generate List
                     </Link>
@@ -31,7 +31,7 @@ export default function Areabar(props) {
                     <Link className="navBtn" to="/createList">
                         Create List
                     </Link>
-                </li>
+                </li> */}
             </ul>
         </div>
     )

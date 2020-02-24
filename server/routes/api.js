@@ -14,18 +14,18 @@ const dummyUser = "User22";
 router.get('/areas', async (req, res, next) => {
     let currentUser = await UserModel.findOne({ name: dummyUser });
     let userId = currentUser.id;
-    let allAreas = await AreaModel.find({ userId: userId }).sort({"date": -1})
-    console.log(allAreas)
-    let todos = await TodoModel.find({ userId: userId }).sort({"date": -1})
+    let allAreas = await AreaModel.find({ userId: userId }).sort({ "date": -1 })
+    
+    let todos = await TodoModel.find({ userId: userId }).sort({ "date": -1 })
     let areaWithTodo = allAreas.map(area => {
         let areaTodos = todos.filter(todo => {
 
             return todo.areaId === area._id.toString()
         })
 
-        return {...area.toObject(), todos:areaTodos};
+        return { ...area.toObject(), todos: areaTodos };
     });
-    console.log(areaWithTodo)
+    
     res.send(areaWithTodo)
 })
 
@@ -74,18 +74,18 @@ router.post('/newArea', (req, res, next) => {
 })
 
 // Delete Area
-router.delete('/deleteArea', async (req,res,next)=>{
+router.delete('/deleteArea', async (req, res, next) => {
     let areaId = req.body.areaId
     console.log(req.body)
     await AreaModel.findByIdAndDelete(areaId)
-    .then(response =>{
-      res.send({msg: 'Area deleted'})
-    })
-    .catch( err=>{
-      res.send({msg: err})
-    })
-  })
-  
+        .then(response => {
+            res.send({ msg: 'Area deleted' })
+        })
+        .catch(err => {
+            res.send({ msg: err })
+        })
+})
+
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
     let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
@@ -109,13 +109,45 @@ router.post('/newTodo', async (req, res, next) => {
             console.log(err)
             res.send({ msg: err })
         })
+    AreaModel.findOneAndUpdate({_id: areaId}, {$inc : {'todoCount' : 1}})
+    .then(response=>{
+        console.log(response)   
+    })
+    .catch(err => {
+        console.log(err)
+        res.send({ msg: err })
+    })
 })
 
 // Load all Todos for one Area
 router.post('/getTodos', async (req, res, next) => {
     let { areaId } = req.body;
-    let todoList = await TodoModel.find({areaId:areaId}).sort({"date": -1})
+    let todoList = await TodoModel.find({ areaId: areaId }).sort({ "date": -1 })
     res.send(todoList)
+})
+
+//Generate List for chosen Areas
+router.post('/generateList', async (req, res, next) => {
+    let { areaIds } = req.body;
+    let todoList = await TodoModel.find({ areaId: areaIds });
+    res.send(todoList)
+})
+
+//Generate List without empty Areas
+router.get('/getAreasWithoutEmpty', async (req,res,next)=>{
+    let userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    let fullAreaIds = await TodoModel.find({userId: userId}, {areaId: 1, _id: 0}).distinct("areaId");
+    console.log(fullAreaIds)
+    let fullAreas = await AreaModel.find({_id: fullAreaIds})
+    res.send(fullAreas)
+})
+
+//Count all Todos in Area
+router.post('/countTodos', async (req,res,next)=>{
+    let { areaId } = req.body;
+    let todoList = await TodoModel.find({ areaId: areaId })
+    res.send(todoList.length)
+
 })
 
 module.exports = router;
