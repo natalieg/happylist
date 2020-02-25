@@ -77,6 +77,7 @@ router.post('/newArea', (req, res, next) => {
 router.delete('/deleteArea', async (req, res, next) => {
     let areaId = req.body.areaId
     console.log(req.body)
+    await TodoModel.deleteMany({areaId:areaId})
     await AreaModel.findByIdAndDelete(areaId)
         .then(response => {
             res.send({ msg: 'Area deleted' })
@@ -148,6 +149,16 @@ router.post('/countTodos', async (req,res,next)=>{
     let todoList = await TodoModel.find({ areaId: areaId })
     res.send(todoList.length)
 
-})
+// Delete a specific Todo (using id)
+router.delete('/deleteTodo', async (req,res,next)=>{
+    let {todoId} = req.body;
+    await TodoModel.findByIdAndDelete(todoId)
+    .then(response =>{
+        res.send({msg: 'Todo deleted'})
+      })
+      .catch( err=>{
+        res.send({msg: err})
+      })
+   
 
 module.exports = router;
