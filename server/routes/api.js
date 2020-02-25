@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 const { UserModel, AreaModel, TodoModel } = require('../models/AreaModel');
 const uuid = require('uuid');
+const {generateListMaxNumber} = require('../controller/generateList')
 
-0
+const dummyUser = "User22";
 
 /* TODO Get Areas from DB
  Get Areas for Logged in User
@@ -132,9 +133,10 @@ router.post('/getTodos', async (req, res, next) => {
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
     let { areaIds, maxNumber } = req.body;
-    let todoList = await TodoModel.find({ areaId: areaIds});
-    console.log(todoList)
-    res.send(todoList)
+    let todoList = await TodoModel.find({ areaId: areaIds}); 
+    let generatedList = generateListMaxNumber(todoList, areaIds, maxNumber)
+    console.log(generatedList)
+    res.send(generatedList)
 })
 
 //Generate List without empty Areas
