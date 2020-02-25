@@ -148,6 +148,7 @@ router.post('/countTodos', async (req,res,next)=>{
     let { areaId } = req.body;
     let todoList = await TodoModel.find({ areaId: areaId })
     res.send(todoList.length)
+})
 
 // Delete a specific Todo (using id)
 router.delete('/deleteTodo', async (req,res,next)=>{
@@ -159,6 +160,7 @@ router.delete('/deleteTodo', async (req,res,next)=>{
       .catch( err=>{
         res.send({msg: err})
       })
+    })
    
 
 module.exports = router;
