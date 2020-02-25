@@ -1,19 +1,60 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const todoSchema = new Schema ({
+const listSchema = new Schema({
+    userId: {
+        type: String,
+        unique: true
+    },
+    todos: [
+        {
+            todoId: {
+                type: String
+            },
+            todoName: {
+                type: String
+            },
+            partNumber: {
+                type: Number
+            },
+            allParts: {
+                type: Number
+            },
+            partTime: {
+                type: Number
+            },
+            state: {
+                type: Boolean,
+                default: false
+            },
+            color: {
+                type: String
+            }
+        }
+    ]
+
+})
+
+const todoSchema = new Schema({
     todoName: {
         type: String,
         require: true
     },
     parts: {
-        type: Number
+        type: Number,
+        default: 1
+    },
+    finishedParts: {
+        type: Number,
+        default: 0
     },
     partName: {
-        type: String
+        type: String,
+        default: "Part(s)"
     },
     partTime: {
         type: Number,
+        default: 20
     },
     totalTime: {
         type: Number,
@@ -34,7 +75,7 @@ const todoSchema = new Schema ({
         default: "white"
     },
     areaId: {
-        type: String, 
+        type: String,
         require: true
     },
     userId: {
@@ -58,7 +99,7 @@ const areaSchema = new Schema({
         default: Date.now
     },
     selected: {
-        type: Boolean, 
+        type: Boolean,
         default: true
     },
     todoCount: {
@@ -95,4 +136,5 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.model('user', userSchema);
 const AreaModel = mongoose.model('area', areaSchema);
 const TodoModel = mongoose.model('todo', todoSchema);
-module.exports = {UserModel, AreaModel, TodoModel};
+const ListModel = mongoose.model('list', listSchema);
+module.exports = { UserModel, AreaModel, TodoModel, ListModel };

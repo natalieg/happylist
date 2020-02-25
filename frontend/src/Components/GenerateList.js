@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import apis from '../api'
 import { check } from 'express-validator'
+import SingleTodo from './SingleTodo'
 
 export default class GenerateList extends Component {
     constructor() {
@@ -12,7 +13,9 @@ export default class GenerateList extends Component {
             areas: [],
             activeAreas: [],
             todoList: [],
-            currentTodoListCount: 0
+            currentTodoListCount: 0,
+            isLoading: false,
+
         }
     }
 
@@ -23,6 +26,7 @@ export default class GenerateList extends Component {
         await apis.getAreasWithoutEmpty().then(response => {
             let tempActive = [];
             response.data.forEach(element => {
+                
                 tempActive.push({
                     id: element._id,
                     state: true,
@@ -31,6 +35,7 @@ export default class GenerateList extends Component {
                     todoCount: element.todoCount
                 })
             });
+            
             this.setState({
                 areas: response.data,
                 isLoading: false,
@@ -39,6 +44,9 @@ export default class GenerateList extends Component {
         })
     }
 
+    /*
+    Creating the Todo List
+    */
     createTodoList = async () => {
         this.setState({ isLoading: true })
         let areaIds = []
@@ -55,13 +63,18 @@ export default class GenerateList extends Component {
                 let tempTodo = [];
                 response.data.forEach(todo => {
                     tempTodo.push({
+                        _id: todo._id,
                         todoName: todo.todoName,
+                        partNumber: todo.finishedParts + 1,
+                        allParts: todo.parts,
+                        partTime: todo.partTime,
                         color: todo.areaColor
                     })
                 })
                 this.setState({
                     todoList: tempTodo,
-                    currentTodoListCount: tempTodo.length
+                    currentTodoListCount: tempTodo.length,
+                    isLoading: false
                 })
             })
     }
@@ -92,7 +105,8 @@ export default class GenerateList extends Component {
                     <div key={area.id} className="selectArea"
                         style={{ backgroundColor: area.color }}>
                         <label>
-                            <input type="checkbox" onChange={this.changeActiveAreas}
+                            <input type="checkbox"
+                                onChange={this.changeActiveAreas}
                                 checked={area.state} id={area.id} />
                             {area.areaTitle} : {area.todoCount}
                         </label></div>
@@ -101,13 +115,15 @@ export default class GenerateList extends Component {
         }
         let generatedList = null;
         if (this.state.todoList.length > 0) {
+            
             generatedList = this.state.todoList.map((todo, index) => {
                 return (
-                    <div key={index} className="singleTodo">
-                        {todo.todoName}
-                        <div className="todoColorRef"
-                            style={{ backgroundColor: todo.color }}></div>
-                    </div>
+                    <SingleTodo
+                        key={todo._id}
+                        todoId={todo._id}
+                        todoName={todo.todoName}
+                        color={todo.color}
+                    />
                 )
             })
         }

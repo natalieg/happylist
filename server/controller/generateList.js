@@ -57,9 +57,7 @@ const generateListMaxNumber = (todoArray, areaIds, maxNumber) => {
     });
 
     todoListList.forEach(list => {
-        console.log("Restnumber is", restNumber, "Diver:", list.divider)
         let tasksForThisArea = parseInt(restNumber / list.divider)
-        console.log(tasksForThisArea)
         if (list.length < tasksForThisArea) {
             list.list.forEach(todo => {
                 tempList.push(todo)
@@ -73,13 +71,17 @@ const generateListMaxNumber = (todoArray, areaIds, maxNumber) => {
         }
     });
     shuffleArray(tempList)
-    // console.log("tempList")
-    // console.log(tempList)
-    // console.log("Max was", maxNumber, "Todos now: ", tempList.length)
-    // console.log("---------")
     return(tempList)
-    // console.log(todoArray, todoArray.length)
-    // console.log("tempList", tempList)
 }
 
-module.exports = {generateListMaxNumber}
+const generateList=(todoArray, areaIds, maxNumber)=>{
+    if(todoArray.length < maxNumber ){
+        shuffleArray(todoArray)
+        return(todoArray)
+    }  else {
+        return(generateListMaxNumber(todoArray, areaIds, maxNumber))
+    }
+
+};
+
+module.exports = {generateList}

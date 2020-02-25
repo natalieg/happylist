@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const { UserModel, AreaModel, TodoModel } = require('../models/AreaModel');
+const { UserModel, AreaModel, TodoModel, ListModel } = require('../models/AreaModel');
 const uuid = require('uuid');
-const {generateListMaxNumber} = require('../controller/generateList')
+const { generateList } = require('../controller/generateList')
 
 const dummyUser = "User22";
+const userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
 
 /* TODO Get Areas from DB
  Get Areas for Logged in User
@@ -93,7 +94,7 @@ router.post('/newTodo', async (req, res, next) => {
     let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
-    let color = await AreaModel.findOne({_id: areaId},{color: 1, _id: 0})
+    let color = await AreaModel.findOne({ _id: areaId }, { color: 1, _id: 0 })
     let newTodo = new TodoModel({
         todoName: todoName,
         parts: parts,
@@ -133,17 +134,43 @@ router.post('/getTodos', async (req, res, next) => {
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
     let { areaIds, maxNumber } = req.body;
-    let todoList = await TodoModel.find({ areaId: areaIds}); 
-    let generatedList = generateListMaxNumber(todoList, areaIds, maxNumber)
-    console.log(generatedList)
-    res.send(generatedList)
+    let todoList = await TodoModel.find({ areaId: areaIds });
+    let generatedList = generateList(todoList, areaIds, maxNumber)
+
+    let tempList = []
+    generatedList.forEach(todo => {
+        tempList.push({
+            todoId: todo._id,
+            todoName: todo.todoName,
+            partNumber: todo.finishedParts + 1,
+            allParts: todo.parts,
+            partTime: todo.partTime,
+            state: false,
+            color: todo.areaColor
+        })
+    });
+    let newList = {
+        //FIXME LATER
+        userId: userId,
+        todos: tempList
+    }
+    ListModel.findOneAndUpdate({userId: userId}, newList, {
+        upsert: true
+    })
+        .then(response => {
+            console.log(response)
+            res.send(generatedList)
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
 })
 
 //Generate List without empty Areas
 router.get('/getAreasWithoutEmpty', async (req, res, next) => {
     let userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
     let fullAreaIds = await TodoModel.find({ userId: userId }, { areaId: 1, _id: 0 }).distinct("areaId");
-    console.log(fullAreaIds)
     let fullAreas = await AreaModel.find({ _id: fullAreaIds })
     res.send(fullAreas)
 })
@@ -158,8 +185,8 @@ router.post('/countTodos', async (req, res, next) => {
 // Delete a specific Todo (using id)
 router.delete('/deleteTodo', async (req, res, next) => {
     let { todoId } = req.body;
-    let area = await TodoModel.findOne({_id: todoId}, {areaId: 1, _id: 0})
-    
+    let area = await TodoModel.findOne({ _id: todoId }, { areaId: 1, _id: 0 })
+
     await TodoModel.findByIdAndDelete(todoId)
         .then(response => {
             res.send({ msg: 'Todo deleted' })
@@ -167,7 +194,7 @@ router.delete('/deleteTodo', async (req, res, next) => {
         .catch(err => {
             res.send({ msg: err })
         })
-     AreaModel.findOneAndUpdate({ _id: area.areaId }, { $inc: { 'todoCount': -1 } })
+    AreaModel.findOneAndUpdate({ _id: area.areaId }, { $inc: { 'todoCount': -1 } })
         .then(response => {
             console.log(response)
         })
@@ -175,7 +202,7 @@ router.delete('/deleteTodo', async (req, res, next) => {
             console.log(err)
             res.send({ msg: err })
         })
-        
+
 })
 
 module.exports = router;
