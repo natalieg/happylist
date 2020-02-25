@@ -176,5 +176,14 @@ router.delete('/deleteTodo', async (req, res, next) => {
         
 })
 
+    .then(response =>{
+        res.send({msg: 'Todo deleted'})
+      })
+      .catch( err=>{
+        res.send({msg: err})
+      })
+    })
+   
+
 
 module.exports = router;
