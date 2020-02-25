@@ -80,7 +80,7 @@ export default class NewTodo extends Component {
                     value={this.state.todoName}
                     onChange={this.handleInputName} 
                     onKeyDown={this.checKey}/>
-                <input type="number" name="parts" placeholder="parts"
+                <input type="number" name="parts" placeholder="parts" min="0"
                     style={{ width: "42%" }}
                     value={this.state.parts}
                     onChange={this.handleInputParts} />

@@ -74,9 +74,14 @@ export default class GenerateList extends Component {
         this.setState({ activeAreas: tempActive })
     }
 
-    // FIXME
-    changeStuff=(e)=>{
+    handleInputTask = (e) => {
+        const value = e.target.value;
+        this.setState({ userMaxTasks: value })
+    }
 
+    handleInputTime = (e) => {
+        const value = e.target.value;
+        this.setState({ userTime: value })
     }
 
     render() {
@@ -115,8 +120,8 @@ export default class GenerateList extends Component {
                     <div><label>Tasks</label></div>
                 </div>
                 <div className="row">
-                    <div><input type="number" onChange={this.changeStuff} value={this.state.userTime} /></div>
-                    <div><input type="number" onChange={this.changeStuff} value={this.state.userMaxTasks} /></div>
+                    <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
+                    <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
                 </div>
                 <div className="selectAreasDiv">
                     {allAreas}
