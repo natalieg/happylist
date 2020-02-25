@@ -92,6 +92,7 @@ router.post('/newTodo', async (req, res, next) => {
     let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    let color = await AreaModel.findOne({_id: areaId},{color: 1, _id: 0})
     let newTodo = new TodoModel({
         todoName: todoName,
         parts: parts,
@@ -99,7 +100,8 @@ router.post('/newTodo', async (req, res, next) => {
         time: time,
         difficulty: difficulty,
         userId: userId,
-        areaId: areaId
+        areaId: areaId,
+        areaColor: color.color
     })
     newTodo.save()
         .then(response => {
@@ -129,8 +131,9 @@ router.post('/getTodos', async (req, res, next) => {
 
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
-    let { areaIds } = req.body;
-    let todoList = await TodoModel.find({ areaId: areaIds });
+    let { areaIds, maxNumber } = req.body;
+    let todoList = await TodoModel.find({ areaId: areaIds});
+    console.log(todoList)
     res.send(todoList)
 })
 
@@ -172,6 +175,5 @@ router.delete('/deleteTodo', async (req, res, next) => {
         })
         
 })
-
 
 module.exports = router;

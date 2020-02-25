@@ -206,7 +206,8 @@ button:not(.navBtn) {
 }
 
 .list {
-    max-width: 400px;
+    width: 80%;
+    max-width: 800px;
     margin: 0 auto;
 
     input {
@@ -226,13 +227,49 @@ button:not(.navBtn) {
     }
 }
 
+// Generate List 
+
+.selectAreasDiv{
+    display: flex;
+    align-content: space-around;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+}
 
 .selectArea {
     padding: 10px;
+    min-width: 160px;
+    margin: 10px;
     input {
         width: 20px;
         height: 20px;
     }
+}
+
+.visibleListWrapper {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.singleTodo {
+    width: 50%;
+    background-color: white;
+    margin: 4px auto;
+    padding-left: 10px;
+    height: 30px;
+    text-align: left;
+    position: relative;
+}
+.todoColorRef{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: 0;
+    right: 0;
+    position: absolute;
 }
 
 // Animation 

@@ -8,7 +8,7 @@ export default class NewTodo extends Component {
         this.state = {
             areaId: props.areaId,
             todoName: '',
-            parts: '',
+            parts: 1,
             partName: '',
             time: '',
             difficulty: '',
@@ -57,7 +57,7 @@ export default class NewTodo extends Component {
         await apis.sendNewTodo(data).then(response => {
             this.setState({
                 todoName: '',
-                parts: '',
+                parts: 1,
                 partName: '',
                 time: '',
                 difficulty: ''
