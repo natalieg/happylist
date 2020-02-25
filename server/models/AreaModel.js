@@ -12,7 +12,10 @@ const todoSchema = new Schema ({
     partName: {
         type: String
     },
-    time: {
+    partTime: {
+        type: Number,
+    },
+    totalTime: {
         type: Number,
     },
     difficulty: {
