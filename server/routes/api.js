@@ -3,7 +3,7 @@ var router = express.Router();
 const { UserModel, AreaModel, TodoModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 
-const dummyUser = "User22";
+0
 
 /* TODO Get Areas from DB
  Get Areas for Logged in User
