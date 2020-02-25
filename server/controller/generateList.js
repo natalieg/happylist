@@ -8,9 +8,6 @@ let list1 = [
 let list2 = [
     { areaId: 55, todoname: "1 book", parts: 10, parttime: 40 },
     { areaId: 55, todoname: "2 dvd", parts: 2, parttime: 15 }
-    // { areaId: 55, todoname: "3 paper", parts: 6, parttime: 30 },
-    // { areaId: 55, todoname: "4 note", parts: 4, parttime: 10 },
-    // { areaId: 55, todoname: "5 sketchbook", parts: 8, parttime: 20 }
 ]
 
 let list3 = [

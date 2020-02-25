@@ -4,7 +4,7 @@ const { UserModel, AreaModel, TodoModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 const {generateListMaxNumber} = require('../controller/generateList')
 
-0
+const dummyUser = "User22";
 
 /* TODO Get Areas from DB
  Get Areas for Logged in User
