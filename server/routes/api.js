@@ -15,7 +15,7 @@ router.get('/areas', async (req, res, next) => {
     let currentUser = await UserModel.findOne({ name: dummyUser });
     let userId = currentUser.id;
     let allAreas = await AreaModel.find({ userId: userId }).sort({ "date": -1 })
-    
+
     let todos = await TodoModel.find({ userId: userId }).sort({ "date": -1 })
     let areaWithTodo = allAreas.map(area => {
         let areaTodos = todos.filter(todo => {
@@ -25,7 +25,7 @@ router.get('/areas', async (req, res, next) => {
 
         return { ...area.toObject(), todos: areaTodos };
     });
-    
+
     res.send(areaWithTodo)
 })
 
@@ -77,7 +77,7 @@ router.post('/newArea', (req, res, next) => {
 router.delete('/deleteArea', async (req, res, next) => {
     let areaId = req.body.areaId
     console.log(req.body)
-    await TodoModel.deleteMany({areaId:areaId})
+    await TodoModel.deleteMany({ areaId: areaId })
     await AreaModel.findByIdAndDelete(areaId)
         .then(response => {
             res.send({ msg: 'Area deleted' })
@@ -92,6 +92,7 @@ router.post('/newTodo', async (req, res, next) => {
     let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    let color = await AreaModel.findOne({_id: areaId},{color: 1, _id: 0})
     let newTodo = new TodoModel({
         todoName: todoName,
         parts: parts,
@@ -99,7 +100,8 @@ router.post('/newTodo', async (req, res, next) => {
         time: time,
         difficulty: difficulty,
         userId: userId,
-        areaId: areaId
+        areaId: areaId,
+        areaColor: color.color
     })
     newTodo.save()
         .then(response => {
@@ -110,14 +112,14 @@ router.post('/newTodo', async (req, res, next) => {
             console.log(err)
             res.send({ msg: err })
         })
-    AreaModel.findOneAndUpdate({_id: areaId}, {$inc : {'todoCount' : 1}})
-    .then(response=>{
-        console.log(response)   
-    })
-    .catch(err => {
-        console.log(err)
-        res.send({ msg: err })
-    })
+    AreaModel.findOneAndUpdate({ _id: areaId }, { $inc: { 'todoCount': 1 } })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
 })
 
 // Load all Todos for one Area
@@ -129,31 +131,51 @@ router.post('/getTodos', async (req, res, next) => {
 
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
-    let { areaIds } = req.body;
-    let todoList = await TodoModel.find({ areaId: areaIds });
+    let { areaIds, maxNumber } = req.body;
+    let todoList = await TodoModel.find({ areaId: areaIds});
+    console.log(todoList)
     res.send(todoList)
 })
 
 //Generate List without empty Areas
-router.get('/getAreasWithoutEmpty', async (req,res,next)=>{
+router.get('/getAreasWithoutEmpty', async (req, res, next) => {
     let userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
-    let fullAreaIds = await TodoModel.find({userId: userId}, {areaId: 1, _id: 0}).distinct("areaId");
+    let fullAreaIds = await TodoModel.find({ userId: userId }, { areaId: 1, _id: 0 }).distinct("areaId");
     console.log(fullAreaIds)
-    let fullAreas = await AreaModel.find({_id: fullAreaIds})
+    let fullAreas = await AreaModel.find({ _id: fullAreaIds })
     res.send(fullAreas)
 })
 
 //Count all Todos in Area
-router.post('/countTodos', async (req,res,next)=>{
+router.post('/countTodos', async (req, res, next) => {
     let { areaId } = req.body;
     let todoList = await TodoModel.find({ areaId: areaId })
     res.send(todoList.length)
 })
 
 // Delete a specific Todo (using id)
-router.delete('/deleteTodo', async (req,res,next)=>{
-    let {todoId} = req.body;
+router.delete('/deleteTodo', async (req, res, next) => {
+    let { todoId } = req.body;
+    let area = await TodoModel.findOne({_id: todoId}, {areaId: 1, _id: 0})
+    
     await TodoModel.findByIdAndDelete(todoId)
+        .then(response => {
+            res.send({ msg: 'Todo deleted' })
+        })
+        .catch(err => {
+            res.send({ msg: err })
+        })
+     AreaModel.findOneAndUpdate({ _id: area.areaId }, { $inc: { 'todoCount': -1 } })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
+        
+})
+
     .then(response =>{
         res.send({msg: 'Todo deleted'})
       })
@@ -162,5 +184,6 @@ router.delete('/deleteTodo', async (req,res,next)=>{
       })
     })
    
+
 
 module.exports = router;

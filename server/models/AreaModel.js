@@ -26,6 +26,10 @@ const todoSchema = new Schema ({
         type: Boolean,
         default: false
     },
+    areaColor: {
+        type: String,
+        default: "white"
+    },
     areaId: {
         type: String, 
         require: true
