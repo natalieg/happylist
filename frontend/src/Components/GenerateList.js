@@ -160,6 +160,8 @@ export default class GenerateList extends Component {
                         <div className="visibleListWrapper">
                             <div>Current Todos: {this.state.currentTodoListCount}</div>
                             {generatedList}
+                            <input className="button" type='button' value="Save"/>
+                            <input className="button" type='button' value="Hide Completed"/>
                         </div>
                         : null}
                 </div>
