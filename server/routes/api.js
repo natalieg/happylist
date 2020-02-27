@@ -91,15 +91,16 @@ router.delete('/deleteArea', async (req, res, next) => {
 
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
-    let { todoName, parts, partName, time, difficulty, userId, areaId } = req.body;
+    let { todoName, parts, partName, time,totalTime,  difficulty, userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
     let color = await AreaModel.findOne({ _id: areaId }, { color: 1, _id: 0 })
     let newTodo = new TodoModel({
         todoName: todoName,
-        parts: parts,
+        allParts: parts,
         partName: partName,
         time: time,
+        totalTime: totalTime,
         difficulty: difficulty,
         userId: userId,
         areaId: areaId,
@@ -143,7 +144,7 @@ router.post('/generateList', async (req, res, next) => {
             todoId: todo._id,
             todoName: todo.todoName,
             partNumber: todo.finishedParts + 1,
-            allParts: todo.parts,
+            allParts: todo.allParts,
             partTime: todo.partTime,
             state: false,
             color: todo.areaColor
@@ -165,6 +166,19 @@ router.post('/generateList', async (req, res, next) => {
             console.log(err)
             res.send({ msg: err })
         })
+})
+
+//Load current generated List
+router.get('/getCurrentList', async (req,res,next) => {
+    let list = await ListModel.find({userId: userId})
+    .then(response => {
+        console.log(response)
+        res.send(response)
+    })
+    .catch(err => {
+        console.log(err)
+        res.send({ msg: err })
+    });    
 })
 
 //Generate List without empty Areas

@@ -40,7 +40,7 @@ const todoSchema = new Schema({
         type: String,
         require: true
     },
-    parts: {
+    allParts: {
         type: Number,
         default: 1
     },

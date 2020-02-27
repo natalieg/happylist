@@ -9,8 +9,9 @@ export default class NewTodo extends Component {
             areaId: props.areaId,
             todoName: '',
             parts: 1,
-            partName: '',
-            time: '',
+            partName: "Parts",
+            time: 10,
+            totalTime: 10,
             difficulty: '',
             divClass: "ani1",
             reloadTodo: props.reloadTodo
@@ -32,6 +33,8 @@ export default class NewTodo extends Component {
 
     handleInputParts = (e) => {
         const value = e.target.value;
+        const timeCalc = value * this.state.time;
+        this.setState({ totalTime: timeCalc })
         this.setState({ parts: value })
     }
 
@@ -40,9 +43,22 @@ export default class NewTodo extends Component {
         this.setState({ partName: value })
     }
 
+    // Single Time input calculates
+    // full Time for all Parts
     handleInputTime = (e) => {
-        const value = e.target.value;
+        const value = parseInt(e.target.value);
+        const calcTime = value * this.state.parts;
+        this.setState({ totalTime: calcTime })
         this.setState({ time: value })
+    }
+
+    // Full time input also calculates the 
+    // time per part
+    handleInputTotalTime = (e) => {
+        const value = parseInt(e.target.value);
+        const timeCalc = value / this.state.parts;
+        this.setState({ time: timeCalc })
+        this.setState({ totalTime: value })
     }
 
     handleInputDifficulty = (e) => {
@@ -58,8 +74,9 @@ export default class NewTodo extends Component {
             this.setState({
                 todoName: '',
                 parts: 1,
-                partName: '',
-                time: '',
+                partName: "Parts",
+                time: 10,
+                totalTime: 10,
                 difficulty: ''
             })
         }).catch(err => {
@@ -68,34 +85,45 @@ export default class NewTodo extends Component {
         this.state.reloadTodo()
     }
     checKey = (e) => {
-        if(e.key === "Enter"){
+        if (e.key === "Enter") {
             this.handleSendData()
         }
     }
 
     render() {
         return (
-            <div className={this.state.divClass}>
+            <div className={`${this.state.divClass} newTodo`}>
                 <input type="text" name="todoName" placeholder="todoname"
+                    autoComplete="off"
                     value={this.state.todoName}
-                    onChange={this.handleInputName} 
-                    onKeyDown={this.checKey}/>
+                    onChange={this.handleInputName}
+                    onKeyDown={this.checKey} />
                 <input type="number" name="parts" placeholder="parts" min="0"
+                    autoComplete="off"
                     style={{ width: "42%" }}
                     value={this.state.parts}
                     onChange={this.handleInputParts} />
                 <input type="text" name="partName" placeholder="partname"
+                    autoComplete="off"
                     style={{ width: "42%" }}
                     value={this.state.partName}
                     onChange={this.handleInputPartName} />
                 <input type="number" name="time" placeholder="time"
-                    style={{ width: "60%" }}
+                    autoComplete="off"
+                    style={{ width: "40%" }}
                     value={this.state.time}
                     onChange={this.handleInputTime} />
-                    <label>Minutes</label>
-                <input type="number" name="difficulty" placeholder="difficulty"
+                <label>Minutes</label>
+                <input type="number" name="totalTime" placeholder="totalTime"
+                    autoComplete="off"
+                    style={{ width: "40%" }}
+                    value={this.state.totalTime}
+                    onChange={this.handleInputTotalTime} />
+                <label>Minutes</label>
+                {/* <input type="number" name="difficulty" placeholder="difficulty"
+                    autocomplete="off"
                     value={this.state.difficulty}
-                    onChange={this.handleInputDifficulty} />
+                    onChange={this.handleInputDifficulty} /> */}
                 <button onClick={this.handleSendData}>Save</button>
             </div>
         )

@@ -40,7 +40,6 @@ export default class SingleArea extends Component {
     }
 
     render() {
-        console.log(this.state.area)
         return (
 
             <div id={this.state.area.areaId} style={{ backgroundColor: this.state.area.backgroundColor }}

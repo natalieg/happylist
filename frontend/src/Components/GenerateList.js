@@ -19,14 +19,23 @@ export default class GenerateList extends Component {
         }
     }
 
+    loadSavedList = async () => {
+        await apis.getCurrentList().then(response => {
+            let tempTodos = [... response.data[0].todos]
+            if (tempTodos.length > 0) {
+                this.setState({ todoList: tempTodos, 
+                currentTodoListCount: tempTodos.length })
+            }
+        })
+    }
 
     // Loading Areas
     componentDidMount = async () => {
         this.setState({ isLoading: true })
+        this.loadSavedList();
         await apis.getAreasWithoutEmpty().then(response => {
             let tempActive = [];
             response.data.forEach(element => {
-                
                 tempActive.push({
                     id: element._id,
                     state: true,
@@ -35,7 +44,6 @@ export default class GenerateList extends Component {
                     todoCount: element.todoCount
                 })
             });
-            
             this.setState({
                 areas: response.data,
                 isLoading: false,
@@ -43,6 +51,8 @@ export default class GenerateList extends Component {
             })
         })
     }
+
+
 
     /*
     Creating the Todo List
@@ -66,7 +76,7 @@ export default class GenerateList extends Component {
                         _id: todo._id,
                         todoName: todo.todoName,
                         partNumber: todo.finishedParts + 1,
-                        allParts: todo.parts,
+                        allParts: todo.allParts,
                         partTime: todo.partTime,
                         color: todo.areaColor
                     })
@@ -115,7 +125,6 @@ export default class GenerateList extends Component {
         }
         let generatedList = null;
         if (this.state.todoList.length > 0) {
-            
             generatedList = this.state.todoList.map((todo, index) => {
                 return (
                     <SingleTodo
@@ -123,6 +132,8 @@ export default class GenerateList extends Component {
                         todoId={todo._id}
                         todoName={todo.todoName}
                         color={todo.color}
+                        partNumber={todo.partNumber}
+                        allParts={todo.allParts}
                     />
                 )
             })
