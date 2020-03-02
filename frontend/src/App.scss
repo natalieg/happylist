@@ -262,6 +262,7 @@ button:not(.navBtn) {
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+
     .button {
         padding: 5px;
         margin: 5px;
@@ -269,33 +270,42 @@ button:not(.navBtn) {
     }
 }
 
-.singleTodo {
+.dragContainer {
     width: 50%;
-    background-color: white;
     margin: 4px auto;
+}
+
+.singleTodo {
+    width: 100%;
+    background-color: white;
     padding-left: 10px;
     height: $singleTodoHeight;
     text-align: left;
     position: relative;
+
     // display: flex;
     // align-items: center;
     label {
-         line-height: $singleTodoHeight;
+        line-height: $singleTodoHeight;
     }
+
     .todoLabel {
         padding-left: 40px;
     }
+
     .checkbox {
         position: absolute;
         top: 7px;
         height: 30px;
         width: 30px;
     }
+
     .todoComplete {
         text-decoration: line-through;
         color: grey;
         transition: .5s;
     }
+
     .todoIncomplete {
         text-decoration: none;
         color: black;
@@ -307,18 +317,20 @@ button:not(.navBtn) {
         position: absolute;
         top: 0px;
         right: 2px;
+
         svg {
-            width:  44px;
+            width: 44px;
             height: 44px;
             margin-top: 2px;
             border: 1px solid rgba(0, 0, 0, 0.308);
             border-radius: 50%;
         }
     }
+
     .partDisplay {
         float: right;
         padding-right: 60px;
-    }    
+    }
 }
 
 .todoColorRef {

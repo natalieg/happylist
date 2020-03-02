@@ -91,7 +91,7 @@ router.delete('/deleteArea', async (req, res, next) => {
 
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
-    let { todoName, parts, partName, time,totalTime,  difficulty, userId, areaId } = req.body;
+    let { todoName, parts, partName, time, totalTime, difficulty, userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
     let color = await AreaModel.findOne({ _id: areaId }, { color: 1, _id: 0 })
@@ -143,7 +143,7 @@ router.post('/generateList', async (req, res, next) => {
         tempList.push({
             todoId: todo._id,
             todoName: todo.todoName,
-            partNumber: todo.finishedParts + 1,
+            partNumber: todo.finishedParts,
             allParts: todo.allParts,
             partTime: todo.partTime,
             state: false,
@@ -155,11 +155,11 @@ router.post('/generateList', async (req, res, next) => {
         userId: userId,
         todos: tempList
     }
-    ListModel.findOneAndUpdate({userId: userId}, newList, {
+    ListModel.findOneAndUpdate({ userId: userId }, newList, {
         upsert: true
     })
         .then(response => {
-            console.log(response)
+            // console.log(response)
             res.send(generatedList)
         })
         .catch(err => {
@@ -168,17 +168,42 @@ router.post('/generateList', async (req, res, next) => {
         })
 })
 
+//Save current Todo
+router.post('/saveCurrentTodo', async (req, res, next) => {
+    let user = userId; // Fixme Later
+    let { todoId, state, partNumber } = req.body;
+    console.log("IM HERE")
+    console.log(todoId, state, partNumber)
+    await ListModel.updateOne(
+        { userId: user, "todos.todoId": todoId },
+        {
+            $set: {
+                "todos.$.state": state,
+                "todos.$.partNumber": partNumber
+            }
+        }
+    )
+        .then(response => {
+            // console.log(response)
+            res.send("Todo saved successfully!")
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
+})
+
 //Load current generated List
-router.get('/getCurrentList', async (req,res,next) => {
-    let list = await ListModel.find({userId: userId})
-    .then(response => {
-        console.log(response)
-        res.send(response)
-    })
-    .catch(err => {
-        console.log(err)
-        res.send({ msg: err })
-    });    
+router.get('/getCurrentList', async (req, res, next) => {
+    let list = await ListModel.find({ userId: userId })
+        .then(response => {
+            // console.log(response)
+            res.send(response)
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        });
 })
 
 //Generate List without empty Areas
