@@ -3,6 +3,7 @@ $areaBorder: 20px;
 $backcolor: rgb(177, 160, 145);
 $buttonMargin: 4px;
 $biggerFont: 1.3em;
+$singleTodoHeight: 50px;
 
 body {
     width: 100%;
@@ -30,6 +31,7 @@ body {
 // }
 
 .upperBar {
+    height: 22px !important;
     margin-top: 0px;
     padding: 4px;
 }
@@ -260,30 +262,75 @@ button:not(.navBtn) {
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+
+    .button {
+        padding: 5px;
+        margin: 5px;
+        max-width: 50% !important;
+    }
+}
+
+.dragContainer {
+    width: 50%;
+    margin: 4px auto;
 }
 
 .singleTodo {
-    width: 50%;
+    width: 100%;
     background-color: white;
-    margin: 4px auto;
     padding-left: 10px;
-    height: 30px;
+    height: $singleTodoHeight;
     text-align: left;
     position: relative;
 
+    // display: flex;
+    // align-items: center;
+    label {
+        line-height: $singleTodoHeight;
+    }
+
+    .todoLabel {
+        padding-left: 40px;
+    }
+
+    .checkbox {
+        position: absolute;
+        top: 7px;
+        height: 30px;
+        width: 30px;
+    }
+
     .todoComplete {
         text-decoration: line-through;
-        color: grey
+        color: grey;
+        transition: .5s;
     }
+
     .todoIncomplete {
         text-decoration: none;
-        color: black
+        color: black;
+        transition: .5s;
     }
-}
 
-.partDisplay {
-    float: right;
-    padding-right: 40px;
+    .pieChart {
+        //height: 100% !important;
+        position: absolute;
+        top: 0px;
+        right: 2px;
+
+        svg {
+            width: 44px;
+            height: 44px;
+            margin-top: 2px;
+            border: 1px solid rgba(0, 0, 0, 0.308);
+            border-radius: 50%;
+        }
+    }
+
+    .partDisplay {
+        float: right;
+        padding-right: 60px;
+    }
 }
 
 .todoColorRef {
