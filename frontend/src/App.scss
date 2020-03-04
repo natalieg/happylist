@@ -192,13 +192,13 @@ button:not(.navBtn) {
     flex-grow: 1;
     // height: 200px;
     overflow-y: auto;
+    text-align: left;
 
     p {
         padding: 2px;
         margin: 4px;
         transition: .5s;
     }
-
     p::before {
         content: 'o '
     }
@@ -206,6 +206,9 @@ button:not(.navBtn) {
     p:hover {
         background-color: lighten($backcolor, $amount: 20);
         border-radius: 4px;
+    }
+    .todoProgress {
+        float: right;
     }
 }
 
@@ -300,18 +303,6 @@ button:not(.navBtn) {
         width: 30px;
     }
 
-    .todoComplete {
-        text-decoration: line-through;
-        color: grey;
-        transition: .5s;
-    }
-
-    .todoIncomplete {
-        text-decoration: none;
-        color: black;
-        transition: .5s;
-    }
-
     .pieChart {
         //height: 100% !important;
         position: absolute;
@@ -331,6 +322,18 @@ button:not(.navBtn) {
         float: right;
         padding-right: 60px;
     }
+}
+
+.todoComplete {
+    text-decoration: line-through;
+    color: grey;
+    transition: .5s;
+}
+
+.todoIncomplete {
+    text-decoration: none;
+    color: black;
+    transition: .5s;
 }
 
 .todoColorRef {

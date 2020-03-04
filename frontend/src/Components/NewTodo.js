@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import apis from '../api';
-import Validator from 'validator';
-import PropTypes from 'prop-types';
 import ErrorMessage from './message/ErrorMessage';
 
 export default class NewTodo extends Component {
@@ -34,29 +32,17 @@ export default class NewTodo extends Component {
             this.setState({ loading: true });
     
             console.log('trying to transmit data');
-    
-
                 this.handleSendData()
-      
-            
         };
     };
 
     validate = (data) =>{
-        
-        
-        
         const errors = {}; // the errors var will be empty if we don`t have errors 
        
         if(!data.todoName)  errors.todoName = 'Name cannot be empty';
-        if(data.parts <= 0 || (data.parts % 1) != 0) errors.partsStr = 'Parts must be a positive whole number';
-        if(data.time <= 0 || (data.parts % 1) != 0)  errors.timeStr = 'Time must be a positive whole number';
-        if(data.totalTime <= 0 || (data.totalTime % 1) != 0)  errors.totalTime = 'totalTime must be a positive whole number';
-
-
-
-
-    
+        if(data.parts <= 0 || (data.parts % 1) !== 0) errors.partsStr = 'Parts must be a positive whole number';
+        if(data.time <= 0 || (data.parts % 1) !== 0)  errors.timeStr = 'Time must be a positive whole number';
+        if(data.totalTime <= 0 || (data.totalTime % 1) !== 0)  errors.totalTime = 'totalTime must be a positive whole number';
         return errors;
     };
 

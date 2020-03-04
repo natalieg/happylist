@@ -4,7 +4,6 @@ import NewArea from './NewArea';
 import UpperView from './UpperView';
 import apis from '../api'
 import Areabar from './Navbar/Areabar';
-import GenerateList from './GenerateList'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 //#Check Pre defined standard colors, maybe change position later
@@ -25,7 +24,7 @@ export default class Areas extends Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true })
         await apis.getAreaList().then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.setState({
                 areas: response.data,
                 isLoading: false
@@ -89,12 +88,17 @@ export default class Areas extends Component {
             })
             
             return (
-                <SingleArea id={this.state.areas[index]._id} className='singleArea' key={this.state.areas[index]._id}
-                    btnValue={index} click={this.addTodo} color={area.color}
-                    name={area.areaTitle} taskcount={taskcount} tasks={displayTodos} />
+                <SingleArea id={this.state.areas[index]._id} 
+                    className='singleArea' 
+                    key={this.state.areas[index]._id}
+                    btnValue={index} 
+                    click={this.addTodo} 
+                    color={area.color}
+                    name={area.areaTitle} 
+                    taskcount={taskcount} 
+                    tasks={displayTodos} />
             )
         })
-        console.log(displayareas)
         return (
             <Router>
                 <div>
@@ -108,7 +112,8 @@ export default class Areas extends Component {
                            {/* Shows all the Areas */}
                         <Route path="/">
                             <div className='moduleOverview'>
-                                {this.state.newAreaActive ? <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
+                                {this.state.newAreaActive ? 
+                                <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
                                 {displayareas}
                             </div>
                         </Route>
