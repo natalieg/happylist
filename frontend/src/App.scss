@@ -130,9 +130,10 @@ button:not(.navBtn) {
     text-align: center;
     display: flex;
     flex-flow: column;
-    height: 100%;
+    //height: 100%;
+    height: 500px;
     transition: .5s;
-    // height: 500px;
+    
 
     h2 {
         margin: 0;
@@ -189,7 +190,9 @@ button:not(.navBtn) {
     border: 10px solid white;
     border-radius: $areaBorder;
     margin-top: 10px;
-    flex-grow: 1;
+    flex: 1;
+    flex-shrink: 1;
+    transition: flex .5s ease-in;
     // height: 200px;
     overflow-y: auto;
     text-align: left;
@@ -345,18 +348,53 @@ button:not(.navBtn) {
     position: absolute;
 }
 
+.newTodoWrap {
+    flex: 1;
+    transition: flex .5s ease-in;
+
+}
+
+.inputError {
+    box-shadow: inset 0 0 5px red;
+    border: 1px solid rgba(255, 0, 0, 0.658);
+    // border: 1px solid red;
+}
+
+.inputOkay {
+    border: none
+    // border: 1px solid grey ;
+}
+
 // Animation 
 
+.newTodoWrap {
+    flex: 1;
+    display: flex;
+    transition: flex .5s ease-in;
+    flex-direction: column;
+}
+
 .ani1 {
+    flex: 0;
     opacity: 1;
-    height: 0px;
+    // max-height: 0%;
     overflow: hidden;
-    transition: height .5s ease-in;
+    transition: flex .5s ease-in;
 }
 
 .ani2 {
     opacity: 1;
-    height: 230px;
+    // max-height: 100%;
+    flex: 1.1;
+    flex-shrink: 0;
+    height: 100%;
     overflow: hidden;
-    transition: height .5s ease-in;
+    // transition: flex .5s ease-in;
+}
+
+// Messages
+.errorMessage {
+    position: relative;
+
+    z-index: 5;
 }

@@ -16,33 +16,52 @@ export default class NewTodo extends Component {
             difficulty: '',
             divClass: "ani1",
             reloadTodo: props.reloadTodo,
-            loading:false,
-            errors: {}
+            loading: false,
+            errors: {},
+            errorText: "",
+            numError: false,
+            numErrorText: "",
         }
     }
 
-    onSubmit = (e) =>{
+    onSubmit = (e) => {
         const data = this.state
         e.preventDefault();
-        const errors = this.validate( data ); // do not do enything else if we have errors 
+        const errors = this.validate(data); // do not do enything else if we have errors 
         this.setState({ errors });
-    
-        if(Object.keys(errors).length === 0){
-    
+
+        if (Object.keys(errors).length === 0) {
+
             this.setState({ loading: true });
-    
+
             console.log('trying to transmit data');
-                this.handleSendData()
+            this.handleSendData()
         };
     };
 
-    validate = (data) =>{
+    validate = (data) => {
+        this.setState({ numError: false, numErrorText: "" })
         const errors = {}; // the errors var will be empty if we don`t have errors 
-       
-        if(!data.todoName)  errors.todoName = 'Name cannot be empty';
-        if(data.parts <= 0 || (data.parts % 1) !== 0) errors.partsStr = 'Parts must be a positive whole number';
-        if(data.time <= 0 || (data.parts % 1) !== 0)  errors.timeStr = 'Time must be a positive whole number';
-        if(data.totalTime <= 0 || (data.totalTime % 1) !== 0)  errors.totalTime = 'totalTime must be a positive whole number';
+        let numErr = "" // String for the Number errors
+
+        if (!data.todoName) errors.todoName = 'Name cannot be empty!';
+        if (data.parts <= 0 || (data.parts % 1) !== 0) {
+            errors.partsStr = 'Parts';
+            numErr += 'Parts, '
+        };
+        if (data.time <= 0 || (data.time % 1) !== 0) {
+            errors.timeStr = 'Time ';
+            numErr += 'Time, '
+        }
+        if (data.totalTime <= 0 || (data.totalTime % 1) !== 0) {
+            errors.totalTime = 'TotalTime'
+            numErr += 'Total Time'
+        };
+
+        if (errors.partsStr || errors.timeStr || errors.totalTime) {
+            this.setState({ numError: true, numErrorText: numErr })
+        }
+
         return errors;
     };
 
@@ -95,7 +114,7 @@ export default class NewTodo extends Component {
     }
 
     // sending and saving data to DB
-    handleSendData = async () => {  
+    handleSendData = async () => {
         const data = this.state;
         console.log("Sending todo data")
         console.log(data)
@@ -120,50 +139,57 @@ export default class NewTodo extends Component {
     }
 
     render() {
+
         return (
-            <div className={`${this.state.divClass} newTodo`}>
-                <input type="text" name="todoName" placeholder="todoname"
-                    autoComplete="off"
-                    value={this.state.todoName}
-                    onChange={this.handleInputName}
-                    onKeyDown={this.checKey} />
-                    {this.state.errors.todoName && <ErrorMessage text = {this.state.errors.todoName}/>}
+            <div className="newTodoWrap">
+                <div className="errorMessages">
+                    {this.state.errors.todoName && <ErrorMessage text={this.state.errors.todoName} />}
+                    {this.state.numError ? `Please Check: ${this.state.numErrorText}` : null}
+                </div>
+                <div className={`${this.state.divClass} newTodo`}>
 
-                <input type="number" name="parts" placeholder="parts" min="0"
-                    autoComplete="off"
-                    style={{ width: "42%" }}
-                    value={this.state.parts}
-                    onChange={this.handleInputParts} />
-                    {this.state.errors.partsStr && <ErrorMessage text = {this.state.errors.partsStr}/>}
+                    <input type="text" name="todoName" placeholder="todoname"
+                        className={this.state.errors.todoName ? "inputError" : null}
+                        autoComplete="off"
+                        value={this.state.todoName}
+                        onChange={this.handleInputName}
+                        onKeyDown={this.checKey} />
 
-                <input type="text" name="partName" placeholder="partname"
-                    autoComplete="off"
-                    style={{ width: "42%" }}
-                    value={this.state.partName}
-                    onChange={this.handleInputPartName} />
-                    {this.state.errors.partName && <ErrorMessage text = {this.state.errors.partName}/>}
+                    <input type="number" name="parts" placeholder="parts" min="0"
+                        className={this.state.errors.partsStr ? "inputError" : null}
+                        autoComplete="off"
+                        style={{ width: "42%" }}
+                        value={this.state.parts}
+                        onChange={this.handleInputParts} />
 
-                <input type="number" name="time" placeholder="time"
-                    autoComplete="off"
-                    style={{ width: "40%" }}
-                    value={this.state.time}
-                    onChange={this.handleInputTime} />
-                <label>Minutes</label>
-                    {this.state.errors.timeStr && <ErrorMessage text = {this.state.errors.timeStr}/>}
+                    <input type="text" name="partName" placeholder="partname"
+                        autoComplete="off"
+                        style={{ width: "42%" }}
+                        value={this.state.partName}
+                        onChange={this.handleInputPartName} />
 
-                <input type="number" name="totalTime" placeholder="totalTime"
-                    autoComplete="off"
-                    style={{ width: "40%" }}
-                    value={this.state.totalTime}
-                    onChange={this.handleInputTotalTime} />
-                    {this.state.errors.totalTime && <ErrorMessage text = {this.state.errors.totalTime}/>}
-                <label>Minutes</label>
+                    <input type="number" name="time" placeholder="time"
+                        className={this.state.errors.timeStr ? "inputError" : null}
+                        autoComplete="off"
+                        style={{ width: "40%" }}
+                        value={this.state.time}
+                        onChange={this.handleInputTime} />
+                    <label>Minutes</label>
 
-                {/* <input type="number" name="difficulty" placeholder="difficulty"
+                    <input type="number" name="totalTime" placeholder="totalTime"
+                        className={this.state.errors.totalTime ? "inputError" : null}
+                        autoComplete="off"
+                        style={{ width: "40%" }}
+                        value={this.state.totalTime}
+                        onChange={this.handleInputTotalTime} />
+                    <label>Minutes</label>
+
+                    {/* <input type="number" name="difficulty" placeholder="difficulty"
                     autocomplete="off"
                     value={this.state.difficulty}
                     onChange={this.handleInputDifficulty} /> */}
-                <button onClick={this.onSubmit}>Save</button>
+                    <button onClick={this.onSubmit}>Save</button>
+                </div>
             </div>
         )
     }
