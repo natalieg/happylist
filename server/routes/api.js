@@ -135,7 +135,7 @@ router.post('/getTodos', async (req, res, next) => {
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
     let { areaIds, maxNumber } = req.body;
-    let todoList = await TodoModel.find({ areaId: areaIds });
+    let todoList = await TodoModel.find({ areaId: areaIds, finished: false });
     let generatedList = generateList(todoList, areaIds, maxNumber)
 
     let tempList = []
@@ -172,8 +172,6 @@ router.post('/generateList', async (req, res, next) => {
 router.post('/saveCurrentTodo', async (req, res, next) => {
     let user = userId; // Fixme Later
     let { todoId, state, partNumber } = req.body;
-    console.log("IM HERE")
-    console.log(todoId, state, partNumber)
     await ListModel.updateOne(
         { userId: user, "todos.todoId": todoId },
         {
@@ -183,10 +181,19 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
             }
         }
     )
-        .then(response => {
-            // console.log(response)
-            res.send("Todo saved successfully!")
-        })
+    let todo = await TodoModel.findById(todoId)
+    let finished = false;
+    if(todo.allParts == partNumber){
+        finished = true
+    }
+    await todo.update({
+        finishedParts: partNumber,
+        finished: finished
+    })
+    .then(response => {
+        console.log(response)
+        res.send({ msg: 'Updated Todo' })
+    })
         .catch(err => {
             console.log(err)
             res.send({ msg: err })

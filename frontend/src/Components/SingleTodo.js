@@ -29,8 +29,6 @@ export default class SingleTodo extends Component {
             state: value,
             partNumber: partNumber
         }
-        console.log("Inside Frontend ----------------")
-        console.log(data)
         await apis.saveCurrentTodo(data)
             .then(response => {
                 this.setState({ 

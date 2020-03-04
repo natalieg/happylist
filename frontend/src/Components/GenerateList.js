@@ -22,7 +22,7 @@ export default class GenerateList extends Component {
     // Loads a saved list
     loadSavedList = async () => {
         await apis.getCurrentList().then(response => {
-            if(response.data[0] != null){
+            if (response.data[0] != null) {
                 let tempTodos = [...response.data[0].todos]
                 if (tempTodos.length > 0) {
                     this.setState({
@@ -31,7 +31,7 @@ export default class GenerateList extends Component {
                     })
                 }
             }
-   
+
         })
     }
 
@@ -58,7 +58,6 @@ export default class GenerateList extends Component {
         })
     }
 
-
     changeTodoState = (e) => {
         const value = e.target.checked;
         this.setState({ state: value })
@@ -72,10 +71,13 @@ export default class GenerateList extends Component {
     }
 
     /*
-    Creating the Todo List
+    Creating a new Todo List
     */
     createTodoList = async () => {
-        this.setState({ isLoading: true })
+        console.log("I AM CREATING!")
+        this.setState({ 
+            isLoading: true,
+        })
         let areaIds = []
         this.state.activeAreas.forEach(area => {
             if (area.state) {
@@ -90,13 +92,18 @@ export default class GenerateList extends Component {
                 let tempTodo = [];
                 response.data.forEach(todo => {
                     tempTodo.push({
-                        _id: todo._id,
+                        todoId: todo._id,
                         todoName: todo.todoName,
                         partNumber: todo.finishedParts,
                         allParts: todo.allParts,
                         partTime: todo.partTime,
-                        color: todo.areaColor
+                        color: todo.areaColor,
+                        state: false
                     })
+                })
+                console.log(tempTodo)
+                this.setState({
+                    todoList: []
                 })
                 this.setState({
                     todoList: tempTodo,
@@ -112,7 +119,7 @@ export default class GenerateList extends Component {
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/html", e.target.parentNode);
         e.dataTransfer.setDragImage(e.target, 100, 20);
-        this.setState({isDragging: true})
+        this.setState({ isDragging: true })
     };
 
     onDragOver = index => {
@@ -134,7 +141,7 @@ export default class GenerateList extends Component {
 
     onDragEnd = () => {
         this.draggedIdx = null;
-        this.setState({isDragging: false})
+        this.setState({ isDragging: false })
 
     };
     /////// End Drag & Drop
@@ -162,8 +169,8 @@ export default class GenerateList extends Component {
         if (this.state.activeAreas.length > 0) {
             allAreas = this.state.activeAreas.map((area, index) => {
                 return (
-                    <div key={area.id} 
-                    className="selectArea"        
+                    <div key={area.id}
+                        className="selectArea"
                         style={{ backgroundColor: area.color }}>
                         <label>
                             <input type="checkbox"
@@ -178,7 +185,7 @@ export default class GenerateList extends Component {
         if (this.state.todoList.length > 0) {
             generatedList = this.state.todoList.map((todo, index) => {
                 return (
-                    <div className="dragContainer" key={index} draggable
+                    <div className="dragContainer" key={todo.todoId} draggable
                         onDragOver={() => this.onDragOver(index)}
                         onDragStart={e => this.onDragStart(e, index)}
                         onDragEnd={this.onDragEnd}>
