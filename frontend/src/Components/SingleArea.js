@@ -35,6 +35,7 @@ export default class SingleArea extends Component {
 
     handleLoadData = async () => {
         await apis.getAreaTodos({ areaId: this.state.area.areaId }).then(response => {
+            this.setState({tasks: []})
             this.setState({
                 tasks: response.data,
                 isLoading: false

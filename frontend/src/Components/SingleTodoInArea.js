@@ -13,8 +13,6 @@ export default class SingleTodoInArea extends Component {
         }
     }
 
-    
-
     calcProgress = () => {
         if(this.state.finishedParts === 0){
             return 0
