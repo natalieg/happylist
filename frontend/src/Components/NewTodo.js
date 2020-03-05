@@ -26,7 +26,6 @@ export default class NewTodo extends Component {
 
     onSubmit = (e) => {
         const data = this.state
-        e.preventDefault();
         const errors = this.validate(data); // do not do enything else if we have errors 
         this.setState({ errors });
 
@@ -133,7 +132,7 @@ export default class NewTodo extends Component {
     
     checKey = (e) => {
         if (e.key === "Enter") {
-            this.handleSendData()
+            this.onSubmit()
         }
     }
 
@@ -159,20 +158,23 @@ export default class NewTodo extends Component {
                         autoComplete="off"
                         style={{ width: "42%" }}
                         value={this.state.parts}
-                        onChange={this.handleInputParts} />
+                        onChange={this.handleInputParts} 
+                        onKeyDown={this.checKey}/>
 
                     <input type="text" name="partName" placeholder="partname"
                         autoComplete="off"
                         style={{ width: "42%" }}
                         value={this.state.partName}
-                        onChange={this.handleInputPartName} />
+                        onChange={this.handleInputPartName} 
+                        onKeyDown={this.checKey}/>
 
                     <input type="number" name="time" placeholder="time"
                         className={this.state.errors.timeStr ? "inputError" : null}
                         autoComplete="off"
                         style={{ width: "40%" }}
                         value={this.state.time}
-                        onChange={this.handleInputTime} />
+                        onChange={this.handleInputTime} 
+                        onKeyDown={this.checKey}/>
                     <label>Minutes</label>
 
                     <input type="number" name="totalTime" placeholder="totalTime"
@@ -180,7 +182,8 @@ export default class NewTodo extends Component {
                         autoComplete="off"
                         style={{ width: "40%" }}
                         value={this.state.totalTime}
-                        onChange={this.handleInputTotalTime} />
+                        onChange={this.handleInputTotalTime} 
+                        onKeyDown={this.checKey}/>
                     <label>Minutes</label>
 
                     {/* <input type="number" name="difficulty" placeholder="difficulty"
