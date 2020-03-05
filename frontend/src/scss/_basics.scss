@@ -1,0 +1,36 @@
+body {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    margin: 0 auto;
+    //background-color: rgb(82, 73, 73);
+    background-image: url(./img/white-flower-plant-3275696.jpg);
+    // background-blend-mode: overlay;
+    background-position: top center;
+    background-size: cover;
+    //background: rgb(222, 164, 190);
+    //background: linear-gradient(317deg, rgba(222, 164, 190, 1) 0%, rgba(176, 198, 224, 1) 59%, rgba(255, 255, 255, 1) 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+.newTodo {
+    button {
+        width: 80%;
+    }
+}
+
+.intro {
+    text-align: center;
+    padding: 50px;
+}
+
+
+.row {
+    display: flex;
+    justify-content: center;
+
+    div {
+        width: 30%;
+    }
+}

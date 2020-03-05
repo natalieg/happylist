@@ -3,7 +3,8 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Navbar from './Components/Navbar/Navbar'
 import Areas from './Components/Areas'
 import GenerateList from './Components/GenerateList'
-import './App.scss';
+import './scss/Main.scss';
+// import './App.scss';
 
 export default class App extends Component {
   render() {

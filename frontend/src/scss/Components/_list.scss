@@ -1,0 +1,110 @@
+// Area Selection
+.selectAreasDiv {
+    display: flex;
+    align-content: space-around;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.selectArea {
+    padding: 10px;
+    min-width: 160px;
+    margin: 10px;
+
+    input {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+.list {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+
+    input {
+        font-size: $biggerFont;
+        max-width: 80px;
+        padding-left: 15px;
+        text-align: center;
+    }
+}
+
+.visibleListWrapper {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+
+    .button {
+        padding: 5px;
+        margin: 5px;
+        max-width: 50% !important;
+    }
+}
+
+.dragContainer {
+    width: 50%;
+    margin: 4px auto;
+}
+
+.singleTodo {
+    width: 100%;
+    background-color: white;
+    padding-left: 10px;
+    height: $singleTodoHeight;
+    text-align: left;
+    position: relative;
+
+    // display: flex;
+    // align-items: center;
+    label {
+        line-height: $singleTodoHeight;
+    }
+
+    .todoLabel {
+        padding-left: 40px;
+    }
+
+    .checkbox {
+        position: absolute;
+        top: 7px;
+        height: 30px;
+        width: 30px;
+    }
+
+    .pieChart {
+        //height: 100% !important;
+        position: absolute;
+        top: 0px;
+        right: 2px;
+
+        svg {
+            width: 44px;
+            height: 44px;
+            margin-top: 2px;
+            border: 1px solid rgba(0, 0, 0, 0.308);
+            border-radius: 50%;
+        }
+    }
+
+    .partDisplay {
+        float: right;
+        padding-right: 60px;
+    }
+}
+
+// Finished and unfinished Todos
+.todoComplete {
+    text-decoration: line-through;
+    color: grey;
+    transition: .5s;
+}
+
+.todoIncomplete {
+    text-decoration: none;
+    color: black;
+    transition: .5s;
+}

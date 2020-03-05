@@ -35,7 +35,7 @@ export default class SingleArea extends Component {
 
     handleLoadData = async () => {
         await apis.getAreaTodos({ areaId: this.state.area.areaId }).then(response => {
-            this.setState({tasks: []})
+            this.setState({ tasks: [] })
             this.setState({
                 tasks: response.data,
                 isLoading: false
@@ -50,22 +50,24 @@ export default class SingleArea extends Component {
 
     render() {
         let displayTodos = this.state.tasks.map((todo, index) => {
-            return <SingleTodoInArea todo={todo}/>
+            return <SingleTodoInArea todo={todo} />
         })
 
         return (
             <div id={this.state.area.areaId} style={{ backgroundColor: this.state.area.backgroundColor }}
                 className={this.state.area.className}>
-                <h2>{this.state.area.areaName}</h2>
-                <p className='areaSummary'>Tasks: {this.state.taskcount}</p>
-                <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
-
-                {this.state.newTodoVisible ?
-                    <NewTodo divClass={this.state.newTodoCss}
-                        areaId={this.state.area.areaId}
-                        reloadTodo={this.handleLoadData}/>
-                    : null}
-
+                <div className="singleAreaUpper">
+                    <h2>{this.state.area.areaName}</h2>
+                    <p className='areaSummary'>Tasks: {this.state.taskcount}</p>
+                    <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
+                </div>
+                <div className="newTodoArea">
+                    {this.state.newTodoVisible ?
+                        <NewTodo divClass={this.state.newTodoCss}
+                            areaId={this.state.area.areaId}
+                            reloadTodo={this.handleLoadData} />
+                        : null}
+                </div>
                 <div className='todoItemContainer'>
                     {this.state.tasks.length > 0 ?
                         <>{displayTodos}</>
