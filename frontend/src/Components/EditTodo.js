@@ -7,6 +7,7 @@ export default class EditTodo extends Component {
 
         this.state = {
             todoId: props.todoId,
+            
             todoName: props.todoName,
             finishedParts: props.finishedParts,
             partName: props.partName,
@@ -15,6 +16,7 @@ export default class EditTodo extends Component {
             totalTime: props.totalTime,
             hideEdit: props.hideEdit,
             reloadTodo: props.reloadTodo,
+            reloadData: props.reloadData
         }
     }
 
@@ -35,9 +37,23 @@ export default class EditTodo extends Component {
         this.handleSendData()
     }
 
+    deleteTask = async () => {
+        const data = this.state;
+        const config = {
+            data: data
+        }
+        await apis.deleteTodo(config).then(response => {
+
+        }).catch(err => {
+            console.log(err)
+        })
+        this.state.hideEdit()
+        this.state.reloadData()
+    }
+
     checKey = (e) => {
         if (e.key === "Enter") {
-           this.onSubmit()
+            this.onSubmit()
         }
     }
 
@@ -53,7 +69,7 @@ export default class EditTodo extends Component {
 
     handleFinishedParts = (e) => {
         const value = e.target.value;
-        this.setState({finishedParts: value})
+        this.setState({ finishedParts: value })
     }
 
     handleInputAllParts = (e) => {
@@ -84,26 +100,33 @@ export default class EditTodo extends Component {
     render() {
         return (
             <div className="editTodo">
-                EDIT <i class="far fa-save icon" onClick={this.onSubmit}/>
+                EDIT <i class="far fa-save icon" onClick={this.onSubmit} />
+                <i class="far fa-trash-alt icon" onClick={this.deleteTask} />
                 <input name="todoName"
                     placeholder="Taskname"
+                    autoComplete="off"
                     value={this.state.todoName}
                     onChange={this.handleInputName}
                     onKeyDown={this.checKey} />
 
                 <input name="partNumber"
+                    type="number"
+                    autoComplete="off"
                     style={{ width: "20%" }}
                     value={this.state.finishedParts}
                     onChange={this.handleFinishedParts}
                     onKeyDown={this.checKey} />
                 /
                 <input name="allParts"
+                    type="number"
+                    autoComplete="off"
                     style={{ width: "20%" }}
                     value={this.state.allParts}
                     onChange={this.handleInputAllParts}
                     onKeyDown={this.checKey} />
 
                 <input name="partName"
+                    autoComplete="off"
                     style={{ width: "37%" }}
                     value={this.state.partName}
                     onChange={this.handleInputPartName}
@@ -111,12 +134,16 @@ export default class EditTodo extends Component {
 
                 <input
                     name="partTime"
+                    type="number"
+                    autoComplete="off"
                     style={{ width: "43%" }}
                     value={this.state.partTime}
                     onChange={this.handleInputTime}
                     onKeyDown={this.checKey} />
 
                 <input name="totalTime"
+                    type="number"
+                    autoComplete="off"
                     style={{ width: "43%" }}
                     value={this.state.totalTime}
                     onChange={this.handleInputTotalTime}

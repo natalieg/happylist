@@ -10,15 +10,14 @@ export default class SingleTodoInArea extends Component {
             todo: props.todo,
             todoId: props.todo._id,
             hoverActive: false,
-            editActive: false
+            editActive: false,
+            reloadData: props.reloadData
         }
     }
 
 
     handleLoadData = async () => {
         await apis.getSingleTodo({ todoId: this.state.todoId }).then(response => {
-            console.log("HIIIIIIIIIIIIIIIIII")
-            console.log(response.data)
             this.setState({
                 todo: response.data
             })
@@ -58,8 +57,9 @@ export default class SingleTodoInArea extends Component {
                     this.state.todo.todoName
                 }
                 {(this.state.editActive || this.state.hoverActive) &&
-                    <i className="far fa-edit icon"
+                   <i className="far fa-edit icon"
                         onClick={this.handleEditMode} />
+                   
                 }
                 <span className="todoProgress">{this.calcProgress()}%</span>
 
@@ -75,6 +75,7 @@ export default class SingleTodoInArea extends Component {
                         totalTime={this.state.todo.totalTime}
                         hideEdit={this.handleEditMode}
                         reloadTodo={this.handleLoadData}
+                        reloadData={this.state.reloadData}
                     />
                 }
             </p>

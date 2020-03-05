@@ -15,6 +15,7 @@ const generateList = (data) => api.post('/generateList', data)
 const getCurrentList = (data) => api.get('./getCurrentList', data)
 const saveCurrentTodo = (data) => api.post('./saveCurrentTodo', data)
 const editTodo = (data) => api.post('./editTodo', data)
+const deleteTodo = (data) => api.delete('./deleteTodo', data)
 const getSingleTodo = (data) => api.post('./getSingleTodo', data)
 
 const apis = {
@@ -29,6 +30,7 @@ const apis = {
     getCurrentList,
     saveCurrentTodo,
     editTodo,
+    deleteTodo,
     getSingleTodo
 }
 

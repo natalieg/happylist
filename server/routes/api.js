@@ -231,21 +231,11 @@ router.post('/countTodos', async (req, res, next) => {
 // Delete a specific Todo (using id)
 router.delete('/deleteTodo', async (req, res, next) => {
     let { todoId } = req.body;
-    let area = await TodoModel.findOne({ _id: todoId }, { areaId: 1, _id: 0 })
-
-    await TodoModel.findByIdAndDelete(todoId)
+    await TodoModel.findByIdAndDelete({ _id: todoId })
         .then(response => {
             res.send({ msg: 'Todo deleted' })
         })
         .catch(err => {
-            res.send({ msg: err })
-        })
-    AreaModel.findOneAndUpdate({ _id: area.areaId }, { $inc: { 'todoCount': -1 } })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(err => {
-            console.log(err)
             res.send({ msg: err })
         })
 })

@@ -122,6 +122,12 @@
     position: absolute;
     right: 50px;
     z-index: 5;
+    top: 4px
+}
+
+.fa-trash-alt {
+    position: absolute;
+    right: 15px;
 }
 
 .editTodo {
@@ -135,7 +141,6 @@
         color: black;
         position: absolute;
         right: 70px;
-        top: 1px;
     }
 }
 
