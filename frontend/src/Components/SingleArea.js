@@ -50,7 +50,9 @@ export default class SingleArea extends Component {
 
     render() {
         let displayTodos = this.state.tasks.map((todo, index) => {
-            return <SingleTodoInArea todo={todo} />
+            return <SingleTodoInArea
+                key={todo._id}
+                todo={todo} />
         })
 
         return (

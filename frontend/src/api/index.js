@@ -15,6 +15,7 @@ const generateList = (data) => api.post('/generateList', data)
 const getCurrentList = (data) => api.get('./getCurrentList', data)
 const saveCurrentTodo = (data) => api.post('./saveCurrentTodo', data)
 const editTodo = (data) => api.post('./editTodo', data)
+const getSingleTodo = (data) => api.post('./getSingleTodo', data)
 
 const apis = {
     getAreaList,
@@ -27,7 +28,8 @@ const apis = {
     generateList,
     getCurrentList,
     saveCurrentTodo,
-    editTodo
+    editTodo,
+    getSingleTodo
 }
 
 export default apis

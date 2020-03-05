@@ -108,6 +108,8 @@
     position: relative;
     .icon {
         transition: .3s;
+        width: 16px;
+        height: 16px;
     }
     .icon:hover {
         transform: scale(1.2);
@@ -126,10 +128,14 @@
     position: relative;
     background-color: rgb(253, 253, 139);
     padding: 3px;
+    input {
+        font-size: 15px;
+    }
     .fa-save {
         color: black;
         position: absolute;
         right: 70px;
+        top: 1px;
     }
 }
 

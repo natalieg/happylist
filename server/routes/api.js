@@ -183,17 +183,17 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
     )
     let todo = await TodoModel.findById(todoId)
     let finished = false;
-    if(todo.allParts == partNumber){
+    if (todo.allParts == partNumber) {
         finished = true
     }
     await todo.update({
         finishedParts: partNumber,
         finished: finished
     })
-    .then(response => {
-        console.log(response)
-        res.send({ msg: 'Updated Todo' })
-    })
+        .then(response => {
+            console.log(response)
+            res.send({ msg: 'Updated Todo' })
+        })
         .catch(err => {
             console.log(err)
             res.send({ msg: err })
@@ -247,19 +247,29 @@ router.delete('/deleteTodo', async (req, res, next) => {
         .catch(err => {
             console.log(err)
             res.send({ msg: err })
-        })      
-
+        })
 })
 
 // Edit a specific Todo(using id)
-router.post('/editTodo',async (req, res, next) => {
-    let { todoId, todoName, parts, partName, time, totalTime, difficulty} = req.body;
-    await TodoModel.findByIdAndUpdate({ _id: todoId },{ todoName: todoName,
-        allParts: parts,
+router.post('/editTodo', async (req, res, next) => {
+    let { todoId, todoName, finishedParts, allParts, partName, 
+        partTime, totalTime, difficulty } = req.body;
+    let finished = false;
+    if(finishedParts >= allParts){
+        finished = true;
+    } else {
+        finished = false;
+    }
+    await TodoModel.findByIdAndUpdate({ _id: todoId }, {
+        todoName: todoName,
+        finishedParts: finishedParts,
+        allParts: allParts,
         partName: partName,
-        time: time,
+        time: partTime,
         totalTime: totalTime,
-        difficulty: difficulty})
+        difficulty: difficulty,
+        finished: finished
+    })
 
         .then(response => {
             console.log(response)
@@ -268,8 +278,13 @@ router.post('/editTodo',async (req, res, next) => {
         .catch(err => {
             console.log(err)
             res.send({ msg: err })
-        })      
+        })
+})
 
+router.post('/getSingleTodo', async (req,res,next)=> {
+    let {todoId} = req.body;
+    let singleTodo = await TodoModel.findById(todoId);
+    res.send(singleTodo);
 })
 
 module.exports = router;

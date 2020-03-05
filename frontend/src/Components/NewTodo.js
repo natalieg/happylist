@@ -116,8 +116,6 @@ export default class NewTodo extends Component {
     // sending and saving data to DB
     handleSendData = async () => {
         const data = this.state;
-        console.log("Sending todo data")
-        console.log(data)
         await apis.sendNewTodo(data).then(response => {
             this.setState({
                 todoName: '',
@@ -132,6 +130,7 @@ export default class NewTodo extends Component {
         })
         this.state.reloadTodo()
     }
+    
     checKey = (e) => {
         if (e.key === "Enter") {
             this.handleSendData()
@@ -148,7 +147,7 @@ export default class NewTodo extends Component {
                 </div>
                 <div className={`${this.state.divClass} newTodo`}>
 
-                    <input type="text" name="todoName" placeholder="todoname"
+                    <input type="text" name="todoName" placeholder="Taskname"
                         className={this.state.errors.todoName ? "inputError" : null}
                         autoComplete="off"
                         value={this.state.todoName}
