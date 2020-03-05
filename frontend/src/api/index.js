@@ -14,6 +14,7 @@ const deleteArea = (data) => api.delete('./deleteArea', data)
 const generateList = (data) => api.post('/generateList', data)
 const getCurrentList = (data) => api.get('./getCurrentList', data)
 const saveCurrentTodo = (data) => api.post('./saveCurrentTodo', data)
+const editTodo = (data) => api.post('./editTodo', data)
 
 const apis = {
     getAreaList,
@@ -25,7 +26,8 @@ const apis = {
     deleteArea,
     generateList,
     getCurrentList,
-    saveCurrentTodo
+    saveCurrentTodo,
+    editTodo
 }
 
 export default apis

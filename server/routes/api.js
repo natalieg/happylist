@@ -247,7 +247,28 @@ router.delete('/deleteTodo', async (req, res, next) => {
         .catch(err => {
             console.log(err)
             res.send({ msg: err })
+        })      
+
+})
+
+// Edit a specific Todo(using id)
+router.post('/editTodo',async (req, res, next) => {
+    let { todoId, todoName, parts, partName, time, totalTime, difficulty} = req.body;
+    await TodoModel.findByIdAndUpdate({ _id: todoId },{ todoName: todoName,
+        allParts: parts,
+        partName: partName,
+        time: time,
+        totalTime: totalTime,
+        difficulty: difficulty})
+
+        .then(response => {
+            console.log(response)
+            res.send("updated Todo")
         })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })      
 
 })
 
