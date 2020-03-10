@@ -100,8 +100,8 @@ export default class EditTodo extends Component {
     render() {
         return (
             <div className="editTodo">
-                EDIT <i class="far fa-save icon" onClick={this.onSubmit} />
-                <i class="far fa-trash-alt icon" onClick={this.deleteTask} />
+                EDIT <i className="far fa-save icon" onClick={this.onSubmit} />
+                <i className="far fa-trash-alt icon" onClick={this.deleteTask} />
                 <input name="todoName"
                     placeholder="Taskname"
                     autoComplete="off"

@@ -105,6 +105,9 @@
 }
 
 .singleTodoArea {
+    padding: 2px;
+    margin: 4px;
+    transition: .5s;
     position: relative;
     .icon {
         transition: .3s;
@@ -116,6 +119,11 @@
         transition: .3s;
         cursor: pointer;
     }
+}
+
+.singleTodoArea:hover {
+    background-color: lighten($backcolor, $amount: 20);
+    border-radius: 4px;
 }
 
 .fa-edit {

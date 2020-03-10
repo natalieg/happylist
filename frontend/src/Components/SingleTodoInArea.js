@@ -49,7 +49,7 @@ export default class SingleTodoInArea extends Component {
 
     render() {
         return (
-            <p className={`singleTodoArea ${(this.state.todo.finished && !this.state.editActive) ? "todoComplete" : "todoIncomplete"}`}
+            <div className={`singleTodoArea ${(this.state.todo.finished && !this.state.editActive) ? "todoComplete" : "todoIncomplete"}`}
                 onMouseEnter={this.handleMouseOver}
                 onMouseLeave={this.handleMouseOut}
                 key={this.state.todo._id}>
@@ -78,7 +78,7 @@ export default class SingleTodoInArea extends Component {
                         reloadData={this.state.reloadData}
                     />
                 }
-            </p>
+            </div>
         )
     }
 }

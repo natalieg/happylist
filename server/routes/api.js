@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const { UserModel, AreaModel, TodoModel, ListModel } = require('../models/AreaModel');
+const { UserModel, AreaModel, TodoModel, ListModel, ArchiveModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 const { generateList } = require('../controller/generateList')
-
+const { deleteTodos } = require('../controller/todos')
 const dummyUser = "User22";
 const userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+const fixedId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
 
 /* TODO Get Areas from DB
  Get Areas for Logged in User
@@ -14,8 +15,8 @@ const userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
  Login Function
  */
 router.get('/areas', async (req, res, next) => {
-    let currentUser = await UserModel.findOne({ name: dummyUser });
-    let userId = currentUser.id;
+    //Fixme Later
+    let userId = fixedId;
     let allAreas = await AreaModel.find({ userId: userId }).sort({ "date": -1 })
 
     let todos = await TodoModel.find({ userId: userId }).sort({ "date": -1 })
@@ -215,7 +216,8 @@ router.get('/getCurrentList', async (req, res, next) => {
 
 //Generate List without empty Areas
 router.get('/getAreasWithoutEmpty', async (req, res, next) => {
-    let userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
+    //FIXME Later
+    let userId = fixedId;
     let fullAreaIds = await TodoModel.find({ userId: userId }, { areaId: 1, _id: 0 }).distinct("areaId");
     let fullAreas = await AreaModel.find({ _id: fullAreaIds })
     res.send(fullAreas)
@@ -231,7 +233,7 @@ router.post('/countTodos', async (req, res, next) => {
 // Delete a specific Todo (using id)
 router.delete('/deleteTodo', async (req, res, next) => {
     let { todoId } = req.body;
-    await TodoModel.findByIdAndDelete({ _id: todoId })
+    deleteTodos(todoId)
         .then(response => {
             res.send({ msg: 'Todo deleted' })
         })
@@ -242,10 +244,10 @@ router.delete('/deleteTodo', async (req, res, next) => {
 
 // Edit a specific Todo(using id)
 router.post('/editTodo', async (req, res, next) => {
-    let { todoId, todoName, finishedParts, allParts, partName, 
+    let { todoId, todoName, finishedParts, allParts, partName,
         partTime, totalTime, difficulty } = req.body;
     let finished = false;
-    if(finishedParts >= allParts){
+    if (finishedParts >= allParts) {
         finished = true;
     } else {
         finished = false;
@@ -260,7 +262,6 @@ router.post('/editTodo', async (req, res, next) => {
         difficulty: difficulty,
         finished: finished
     })
-
         .then(response => {
             console.log(response)
             res.send("updated Todo")
@@ -271,10 +272,39 @@ router.post('/editTodo', async (req, res, next) => {
         })
 })
 
-router.post('/getSingleTodo', async (req,res,next)=> {
-    let {todoId} = req.body;
+router.post('/getSingleTodo', async (req, res, next) => {
+    let { todoId } = req.body;
     let singleTodo = await TodoModel.findById(todoId);
     res.send(singleTodo);
+})
+
+// Archive finished Todos
+router.post('/archiveTodos', async (req, res, next) => {
+    // let { finishedTodos } = req.body;
+    let userId = fixedId // FIXME Later
+    let finishedTodos = await TodoModel.find({
+        userId: userId,
+        finished: true
+    })
+    console.log("FINISHED TODOS", finishedTodos)
+    let todoIds = []
+    finishedTodos.forEach(todo => {
+        todoIds.push(todo._id)
+    });
+    console.log("IDS")
+    console.log("USERID", userId)
+    deleteTodos(todoIds)
+    await ArchiveModel.findOneAndUpdate({ userId: userId }, { $push: { todos: finishedTodos } }, {
+        upsert: true
+    })
+        .then(response => {
+            console.log(response)
+            res.send("Archived Todos!")
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
 })
 
 module.exports = router;

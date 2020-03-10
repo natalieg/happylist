@@ -1,6 +1,44 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const archiveSchema = new Schema({
+    userId: {
+        type: String,
+        unique: true
+    },
+    todos: [
+        {
+            todoId: {
+                type: String
+            },
+            todoName: {
+                type: String
+            },
+            allParts: {
+                type: Number
+            },
+            totalTime: {
+                type: Number
+            },
+            color: {
+                type: String
+            },
+            areaColor: {
+                type: String,
+                require: true
+            },
+            startDate: {
+                type: Date
+            },
+            finDate: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
+
+})
+
 const listSchema = new Schema({
     userId: {
         type: String,
@@ -137,4 +175,5 @@ const UserModel = mongoose.model('user', userSchema);
 const AreaModel = mongoose.model('area', areaSchema);
 const TodoModel = mongoose.model('todo', todoSchema);
 const ListModel = mongoose.model('list', listSchema);
-module.exports = { UserModel, AreaModel, TodoModel, ListModel };
+const ArchiveModel = mongoose.model('archive', archiveSchema);
+module.exports = { UserModel, AreaModel, TodoModel, ListModel, ArchiveModel };
