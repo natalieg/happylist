@@ -11,7 +11,8 @@ export default class SingleTodoInArea extends Component {
             todoId: props.todo._id,
             hoverActive: false,
             editActive: false,
-            reloadData: props.reloadData
+            reloadData: props.reloadData,
+            updateArea: props.updateArea
         }
     }
 
@@ -76,6 +77,7 @@ export default class SingleTodoInArea extends Component {
                         hideEdit={this.handleEditMode}
                         reloadTodo={this.handleLoadData}
                         reloadData={this.state.reloadData}
+                        updateArea={this.state.updateArea}
                     />
                 }
             </div>

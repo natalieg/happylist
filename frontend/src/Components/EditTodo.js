@@ -16,7 +16,8 @@ export default class EditTodo extends Component {
             totalTime: props.totalTime,
             hideEdit: props.hideEdit,
             reloadTodo: props.reloadTodo,
-            reloadData: props.reloadData
+            reloadData: props.reloadData,
+            updateArea: props.updateArea
         }
     }
 
@@ -49,6 +50,7 @@ export default class EditTodo extends Component {
         })
         this.state.hideEdit()
         this.state.reloadData()
+        this.state.updateArea()
     }
 
     checKey = (e) => {

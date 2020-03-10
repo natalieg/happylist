@@ -63,7 +63,9 @@ export default class SingleArea extends Component {
             return <SingleTodoInArea
                 key={todo._id}
                 todo={todo}
-                reloadData={this.handleLoadData} />
+                reloadData={this.handleLoadData} 
+                updateArea={this.state.updateAreas}
+                />
         })
 
         return (

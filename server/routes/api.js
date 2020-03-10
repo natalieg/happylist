@@ -3,7 +3,7 @@ var router = express.Router();
 const { UserModel, AreaModel, TodoModel, ListModel, ArchiveModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 const { generateList } = require('../controller/generateList')
-const { deleteTodos } = require('../controller/todos')
+const { deleteTodos, countTodosAndUpdate, deleteTodosFromActiveList } = require('../controller/todos')
 const dummyUser = "User22";
 const userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
 const fixedId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
@@ -233,8 +233,11 @@ router.post('/countTodos', async (req, res, next) => {
 // Delete a specific Todo (using id)
 router.delete('/deleteTodo', async (req, res, next) => {
     let { todoId } = req.body;
+    let area = await TodoModel.findById(todoId, { areaId: 1, _id: 0 })
     deleteTodos(todoId)
         .then(response => {
+            countTodosAndUpdate(area.areaId)
+            deleteTodosFromActiveList(userId, todoId)
             res.send({ msg: 'Todo deleted' })
         })
         .catch(err => {
@@ -290,6 +293,7 @@ router.post('/archiveTodos', async (req, res, next) => {
     let todoIds = []
     finishedTodos.forEach(todo => {
         todoIds.push(todo._id)
+        countTodosAndUpdate(todo.areaId)    
     });
     console.log("IDS")
     console.log("USERID", userId)
@@ -299,6 +303,7 @@ router.post('/archiveTodos', async (req, res, next) => {
     })
         .then(response => {
             console.log(response)
+            deleteTodosFromActiveList(userId, todoIds)
             res.send("Archived Todos!")
         })
         .catch(err => {

@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 export default class Areas extends Component {
     state = {
         areas: [],
-        isLoading: false,
+        isLoading: true,
         dummyCounter: 0,
         allTaskCount: 0,
         newAreaActive: false,
@@ -91,9 +91,6 @@ export default class Areas extends Component {
         // Renders all Areas
         let displayareas = this.state.areas.map((area, index) => {
             let taskcount = this.state.areas[index].todos.length;
-            console.log("counting tasks", taskcount)
-            // Display all the ToDos
-            
             return (
                 <SingleArea id={this.state.areas[index]._id}
                     className='singleArea'
@@ -122,7 +119,7 @@ export default class Areas extends Component {
                             <div className='moduleOverview'>
                                 {this.state.newAreaActive ?
                                     <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
-                                {displayareas}
+                                {this.state.isLoading ? "Loading Data" :  displayareas}
                             </div>
                         </Route>
                     </Switch>
