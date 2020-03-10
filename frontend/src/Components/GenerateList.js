@@ -16,7 +16,10 @@ export default class GenerateList extends Component {
             isLoading: false,
             isDragging: false,
             hideComplete: false,
-            showSettings: true
+            showSettings: true,
+
+            progress: 0,
+            finTodos: 0,
         }
     }
 
@@ -24,20 +27,27 @@ export default class GenerateList extends Component {
     loadSavedList = async () => {
         await apis.getCurrentList().then(response => {
             let data = response.data[0]
-            console.log("RESPONSE DATA", response.data)
             if (response.data[0] != null) {
                 let tempTodos = [...data.todos]
+                let tempFinished = 0
+                tempTodos.forEach(todo => {
+                    if (todo.state) {
+                        tempFinished++
+                    }
+                });
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
                         hideComplete: data.hideComplete,
                         showSettings: data.showSettings,
                         userMaxTasks: data.maxNumber,
-                        currentTodoListCount: tempTodos.length
+                        currentTodoListCount: tempTodos.length,
+                        finTodos: tempFinished
                     })
                 }
             }
         })
+        this.calcProgress()
     }
 
     // Loading Areas and saved Lists
@@ -63,6 +73,13 @@ export default class GenerateList extends Component {
         })
     }
 
+    calcProgress = () => {
+        let max = this.state.currentTodoListCount;
+        let fin = this.state.finTodos;
+        let calc = parseInt((fin / max) * 400)
+        this.setState({ progress: calc })
+    }
+
     toggleHideComplete = () => {
         const oldState = this.state.hideComplete;
         this.setState({ hideComplete: !oldState })
@@ -77,12 +94,17 @@ export default class GenerateList extends Component {
         const value = e.target.checked;
         this.setState({ state: value })
         if (value) {
-            this.setState({ todoClassName: "todoComplete" })
-            this.setState({ partNumber: this.state.partNumber + 1 })
+            this.setState({
+                todoClassName: "todoComplete",
+                partNumber: this.state.partNumber + 1
+            })
         } else {
-            this.setState({ todoClassName: "todoIncomplete" })
-            this.setState({ partNumber: this.state.partNumber - 1 })
+            this.setState({
+                todoClassName: "todoIncomplete",
+                partNumber: this.state.partNumber - 1
+            })
         }
+        this.calcProgress();
     }
 
     /*
@@ -128,8 +150,8 @@ export default class GenerateList extends Component {
                     isLoading: false
                 })
             })
-            // FIXME ? Hide settings when generating?
-            //this.setState({showSettings: false})
+        // FIXME ? Hide settings when generating?
+        //this.setState({showSettings: false})
     }
 
     /* Drag & Drop */
@@ -252,8 +274,13 @@ export default class GenerateList extends Component {
                 <div draggable="false">
                     {this.state.currentTodoListCount > 0 ?
                         <div className="visibleListWrapper">
-                            <div>Current Todos: {this.state.currentTodoListCount}</div>
                             <input className="button" type='button' value={this.state.hideComplete ? "Show Complete" : "Hide Completed"} onClick={this.toggleHideComplete} />
+                            <div>Current Todos: {this.state.currentTodoListCount}</div>
+                            <div className="progressWrapper">
+                                <div className="progress"
+                                    style={{ width: `${this.state.progress}px` }}
+                                ></div>
+                            </div>
                             <div className="generatedListWrapper">{generatedList}</div>
                         </div>
                         : null}

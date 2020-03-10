@@ -22,7 +22,7 @@
 .list {
     width: 80%;
     max-width: 800px;
-    margin: 0 auto;    
+    margin: 0 auto;
 
     input {
         font-size: $biggerFont;
@@ -112,4 +112,24 @@
     text-decoration: none;
     color: black;
     transition: .5s;
+}
+
+// Progress
+.progressWrapper {
+    height: 30px;
+    width: 400px;
+    border-radius: 20px;
+    margin: 10px auto;
+    overflow: hidden;
+    background: rgb(215, 140, 174);
+    background: linear-gradient(317deg, rgba(215, 140, 174, 1) 0%, rgba(210, 90, 124, 1) 55%, rgba(198, 63, 123, 1) 100%);
+}
+
+.progress {
+    transition: width .5s ease-out;
+    width: 0px;
+    height: inherit;
+    border-radius: inherit;
+    background: rgb(34,193,195);
+    background: linear-gradient(284deg, rgba(34,193,195,1) 0%, rgba(243,253,45,1) 100%);
 }
