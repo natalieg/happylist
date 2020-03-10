@@ -22,7 +22,7 @@
 .list {
     width: 80%;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto;    
 
     input {
         font-size: $biggerFont;
@@ -43,6 +43,11 @@
         margin: 5px;
         max-width: 50% !important;
     }
+}
+
+.generatedListWrapper {
+    height: 50vh;
+    overflow-y: auto
 }
 
 .dragContainer {

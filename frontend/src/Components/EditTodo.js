@@ -32,9 +32,7 @@ export default class EditTodo extends Component {
         this.state.reloadTodo()
     }
 
-    onSubmit = (e) => {
-        const data = this.state
-        // e.preventDefault();
+    onSubmit = () => {
         this.handleSendData()
     }
 

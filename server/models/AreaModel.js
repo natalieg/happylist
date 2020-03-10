@@ -44,6 +44,18 @@ const listSchema = new Schema({
         type: String,
         unique: true
     },
+    hideComplete: {
+        type: Boolean,
+        default: false
+    },
+    showSettings: {
+        type: Boolean,
+        default: true
+    },
+    maxNumber: {
+        type: Number,
+        default: 10
+    },
     todos: [
         {
             todoId: {
@@ -139,6 +151,10 @@ const areaSchema = new Schema({
     selected: {
         type: Boolean,
         default: true
+    },
+    incompleteTodoCount: {
+        type: Number,
+        default: 0
     },
     todoCount: {
         type: Number,

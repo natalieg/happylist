@@ -3,7 +3,7 @@ var router = express.Router();
 const { UserModel, AreaModel, TodoModel, ListModel, ArchiveModel } = require('../models/AreaModel');
 const uuid = require('uuid');
 const { generateList } = require('../controller/generateList')
-const { deleteTodos, countTodosAndUpdate, deleteTodosFromActiveList } = require('../controller/todos')
+const { deleteTodos, countTodosAndUpdate, deleteTodosFromActiveList, incompleteTodoCount } = require('../controller/todos')
 const dummyUser = "User22";
 const userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
 const fixedId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
@@ -110,6 +110,7 @@ router.post('/newTodo', async (req, res, next) => {
     newTodo.save()
         .then(response => {
             console.log(response)
+            incompleteTodoCount(areaId)
             res.send({ msg: 'Saved Todo' })
         })
         .catch(err => {
@@ -135,7 +136,7 @@ router.post('/getTodos', async (req, res, next) => {
 
 //Generate List for chosen Areas
 router.post('/generateList', async (req, res, next) => {
-    let { areaIds, maxNumber } = req.body;
+    let { areaIds, maxNumber, showSettings, hideComplete } = req.body;
     let todoList = await TodoModel.find({ areaId: areaIds, finished: false });
     let generatedList = generateList(todoList, areaIds, maxNumber)
 
@@ -154,6 +155,9 @@ router.post('/generateList', async (req, res, next) => {
     let newList = {
         //FIXME LATER
         userId: userId,
+        hideComplete: hideComplete,
+        showSettings: showSettings,
+        maxNumber: maxNumber,
         todos: tempList
     }
     ListModel.findOneAndUpdate({ userId: userId }, newList, {
@@ -193,6 +197,8 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
     })
         .then(response => {
             console.log(response)
+            console.log("AAAREAAs", todo.areaId)
+            incompleteTodoCount(todo.areaId)
             res.send({ msg: 'Updated Todo' })
         })
         .catch(err => {
@@ -218,7 +224,7 @@ router.get('/getCurrentList', async (req, res, next) => {
 router.get('/getAreasWithoutEmpty', async (req, res, next) => {
     //FIXME Later
     let userId = fixedId;
-    let fullAreaIds = await TodoModel.find({ userId: userId }, { areaId: 1, _id: 0 }).distinct("areaId");
+    let fullAreaIds = await TodoModel.find({ userId: userId, finished: false }, { areaId: 1, _id: 0 }).distinct("areaId");
     let fullAreas = await AreaModel.find({ _id: fullAreaIds })
     res.send(fullAreas)
 })

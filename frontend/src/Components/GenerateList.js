@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import apis from '../api'
-import { check } from 'express-validator'
 import SingleTodo from './SingleTodo'
 
 export default class GenerateList extends Component {
@@ -16,22 +15,28 @@ export default class GenerateList extends Component {
             currentTodoListCount: 0,
             isLoading: false,
             isDragging: false,
+            hideComplete: false,
+            showSettings: true
         }
     }
 
     // Loads a saved list
     loadSavedList = async () => {
         await apis.getCurrentList().then(response => {
+            let data = response.data[0]
+            console.log("RESPONSE DATA", response.data)
             if (response.data[0] != null) {
-                let tempTodos = [...response.data[0].todos]
+                let tempTodos = [...data.todos]
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
+                        hideComplete: data.hideComplete,
+                        showSettings: data.showSettings,
+                        userMaxTasks: data.maxNumber,
                         currentTodoListCount: tempTodos.length
                     })
                 }
             }
-
         })
     }
 
@@ -47,7 +52,7 @@ export default class GenerateList extends Component {
                     state: true,
                     areaTitle: element.areaTitle,
                     color: element.color,
-                    todoCount: element.todoCount
+                    todoCount: element.incompleteTodoCount
                 })
             });
             this.setState({
@@ -56,6 +61,16 @@ export default class GenerateList extends Component {
                 activeAreas: tempActive
             })
         })
+    }
+
+    toggleHideComplete = () => {
+        const oldState = this.state.hideComplete;
+        this.setState({ hideComplete: !oldState })
+    }
+
+    toggleSettings = () => {
+        const oldState = this.state.showSettings;
+        this.setState({ showSettings: !oldState })
     }
 
     changeTodoState = (e) => {
@@ -74,8 +89,7 @@ export default class GenerateList extends Component {
     Creating a new Todo List
     */
     createTodoList = async () => {
-        console.log("I AM CREATING!")
-        this.setState({ 
+        this.setState({
             isLoading: true,
         })
         let areaIds = []
@@ -84,8 +98,11 @@ export default class GenerateList extends Component {
                 areaIds.push(area.id)
             }
         });
+        // Generate List and save data in DB
         await apis.generateList({
             areaIds: areaIds,
+            hideComplete: this.state.hideComplete,
+            showSettings: this.state.showSettings,
             maxNumber: this.state.userMaxTasks
         })
             .then(response => {
@@ -111,6 +128,8 @@ export default class GenerateList extends Component {
                     isLoading: false
                 })
             })
+            // FIXME ? Hide settings when generating?
+            //this.setState({showSettings: false})
     }
 
     /* Drag & Drop */
@@ -149,7 +168,7 @@ export default class GenerateList extends Component {
     //change Selected Areas
     changeActiveAreas = (e) => {
         let tempActive = this.state.activeAreas;
-        var foundIndex = tempActive.findIndex(x => x.id == e.target.id);
+        var foundIndex = tempActive.findIndex(x => x.id === e.target.id);
         tempActive[foundIndex].state = !tempActive[foundIndex].state;
         this.setState({ activeAreas: tempActive })
     }
@@ -184,48 +203,58 @@ export default class GenerateList extends Component {
         let generatedList = null;
         if (this.state.todoList.length > 0) {
             generatedList = this.state.todoList.map((todo, index) => {
-                return (
-                    <div className="dragContainer" key={todo.todoId} draggable
-                        onDragOver={() => this.onDragOver(index)}
-                        onDragStart={e => this.onDragStart(e, index)}
-                        onDragEnd={this.onDragEnd}>
-                        <SingleTodo
-                            key={todo.todoId}
-                            todoId={todo.todoId}
-                            todoName={todo.todoName}
-                            color={todo.color}
-                            partNumber={todo.partNumber}
-                            allParts={todo.allParts}
-                            state={todo.state}
-                            dragging={this.state.isDragging}
-                        />
-                    </div>
-                )
+                if (this.state.hideComplete && todo.state) {
+                    return null
+                } else {
+                    return (
+                        <div className="dragContainer" key={todo.todoId} draggable
+                            onDragOver={() => this.onDragOver(index)}
+                            onDragStart={e => this.onDragStart(e, index)}
+                            onDragEnd={this.onDragEnd}>
+                            <SingleTodo
+                                key={todo.todoId}
+                                todoId={todo.todoId}
+                                todoName={todo.todoName}
+                                color={todo.color}
+                                partNumber={todo.partNumber}
+                                allParts={todo.allParts}
+                                state={todo.state}
+                                dragging={this.state.isDragging}
+                                reloadList={this.loadSavedList}
+                            />
+                        </div>
+                    )
+                }
+
             })
         }
 
         return (
             <div className="list">
                 <h1>Generate your List!</h1>
-                <div className="row">
-                    <div><label>Time</label></div>
-                    <div><label>Tasks</label></div>
-                </div>
-                <div className="row">
-                    <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
-                    <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
-                </div>
-                <div className="selectAreasDiv">
-                    {allAreas}
-                </div>
                 <button onClick={this.createTodoList}>Create</button>
-                <button>Cancel</button>
+                <button onClick={this.toggleSettings}>Settings</button>
+                {this.state.showSettings &&
+                    <div className="settings">
+                        <div className="row">
+                            <div><label>Time</label></div>
+                            <div><label>Tasks</label></div>
+                        </div>
+                        <div className="row">
+                            <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
+                            <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
+                        </div>
+                        <div className="selectAreasDiv">
+                            {allAreas}
+                        </div>
+                    </div>
+                }
                 <div draggable="false">
                     {this.state.currentTodoListCount > 0 ?
                         <div className="visibleListWrapper">
                             <div>Current Todos: {this.state.currentTodoListCount}</div>
-                            {generatedList}
-                            <input className="button" type='button' value="Hide Completed" />
+                            <input className="button" type='button' value={this.state.hideComplete ? "Show Complete" : "Hide Completed"} onClick={this.toggleHideComplete} />
+                            <div className="generatedListWrapper">{generatedList}</div>
                         </div>
                         : null}
                 </div>

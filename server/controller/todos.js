@@ -18,5 +18,12 @@ const countTodosAndUpdate = async (areaId) => {
     await AreaModel.findByIdAndUpdate(areaId, { todoCount: todoCount })
 }
 
+const incompleteTodoCount = async(areaId)=> {
+    let todos = await TodoModel.find({ areaId: areaId, finished: false });
+    let todoCount = todos.length;
+    await AreaModel.findByIdAndUpdate(areaId, {incompleteTodoCount: todoCount})
+}
 
-module.exports = { deleteTodos, countTodosAndUpdate, deleteTodosFromActiveList }
+
+module.exports = { deleteTodos, countTodosAndUpdate, 
+    deleteTodosFromActiveList, incompleteTodoCount }

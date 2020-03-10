@@ -16,7 +16,8 @@ export default class SingleTodo extends Component {
             allParts: props.allParts,
             todoClassName: '',
             dragging: props.dragging,
-            changeState: props.changeState
+            changeState: props.changeState,
+            reloadList: props.reloadList
         }
     }
 
@@ -37,6 +38,7 @@ export default class SingleTodo extends Component {
             }).catch(err => {
                 console.log(err)
             })
+            this.state.reloadList()
     }
 
 render() {

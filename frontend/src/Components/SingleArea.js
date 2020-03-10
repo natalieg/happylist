@@ -47,7 +47,7 @@ export default class SingleArea extends Component {
     }
 
     checkTodos = () => {
-        if (this.props.taskcount != this.state.tasks.length) {
+        if (this.props.taskcount !== this.state.tasks.length) {
             this.handleLoadData()
         }
     }
