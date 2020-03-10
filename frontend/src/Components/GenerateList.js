@@ -38,7 +38,7 @@ export default class GenerateList extends Component {
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
-                        hideComplete: data.hideComplete,
+                        // hideComplete: data.hideComplete,
                         showSettings: data.showSettings,
                         userMaxTasks: data.maxNumber,
                         currentTodoListCount: tempTodos.length,
@@ -81,6 +81,7 @@ export default class GenerateList extends Component {
     }
 
     toggleHideComplete = () => {
+        console.log("TOGGLE HIDE")
         const oldState = this.state.hideComplete;
         this.setState({ hideComplete: !oldState })
     }
@@ -123,7 +124,7 @@ export default class GenerateList extends Component {
         // Generate List and save data in DB
         await apis.generateList({
             areaIds: areaIds,
-            hideComplete: this.state.hideComplete,
+            // hideComplete: this.state.hideComplete,
             showSettings: this.state.showSettings,
             maxNumber: this.state.userMaxTasks
         })
@@ -206,6 +207,7 @@ export default class GenerateList extends Component {
     }
 
     render() {
+        console.log('Hide Complete is:', this.state.hideComplete)
         let allAreas = null;
         if (this.state.activeAreas.length > 0) {
             allAreas = this.state.activeAreas.map((area, index) => {
