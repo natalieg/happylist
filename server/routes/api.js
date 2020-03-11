@@ -210,6 +210,7 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
 // Save Setting for Userlist
 router.post('/saveSettingForList', async (req, res, next) => {
     let { showSettings, hideComplete } = req.body;
+    console.log("hi")
     let userId = fixedId //FIXME 
     await ListModel.findOneAndUpdate({ userId: userId }, {
         showSettings: showSettings,
