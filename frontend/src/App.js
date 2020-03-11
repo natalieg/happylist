@@ -4,6 +4,7 @@ import Navbar from './Components/Navbar/Navbar'
 import Areas from './Components/Areas'
 import GenerateList from './Components/GenerateList'
 import './scss/Main.scss';
+import ContactForm from './Components/Contacts/ContactForm';
 // import './App.scss';
 
 export default class App extends Component {
@@ -17,9 +18,13 @@ export default class App extends Component {
             <Route path="/generateList" exact>
               <GenerateList />
             </Route>
+            <Route path="/contact" exact>
+              <ContactForm/>
+            </Route>
             <Route path="/">
               <Areas />
             </Route>
+  
           </Switch>
         </Router>
       </div>

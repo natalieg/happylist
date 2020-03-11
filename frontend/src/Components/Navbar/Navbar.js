@@ -15,6 +15,11 @@ function Navbar() {
                         List
                     </Link>
                 </li>
+                <li>
+                    <Link className="navBtn" to="/contact">
+                        Contact
+                    </Link>
+                </li>
             </ul>
         </div>
     )
