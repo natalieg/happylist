@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import apis from '../api'
 import SingleTodo from './SingleTodo'
+import Tooltip from '@material-ui/core/Tooltip'
 
 export default class GenerateList extends Component {
     constructor() {
@@ -17,9 +18,11 @@ export default class GenerateList extends Component {
             isDragging: false,
             hideComplete: false,
             showSettings: true,
-
             progress: 0,
             finTodos: 0,
+            timeLeft: 0,
+            allTime: 0,
+            tooltipToggleComplete: "Hide completed Tasks",
         }
     }
 
@@ -29,10 +32,15 @@ export default class GenerateList extends Component {
             let data = response.data[0]
             if (response.data[0] != null) {
                 let tempTodos = [...data.todos]
-                let tempFinished = 0
+                let tempFinished = 0;
+                let tempTime = 0;
+                let tempAllTime = 0;
                 tempTodos.forEach(todo => {
+                    tempAllTime = tempAllTime + todo.partTime;
                     if (todo.state) {
                         tempFinished++
+                    } else {
+                        tempTime = tempTime + todo.partTime
                     }
                 });
                 if (tempTodos.length > 0) {
@@ -42,7 +50,9 @@ export default class GenerateList extends Component {
                         showSettings: data.showSettings,
                         userMaxTasks: data.maxNumber,
                         currentTodoListCount: tempTodos.length,
-                        finTodos: tempFinished
+                        finTodos: tempFinished,
+                        timeLeft: tempTime,
+                        allTime: tempAllTime
                     })
                 }
             }
@@ -76,14 +86,20 @@ export default class GenerateList extends Component {
     calcProgress = () => {
         let max = this.state.currentTodoListCount;
         let fin = this.state.finTodos;
-        let calc = parseInt((fin / max) * 400)
+        let calc = parseInt((fin / max) * 100)
         this.setState({ progress: calc })
     }
 
     toggleHideComplete = () => {
         console.log("TOGGLE HIDE")
         const oldState = this.state.hideComplete;
-        this.setState({ hideComplete: !oldState })
+        let temptip = ""
+        if(oldState){
+            temptip = "Hide completed Tasks"
+        } else {
+            temptip = "Show completed Tasks"
+        }
+        this.setState({ hideComplete: !oldState, tooltipToggleComplete: temptip })
     }
 
     toggleSettings = () => {
@@ -207,7 +223,6 @@ export default class GenerateList extends Component {
     }
 
     render() {
-        console.log('Hide Complete is:', this.state.hideComplete)
         let allAreas = null;
         if (this.state.activeAreas.length > 0) {
             allAreas = this.state.activeAreas.map((area, index) => {
@@ -276,11 +291,18 @@ export default class GenerateList extends Component {
                 <div draggable="false">
                     {this.state.currentTodoListCount > 0 ?
                         <div className="visibleListWrapper">
-                            <input className="button" type='button' value={this.state.hideComplete ? "Show Complete" : "Hide Completed"} onClick={this.toggleHideComplete} />
-                            <div>Current Todos: {this.state.currentTodoListCount}</div>
+                            <Tooltip className="tooltip" title={this.state.tooltipToggleComplete} arrow placement="top">
+                            <div onClick={this.toggleHideComplete}>
+                            {this.state.hideComplete ? <i className="fas fa-eye" />: <i class="fas fa-eye-slash" />}
+                            </div>
+                            </Tooltip>
+                            <div className="listStatus"><span>Tasks:
+                            <b> {(this.state.currentTodoListCount - this.state.finTodos)}</b></span>
+                                <span className="timeLeft"> Time Left: <b>{this.state.timeLeft}</b> Minutes</span>
+                            </div>
                             <div className="progressWrapper">
                                 <div className="progress"
-                                    style={{ width: `${this.state.progress}px` }}
+                                    style={{ width: `${this.state.progress}%` }}
                                 ></div>
                             </div>
                             <div className="generatedListWrapper">{generatedList}</div>
