@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PieChart from 'react-minimal-pie-chart';
 import apis from '../api'
 
-export default class SingleTodo extends Component {
+export default class SingleTodo extends React.Component {
 
     constructor(props) {
         super(props)
@@ -19,8 +19,10 @@ export default class SingleTodo extends Component {
             changeState: props.changeState,
             reloadList: props.reloadList,
             hoverActive: false,
+            ctrlActive: false
         }
     }
+
 
     changeTodoState = (e) => {
         const value = e.target.checked;
@@ -48,20 +50,31 @@ export default class SingleTodo extends Component {
         this.state.reloadList()
     }
 
-    handleMouseOver = () => {
+    handleMouseOver = (e) => {
         this.setState({ hoverActive: true })
     }
 
-    handleMouseOut = () => {
+    handleMouseOut = (e) => {
         this.setState({ hoverActive: false })
     }
 
-    updateTaskNumber = () => {
-        let tempPart = this.state.partNumber + 1
+    increaseTaskNumber = () => {
+        this.updateTaskNumber(1)
+    }
+
+    decreaseTaskNumber = () => {
+        this.updateTaskNumber(-1)
+    }
+
+    updateTaskNumber = (value) => {
+        let tempPart = this.state.partNumber + value
         let tempState = this.state.state;
         this.setState({ partNumber: tempPart })
         if (tempPart === this.state.allParts) {
             tempState = true;
+        }
+        if (tempPart <= 0) {
+            tempPart = 0
         }
         this.setState({ state: tempState })
         let data = {
@@ -76,9 +89,10 @@ export default class SingleTodo extends Component {
     render() {
         return (
             <div key={this.state.id} className="singleTodo"
+                tabIndex="0"
+
                 onMouseEnter={this.handleMouseOver}
-                onMouseLeave={this.handleMouseOut}
-            >
+                onMouseLeave={this.handleMouseOut}>
 
                 <input type="checkbox"
                     className="checkbox"
@@ -89,8 +103,13 @@ export default class SingleTodo extends Component {
                     <span className="todoLabel">{this.state.todoName}</span>
                 </label>
                 {this.state.hoverActive && !this.state.state ?
-                    <span><i class="fas fa-chevron-circle-up"
-                        onClick={this.updateTaskNumber}></i></span>
+                    <span>
+                        {this.state.partNumber > 0 &&
+                            <i className="fas fas1 fa-chevron-circle-down"
+                                onClick={this.decreaseTaskNumber}></i>
+                        }
+                        <i className="fas fas2 fa-chevron-circle-up"
+                            onClick={this.increaseTaskNumber}></i></span>
                     : null
                 }
                 <span className="partDisplay">{this.state.partNumber}/{this.state.allParts}

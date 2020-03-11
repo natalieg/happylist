@@ -98,10 +98,23 @@
 
     .fas {
         position: absolute;
-        right: 100px;
         top: 15px;
         font-size: 1.5em;
+        transition: .3s;
         cursor: pointer;
+    }
+
+    .fas1 {
+        right: 120px;
+    }
+
+    .fas2 {
+        right: 90px;
+    }
+
+    .fas:hover {
+        transform: scale(1.2);
+        transition: .3s;
     }
 
     .partDisplay {

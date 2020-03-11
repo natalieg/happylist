@@ -293,7 +293,7 @@ export default class GenerateList extends Component {
                         <div className="visibleListWrapper">
                             <Tooltip className="tooltip" title={this.state.tooltipToggleComplete} arrow placement="top">
                             <div onClick={this.toggleHideComplete}>
-                            {this.state.hideComplete ? <i className="fas fa-eye" />: <i class="fas fa-eye-slash" />}
+                            {this.state.hideComplete ? <i className="fas fa-eye" />: <i className="fas fa-eye-slash" />}
                             </div>
                             </Tooltip>
                             <div className="listStatus"><span>Tasks:
