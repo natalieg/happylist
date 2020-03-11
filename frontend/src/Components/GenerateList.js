@@ -17,12 +17,13 @@ export default class GenerateList extends Component {
             isLoading: false,
             isDragging: false,
             hideComplete: false,
-            showSettings: true,
+            showSettings: false,
             progress: 0,
             finTodos: 0,
+            leftTodos: 0,
             timeLeft: 0,
             allTime: 0,
-            tooltipToggleComplete: "Hide completed Tasks",
+            tooltipToggleComplete: "",
         }
     }
 
@@ -33,10 +34,12 @@ export default class GenerateList extends Component {
             if (response.data[0] != null) {
                 let tempTodos = [...data.todos]
                 let tempFinished = 0;
+                let tempAllTasks = 0;
                 let tempTime = 0;
                 let tempAllTime = 0;
                 tempTodos.forEach(todo => {
                     tempAllTime = tempAllTime + todo.partTime;
+                    tempAllTasks++
                     if (todo.state) {
                         tempFinished++
                     } else {
@@ -46,13 +49,14 @@ export default class GenerateList extends Component {
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
-                        // hideComplete: data.hideComplete,
+                        hideComplete: data.hideComplete,
                         showSettings: data.showSettings,
                         userMaxTasks: data.maxNumber,
-                        currentTodoListCount: tempTodos.length,
+                        currentTodoListCount: tempAllTasks,
                         finTodos: tempFinished,
                         timeLeft: tempTime,
-                        allTime: tempAllTime
+                        allTime: tempAllTime,
+                        tooltipToggleComplete: data.hideComplete ? "Show completed Tasks" : "Hide completed Tasks"
                     })
                 }
             }
@@ -90,39 +94,33 @@ export default class GenerateList extends Component {
         this.setState({ progress: calc })
     }
 
-    toggleHideComplete = () => {
+    toggleHideComplete = async () => {
         console.log("TOGGLE HIDE")
         const oldState = this.state.hideComplete;
         let temptip = ""
-        if(oldState){
+        if (oldState) {
             temptip = "Hide completed Tasks"
         } else {
             temptip = "Show completed Tasks"
         }
         this.setState({ hideComplete: !oldState, tooltipToggleComplete: temptip })
+        let data = { hideComplete: !oldState }
+        await apis.saveSettingForList(data).then(response => {
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
-    toggleSettings = () => {
+    toggleSettings = async () => {
         const oldState = this.state.showSettings;
         this.setState({ showSettings: !oldState })
+        let data = { showSettings: !oldState }
+        await apis.saveSettingForList(data).then(response => {
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
-    changeTodoState = (e) => {
-        const value = e.target.checked;
-        this.setState({ state: value })
-        if (value) {
-            this.setState({
-                todoClassName: "todoComplete",
-                partNumber: this.state.partNumber + 1
-            })
-        } else {
-            this.setState({
-                todoClassName: "todoIncomplete",
-                partNumber: this.state.partNumber - 1
-            })
-        }
-        this.calcProgress();
-    }
 
     /*
     Creating a new Todo List
@@ -157,13 +155,14 @@ export default class GenerateList extends Component {
                         state: false
                     })
                 })
-                console.log(tempTodo)
                 this.setState({
                     todoList: []
                 })
                 this.setState({
                     todoList: tempTodo,
                     currentTodoListCount: tempTodo.length,
+                    finTodos: 0,
+                    progress: 0,
                     isLoading: false
                 })
             })
@@ -272,7 +271,10 @@ export default class GenerateList extends Component {
             <div className="list">
                 <h1>Generate your List!</h1>
                 <button onClick={this.createTodoList}>Create</button>
-                <button onClick={this.toggleSettings}>Settings</button>
+                <Tooltip className="tooltip" title="Settings" arrow placement="top">
+                    <i className="fas fasSettings fa-cogs" onClick={this.toggleSettings}></i>
+                </Tooltip>
+
                 {this.state.showSettings &&
                     <div className="settings">
                         <div className="row">
@@ -292,9 +294,9 @@ export default class GenerateList extends Component {
                     {this.state.currentTodoListCount > 0 ?
                         <div className="visibleListWrapper">
                             <Tooltip className="tooltip" title={this.state.tooltipToggleComplete} arrow placement="top">
-                            <div onClick={this.toggleHideComplete}>
-                            {this.state.hideComplete ? <i className="fas fa-eye" />: <i className="fas fa-eye-slash" />}
-                            </div>
+                                <div onClick={this.toggleHideComplete}>
+                                    {this.state.hideComplete ? <i className="fas fa-eye" /> : <i className="fas fa-eye-slash" />}
+                                </div>
                             </Tooltip>
                             <div className="listStatus"><span>Tasks:
                             <b> {(this.state.currentTodoListCount - this.state.finTodos)}</b></span>

@@ -105,11 +105,11 @@
     }
 
     .fas1 {
-        right: 120px;
+        right: 150px;
     }
 
     .fas2 {
-        right: 90px;
+        right: 120px;
     }
 
     .fas:hover {
@@ -123,6 +123,11 @@
         top: 16px;
         right: 0px;
     }
+}
+
+.fasSettings {
+    cursor: pointer;
+    float: right;
 }
 
 .singleTodo:hover {
