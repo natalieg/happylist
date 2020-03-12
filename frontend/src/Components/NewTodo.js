@@ -117,10 +117,10 @@ export default class NewTodo extends Component {
         await apis.sendNewTodo(data).then(response => {
             this.setState({
                 todoName: '',
-                parts: 1,
+                // parts: 1,
                 partName: "Parts",
                 time: 10,
-                totalTime: 10,
+                // totalTime: 10,
                 difficulty: ''
             })
         }).catch(err => {

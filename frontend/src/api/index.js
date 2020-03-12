@@ -12,6 +12,7 @@ const getAreaTodos = (data) => api.post('/getTodos', data)
 const countAreaTodos = (data) => api.post('/countTodos', data)
 const deleteArea = (data) => api.delete('./deleteArea', data)
 const generateList = (data) => api.post('/generateList', data)
+const saveSettingForList = (data) => api.post('/saveSettingForList', data)
 const getCurrentList = (data) => api.get('./getCurrentList', data)
 const saveCurrentTodo = (data) => api.post('./saveCurrentTodo', data)
 const editTodo = (data) => api.post('./editTodo', data)
@@ -28,12 +29,13 @@ const apis = {
     countAreaTodos,
     deleteArea,
     generateList,
+    saveSettingForList,
     getCurrentList,
     saveCurrentTodo,
     editTodo,
     deleteTodo,
     archiveTodos,
-    getSingleTodo
+    getSingleTodo,
 }
 
 export default apis

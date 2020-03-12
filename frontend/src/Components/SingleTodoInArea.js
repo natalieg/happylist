@@ -12,7 +12,8 @@ export default class SingleTodoInArea extends Component {
             hoverActive: false,
             editActive: false,
             reloadData: props.reloadData,
-            updateArea: props.updateArea
+            updateArea: props.updateArea,
+            ctrlActive: false,
         }
     }
 

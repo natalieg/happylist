@@ -207,6 +207,17 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
         })
 })
 
+// Save Setting for Userlist
+router.post('/saveSettingForList', async (req, res, next) => {
+    let { showSettings, hideComplete } = req.body;
+    console.log("hi")
+    let userId = fixedId //FIXME 
+    await ListModel.findOneAndUpdate({ userId: userId }, {
+        showSettings: showSettings,
+        hideComplete: hideComplete
+    })
+})
+
 //Load current generated List
 router.get('/getCurrentList', async (req, res, next) => {
     let list = await ListModel.find({ userId: userId })
@@ -255,6 +266,7 @@ router.delete('/deleteTodo', async (req, res, next) => {
 router.post('/editTodo', async (req, res, next) => {
     let { todoId, todoName, finishedParts, allParts, partName,
         partTime, totalTime, difficulty } = req.body;
+    let userId = fixedId; // FIXME
     let finished = false;
     if (finishedParts >= allParts) {
         finished = true;
@@ -271,6 +283,14 @@ router.post('/editTodo', async (req, res, next) => {
         difficulty: difficulty,
         finished: finished
     })
+    await ListModel.updateOne(
+        { userId: userId, "todos.todoId": todoId},
+        {
+            $set: {
+                "todos.$.state": finished,
+                "todos.$.partNumber": finishedParts
+            }
+        })
         .then(response => {
             console.log(response)
             res.send("updated Todo")
@@ -299,7 +319,7 @@ router.post('/archiveTodos', async (req, res, next) => {
     let todoIds = []
     finishedTodos.forEach(todo => {
         todoIds.push(todo._id)
-        countTodosAndUpdate(todo.areaId)    
+        countTodosAndUpdate(todo.areaId)
     });
     console.log("IDS")
     console.log("USERID", userId)
