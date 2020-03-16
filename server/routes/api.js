@@ -76,6 +76,26 @@ router.post('/newArea', (req, res, next) => {
         })
 })
 
+//Edit an Area
+router.post('/editArea', async (req, res, next) => {
+    let { areaId, areaName, backgroundColor } = req.body;
+    await AreaModel.findOneAndUpdate(
+        { _id: areaId },
+        {
+            areaTitle: areaName,
+            color: backgroundColor
+        })
+        .then(response => {
+            console.log(response)
+            res.send({ msg: 'Area Updated' })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send({ msg: err })
+        })
+})
+
+
 // Delete Area
 router.delete('/deleteArea', async (req, res, next) => {
     let areaId = req.body.areaId
@@ -284,7 +304,7 @@ router.post('/editTodo', async (req, res, next) => {
         finished: finished
     })
     await ListModel.updateOne(
-        { userId: userId, "todos.todoId": todoId},
+        { userId: userId, "todos.todoId": todoId },
         {
             $set: {
                 "todos.$.state": finished,
@@ -337,5 +357,7 @@ router.post('/archiveTodos', async (req, res, next) => {
             res.send({ msg: err })
         })
 })
+
+
 
 module.exports = router;

@@ -10,6 +10,7 @@ const sendNewArea = (data) => api.post('/newArea', data)
 const sendNewTodo = (data) => api.post('/newTodo', data)
 const getAreaTodos = (data) => api.post('/getTodos', data)
 const countAreaTodos = (data) => api.post('/countTodos', data)
+const editArea = (data) => api.post('/editArea', data)
 const deleteArea = (data) => api.delete('./deleteArea', data)
 const generateList = (data) => api.post('/generateList', data)
 const saveSettingForList = (data) => api.post('/saveSettingForList', data)
@@ -27,6 +28,7 @@ const apis = {
     sendNewTodo,
     getAreaTodos,
     countAreaTodos,
+    editArea,
     deleteArea,
     generateList,
     saveSettingForList,
