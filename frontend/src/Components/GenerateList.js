@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import apis from '../api'
-import { check } from 'express-validator'
 import SingleTodo from './SingleTodo'
+import Tooltip from '@material-ui/core/Tooltip'
 
 export default class GenerateList extends Component {
     constructor() {
@@ -16,23 +16,52 @@ export default class GenerateList extends Component {
             currentTodoListCount: 0,
             isLoading: false,
             isDragging: false,
+            hideComplete: false,
+            showSettings: false,
+            progress: 0,
+            finTodos: 0,
+            leftTodos: 0,
+            timeLeft: 0,
+            allTime: 0,
+            tooltipToggleComplete: "",
         }
     }
 
     // Loads a saved list
     loadSavedList = async () => {
         await apis.getCurrentList().then(response => {
+            let data = response.data[0]
             if (response.data[0] != null) {
-                let tempTodos = [...response.data[0].todos]
+                let tempTodos = [...data.todos]
+                let tempFinished = 0;
+                let tempAllTasks = 0;
+                let tempTime = 0;
+                let tempAllTime = 0;
+                tempTodos.forEach(todo => {
+                    tempAllTime = tempAllTime + todo.partTime;
+                    tempAllTasks++
+                    if (todo.state) {
+                        tempFinished++
+                    } else {
+                        tempTime = tempTime + todo.partTime
+                    }
+                });
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
-                        currentTodoListCount: tempTodos.length
+                        hideComplete: data.hideComplete,
+                        showSettings: data.showSettings,
+                        userMaxTasks: data.maxNumber,
+                        currentTodoListCount: tempAllTasks,
+                        finTodos: tempFinished,
+                        timeLeft: tempTime,
+                        allTime: tempAllTime,
+                        tooltipToggleComplete: data.hideComplete ? "Show completed Tasks" : "Hide completed Tasks"
                     })
                 }
             }
-
         })
+        this.calcProgress()
     }
 
     // Loading Areas and saved Lists
@@ -47,7 +76,7 @@ export default class GenerateList extends Component {
                     state: true,
                     areaTitle: element.areaTitle,
                     color: element.color,
-                    todoCount: element.todoCount
+                    todoCount: element.incompleteTodoCount
                 })
             });
             this.setState({
@@ -58,24 +87,46 @@ export default class GenerateList extends Component {
         })
     }
 
-    changeTodoState = (e) => {
-        const value = e.target.checked;
-        this.setState({ state: value })
-        if (value) {
-            this.setState({ todoClassName: "todoComplete" })
-            this.setState({ partNumber: this.state.partNumber + 1 })
-        } else {
-            this.setState({ todoClassName: "todoIncomplete" })
-            this.setState({ partNumber: this.state.partNumber - 1 })
-        }
+    calcProgress = () => {
+        let max = this.state.currentTodoListCount;
+        let fin = this.state.finTodos;
+        let calc = parseInt((fin / max) * 100)
+        this.setState({ progress: calc })
     }
+
+    toggleHideComplete = async () => {
+        console.log("TOGGLE HIDE")
+        const oldState = this.state.hideComplete;
+        let temptip = ""
+        if (oldState) {
+            temptip = "Hide completed Tasks"
+        } else {
+            temptip = "Show completed Tasks"
+        }
+        this.setState({ hideComplete: !oldState, tooltipToggleComplete: temptip })
+        let data = { hideComplete: !oldState }
+        await apis.saveSettingForList(data).then(response => {
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    toggleSettings = async () => {
+        const oldState = this.state.showSettings;
+        this.setState({ showSettings: !oldState })
+        let data = { showSettings: !oldState }
+        await apis.saveSettingForList(data).then(response => {
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
 
     /*
     Creating a new Todo List
     */
     createTodoList = async () => {
-        console.log("I AM CREATING!")
-        this.setState({ 
+        this.setState({
             isLoading: true,
         })
         let areaIds = []
@@ -84,8 +135,11 @@ export default class GenerateList extends Component {
                 areaIds.push(area.id)
             }
         });
+        // Generate List and save data in DB
         await apis.generateList({
             areaIds: areaIds,
+            // hideComplete: this.state.hideComplete,
+            showSettings: this.state.showSettings,
             maxNumber: this.state.userMaxTasks
         })
             .then(response => {
@@ -101,16 +155,19 @@ export default class GenerateList extends Component {
                         state: false
                     })
                 })
-                console.log(tempTodo)
                 this.setState({
                     todoList: []
                 })
                 this.setState({
                     todoList: tempTodo,
                     currentTodoListCount: tempTodo.length,
+                    finTodos: 0,
+                    progress: 0,
                     isLoading: false
                 })
             })
+        // FIXME ? Hide settings when generating?
+        //this.setState({showSettings: false})
     }
 
     /* Drag & Drop */
@@ -149,7 +206,7 @@ export default class GenerateList extends Component {
     //change Selected Areas
     changeActiveAreas = (e) => {
         let tempActive = this.state.activeAreas;
-        var foundIndex = tempActive.findIndex(x => x.id == e.target.id);
+        var foundIndex = tempActive.findIndex(x => x.id === e.target.id);
         tempActive[foundIndex].state = !tempActive[foundIndex].state;
         this.setState({ activeAreas: tempActive })
     }
@@ -184,49 +241,73 @@ export default class GenerateList extends Component {
         let generatedList = null;
         if (this.state.todoList.length > 0) {
             generatedList = this.state.todoList.map((todo, index) => {
-                return (
-                    <div className="dragContainer" key={todo.todoId} draggable
-                        onDragOver={() => this.onDragOver(index)}
-                        onDragStart={e => this.onDragStart(e, index)}
-                        onDragEnd={this.onDragEnd}>
-                        <SingleTodo
-                            key={todo.todoId}
-                            todoId={todo.todoId}
-                            todoName={todo.todoName}
-                            color={todo.color}
-                            partNumber={todo.partNumber}
-                            allParts={todo.allParts}
-                            state={todo.state}
-                            dragging={this.state.isDragging}
-                        />
-                    </div>
-                )
+                if (this.state.hideComplete && todo.state) {
+                    return null
+                } else {
+                    return (
+                        <div className="dragContainer" key={todo.todoId} draggable
+                            onDragOver={() => this.onDragOver(index)}
+                            onDragStart={e => this.onDragStart(e, index)}
+                            onDragEnd={this.onDragEnd}>
+                            <SingleTodo
+                                key={todo.todoId}
+                                todoId={todo.todoId}
+                                todoName={todo.todoName}
+                                color={todo.color}
+                                partNumber={todo.partNumber}
+                                allParts={todo.allParts}
+                                state={todo.state}
+                                dragging={this.state.isDragging}
+                                reloadList={this.loadSavedList}
+                            />
+                        </div>
+                    )
+                }
+
             })
         }
 
         return (
             <div className="list">
                 <h1>Generate your List!</h1>
-                <div className="row">
-                    <div><label>Time</label></div>
-                    <div><label>Tasks</label></div>
-                </div>
-                <div className="row">
-                    <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
-                    <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
-                </div>
-                <div className="selectAreasDiv">
-                    {allAreas}
-                </div>
                 <button onClick={this.createTodoList}>Create</button>
-                <button>Cancel</button>
+                <Tooltip className="tooltip" title="Settings" arrow placement="top">
+                    <i className="fas fasSettings fa-cogs" onClick={this.toggleSettings}></i>
+                </Tooltip>
+
+                {this.state.showSettings &&
+                    <div className="settings">
+                        <div className="row">
+                            <div><label>Time</label></div>
+                            <div><label>Tasks</label></div>
+                        </div>
+                        <div className="row">
+                            <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
+                            <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
+                        </div>
+                        <div className="selectAreasDiv">
+                            {allAreas}
+                        </div>
+                    </div>
+                }
                 <div draggable="false">
                     {this.state.currentTodoListCount > 0 ?
                         <div className="visibleListWrapper">
-                            <div>Current Todos: {this.state.currentTodoListCount}</div>
-                            {generatedList}
-                            <input className="button" type='button' value="Save" />
-                            <input className="button" type='button' value="Hide Completed" />
+                            <Tooltip className="tooltip" title={this.state.tooltipToggleComplete} arrow placement="top">
+                                <div onClick={this.toggleHideComplete}>
+                                    {this.state.hideComplete ? <i className="fas fa-eye" /> : <i className="fas fa-eye-slash" />}
+                                </div>
+                            </Tooltip>
+                            <div className="listStatus"><span>Tasks:
+                            <b> {(this.state.currentTodoListCount - this.state.finTodos)}</b></span>
+                                <span className="timeLeft"> Time Left: <b>{this.state.timeLeft}</b> Minutes</span>
+                            </div>
+                            <div className="progressWrapper">
+                                <div className="progress"
+                                    style={{ width: `${this.state.progress}%` }}
+                                ></div>
+                            </div>
+                            <div className="generatedListWrapper">{generatedList}</div>
                         </div>
                         : null}
                 </div>

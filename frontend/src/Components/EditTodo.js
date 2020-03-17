@@ -16,7 +16,8 @@ export default class EditTodo extends Component {
             totalTime: props.totalTime,
             hideEdit: props.hideEdit,
             reloadTodo: props.reloadTodo,
-            reloadData: props.reloadData
+            reloadData: props.reloadData,
+            updateArea: props.updateArea
         }
     }
 
@@ -31,9 +32,7 @@ export default class EditTodo extends Component {
         this.state.reloadTodo()
     }
 
-    onSubmit = (e) => {
-        const data = this.state
-        // e.preventDefault();
+    onSubmit = () => {
         this.handleSendData()
     }
 
@@ -49,6 +48,7 @@ export default class EditTodo extends Component {
         })
         this.state.hideEdit()
         this.state.reloadData()
+        this.state.updateArea()
     }
 
     checKey = (e) => {
@@ -100,8 +100,8 @@ export default class EditTodo extends Component {
     render() {
         return (
             <div className="editTodo">
-                EDIT <i class="far fa-save icon" onClick={this.onSubmit} />
-                <i class="far fa-trash-alt icon" onClick={this.deleteTask} />
+                EDIT <i className="far fa-save icon" onClick={this.onSubmit} />
+                <i className="far fa-trash-alt icon" onClick={this.deleteTask} />
                 <input name="todoName"
                     placeholder="Taskname"
                     autoComplete="off"

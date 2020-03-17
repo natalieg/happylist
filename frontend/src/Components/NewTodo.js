@@ -21,6 +21,7 @@ export default class NewTodo extends Component {
             errorText: "",
             numError: false,
             numErrorText: "",
+            updateAreas: props.updateAreas
         }
     }
 
@@ -30,9 +31,7 @@ export default class NewTodo extends Component {
         this.setState({ errors });
 
         if (Object.keys(errors).length === 0) {
-
             this.setState({ loading: true });
-
             console.log('trying to transmit data');
             this.handleSendData()
         };
@@ -118,16 +117,17 @@ export default class NewTodo extends Component {
         await apis.sendNewTodo(data).then(response => {
             this.setState({
                 todoName: '',
-                parts: 1,
+                // parts: 1,
                 partName: "Parts",
                 time: 10,
-                totalTime: 10,
+                // totalTime: 10,
                 difficulty: ''
             })
         }).catch(err => {
             console.log(err)
         })
         this.state.reloadTodo()
+        this.state.updateAreas()
     }
     
     checKey = (e) => {

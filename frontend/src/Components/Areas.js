@@ -10,10 +10,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 //const areaColors = ['rgba(168, 201, 226, 0.5)', 'rgba(190, 234, 202, 0.4)', 'rgba(245, 242, 189, 0.5)', 'rgba(232, 217, 201, 0.5)', 'rgba(247, 190, 196, 0.6)'];
 
 export default class Areas extends Component {
-
     state = {
         areas: [],
-        isLoading: false,
+        isLoading: true,
         dummyCounter: 0,
         allTaskCount: 0,
         newAreaActive: false,
@@ -34,6 +33,7 @@ export default class Areas extends Component {
     }
 
     handleLoadData = async () => {
+        console.log("handle load data in areas!")
         await apis.getAreaList().then(response => {
             this.setState({
                 areas: response.data,
@@ -50,9 +50,9 @@ export default class Areas extends Component {
         this.setState({ allTaskCount: countTodos })
     }
 
-    // Dummy Add todo
-    //remove me later more dummy data stuff
+
     addTodo = (event) => {
+        console.log("HELLO")
         let indexOfModule = event.target.value;
         let allareas = [...this.state.areas]; // create copy
         //remove me later more dummy data stuff
@@ -60,6 +60,15 @@ export default class Areas extends Component {
         // default add thing //#TODO add area that opens when you click here || Or change this button to input field maybe?
         allareas[indexOfModule].todos.unshift('new item ' + this.state.dummyCounter); // manipulate array of item
         this.setState({ areas: allareas });
+    }
+
+    //Archive Todos that are finished
+    archiveFinishedTodos = async () => {
+        apis.archiveTodos().then(response => {
+            console.log("RELOAD")
+            this.handleLoadData()
+        }
+        )
     }
 
     // Toggles if the form for New Area is visible or not
@@ -82,21 +91,15 @@ export default class Areas extends Component {
         // Renders all Areas
         let displayareas = this.state.areas.map((area, index) => {
             let taskcount = this.state.areas[index].todos.length;
-            // Display all the ToDos
-            let displayTodos = this.state.areas[index].todos.map((todo, ind) => {
-                return <p key={ind}>{todo.todoName}</p>
-            })
-            
             return (
-                <SingleArea id={this.state.areas[index]._id} 
-                    className='singleArea' 
+                <SingleArea id={this.state.areas[index]._id}
+                    className='singleArea'
                     key={this.state.areas[index]._id}
-                    btnValue={index} 
-                    click={this.addTodo} 
+                    btnValue={index}
+                    updateAreas={this.handleLoadData}
                     color={area.color}
-                    name={area.areaTitle} 
-                    taskcount={taskcount} 
-                    tasks={displayTodos} />
+                    name={area.areaTitle}
+                    taskcount={taskcount} />
             )
         })
         return (
@@ -107,14 +110,16 @@ export default class Areas extends Component {
                     <Areabar areaActive={this.state.areaActive}
                         nameArea={this.state.newAreaActive ? "Cancel New Area" : "Add Area"}
                         clickArea={this.toggleActive}
+                        nameArchive="Archive Finished Tasks"
+                        archiveTodos={this.archiveFinishedTodos}
                     />
                     <Switch>
-                           {/* Shows all the Areas */}
+                        {/* Shows all the Areas */}
                         <Route path="/">
                             <div className='moduleOverview'>
-                                {this.state.newAreaActive ? 
-                                <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
-                                {displayareas}
+                                {this.state.newAreaActive ?
+                                    <NewArea cancelClick={this.toggleActive} reloadAreas={this.handleLoadData} /> : null}
+                                {this.state.isLoading ? "Loading Data" :  displayareas}
                             </div>
                         </Route>
                     </Switch>

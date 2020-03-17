@@ -11,7 +11,9 @@ export default class SingleTodoInArea extends Component {
             todoId: props.todo._id,
             hoverActive: false,
             editActive: false,
-            reloadData: props.reloadData
+            reloadData: props.reloadData,
+            updateArea: props.updateArea,
+            ctrlActive: false,
         }
     }
 
@@ -49,7 +51,7 @@ export default class SingleTodoInArea extends Component {
 
     render() {
         return (
-            <p className={`singleTodoArea ${(this.state.todo.finished && !this.state.editActive) ? "todoComplete" : "todoIncomplete"}`}
+            <div className={`singleTodoArea ${(this.state.todo.finished && !this.state.editActive) ? "todoComplete" : "todoIncomplete"}`}
                 onMouseEnter={this.handleMouseOver}
                 onMouseLeave={this.handleMouseOut}
                 key={this.state.todo._id}>
@@ -76,9 +78,10 @@ export default class SingleTodoInArea extends Component {
                         hideEdit={this.handleEditMode}
                         reloadTodo={this.handleLoadData}
                         reloadData={this.state.reloadData}
+                        updateArea={this.state.updateArea}
                     />
                 }
-            </p>
+            </div>
         )
     }
 }
