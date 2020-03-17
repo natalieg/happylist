@@ -16,6 +16,10 @@ export default class NewArea extends Component {
         }
     }
 
+    componentDidMount(){
+        this.areaTitleInput.focus();
+    }
+
     handleInputTitle = (e) => {
         const value = e.target.value;
         this.setState({ areaTitle: value })
@@ -47,15 +51,23 @@ export default class NewArea extends Component {
         this.state.cancelClick()
     }
 
+    checKey = (e) => {
+        if (e.key === "Enter") {
+            this.handleSendData() //check
+        }
+    }
+
     render() {
         return (
             <div className="singleArea newArea" style={{backgroundColor: this.state.color}}>
                 <h1>New Area</h1>
                 <input
+                ref={(input)=>{this.areaTitleInput = input;}}
                     name="areaTitle"
                     type="text"
                     value={this.state.areaTitle}
                     onChange={this.handleInputTitle}
+                    onKeyDown={this.checKey}
                     placeholder="Area Name"
                 />
                 <Circle

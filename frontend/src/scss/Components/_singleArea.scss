@@ -62,6 +62,10 @@
     flex-shrink: 0;
     flex: 1;
     transition: flex .5s ease-in;
+    h2 {
+        width: 80%;
+        margin: 0 auto;
+    }
 }
 
 .newTodoArea {

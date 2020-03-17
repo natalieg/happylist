@@ -64,6 +64,9 @@ export default class SingleArea extends Component {
         console.log("TOGGLE ACTIVE")
         const isActive = this.state.editActive;
         this.setState({ editActive: !isActive });
+        if(!isActive){
+            this.setState({newTodoVisible: false})
+        }
     }
 
     handleMouseOver = () => {
@@ -104,6 +107,23 @@ export default class SingleArea extends Component {
         })
         this.setState({ editActive: false })
         this.handleLoadData()
+    }
+
+    deleteArea = async () => {
+        let result = window.confirm("Do you want to delete the Area with all the Tasks?");
+        if (result) {
+            const config = {
+                data: { areaId: this.state.area.areaId }
+            }
+            console.log("frontend data", config)
+            await apis.deleteArea(config).then(response => {
+
+            }).catch(err => {
+                console.log(err)
+            })
+            this.setState({ editActive: false })
+            this.state.updateAreas()
+        }
     }
 
     render() {
@@ -174,8 +194,8 @@ export default class SingleArea extends Component {
                             onChange={this.handleInputColor}
                             placeholder="Area Color"
                         /><br />
-                        <button onClick={this.handleSendData}>Save</button>   
-                        <button>Delete</button>
+                        <button onClick={this.handleSendData}>Save</button>
+                        <button onClick={this.deleteArea}>Delete</button>
                     </div>
                 }
             </div>

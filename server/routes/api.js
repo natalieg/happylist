@@ -79,6 +79,7 @@ router.post('/newArea', (req, res, next) => {
 //Edit an Area
 router.post('/editArea', async (req, res, next) => {
     let { areaId, areaName, backgroundColor } = req.body;
+    console.log("EDIT", req.body)
     await AreaModel.findOneAndUpdate(
         { _id: areaId },
         {
@@ -98,8 +99,9 @@ router.post('/editArea', async (req, res, next) => {
 
 // Delete Area
 router.delete('/deleteArea', async (req, res, next) => {
-    let areaId = req.body.areaId
-    console.log(req.body)
+    let {areaId} = req.body;
+    console.log("DELETE ID", areaId)
+    console.log("BODY", req.body)
     await TodoModel.deleteMany({ areaId: areaId })
     await AreaModel.findByIdAndDelete(areaId)
         .then(response => {
