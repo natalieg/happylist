@@ -39,6 +39,12 @@ export default class SingleArea extends Component {
         })
     }
 
+    componentDidUpdate(){
+        if(this.state.editActive){
+            this.areaTitleInput.focus();
+        }
+    }
+
     handleLoadData = async () => {
         await apis.getAreaTodos({ areaId: this.state.area.areaId }).then(response => {
             // this.setState({ tasks: [] })
@@ -64,9 +70,10 @@ export default class SingleArea extends Component {
         console.log("TOGGLE ACTIVE")
         const isActive = this.state.editActive;
         this.setState({ editActive: !isActive });
-        if(!isActive){
-            this.setState({newTodoVisible: false})
-        }
+        if (!isActive) {
+            console.log(`status is ${isActive}`)
+            this.setState({ newTodoVisible: false });
+        } 
     }
 
     handleMouseOver = () => {
@@ -150,10 +157,8 @@ export default class SingleArea extends Component {
                         key={this.state.area.areaId}
                         style={{ backgroundColor: this.state.area.backgroundColor }}
                         className={this.state.area.className}
-
                     >
                         <div className="singleAreaUpper">
-
                             <h2>{this.state.area.areaName}</h2>
                             {/* FIXME props taskcount works but not state taskcount ??? */}
                             <p className='areaSummary'>Tasks: {this.props.taskcount}</p>
@@ -177,7 +182,9 @@ export default class SingleArea extends Component {
                 }
                 {this.state.editActive &&
                     <div className={`${this.state.area.className} editSingleArea`} style={{ backgroundColor: this.state.area.backgroundColor }}>
-                        <input value={this.state.area.areaName}
+                        <input
+                            ref={(input) => { this.areaTitleInput = input; }}
+                            value={this.state.area.areaName}
                             className="editAreaName"
                             onKeyDown={this.checKey}
                             onChange={this.handleInputName}
