@@ -195,7 +195,6 @@ export default class NewTodo extends Component {
                     </p>
                     <Tooltip title="How much do you want to do in a session?" arrow placement="left">
                         <p>
-
                             <i className="fas fa-puzzle-piece" />
                             <input
                                 name="sessionGoal"
@@ -216,26 +215,37 @@ export default class NewTodo extends Component {
                     </Tooltip>
 
                     <p>
-                        <i className="fas fa-clock"></i>
+                        <Tooltip title="Time per Part" arrow placement="left">
+
+                            <span>
+                                <i className="fas fa-clock"></i>
+                                <input type="number" name="time" placeholder="time"
+                                    className={this.state.errors.timeStr ? "inputError" : null}
+                                    autoComplete="off"
+                                    style={{ width: "25%" }}
+                                    value={this.state.time}
+                                    onChange={this.handleInputTime}
+                                    onKeyDown={this.checKey} />
+                                <label className="timeLabel">min</label>
+                            </span>
+                        </Tooltip>
+                        <Tooltip title="Overall Time" arrow placement="right">
+                            <span>
+                                <input type="number" name="totalTime" placeholder="totalTime"
+                                    className={this.state.errors.totalTime ? "inputError" : null}
+                                    autoComplete="off"
+                                    style={{ width: "25%" }}
+                                    value={this.state.totalTime}
+                                    onChange={this.handleInputTotalTime}
+                                    onKeyDown={this.checKey} />
+                                <label className="timeLabel">min</label>
+                            </span>
+                        </Tooltip>
                     </p>
 
-                    <input type="number" name="time" placeholder="time"
-                        className={this.state.errors.timeStr ? "inputError" : null}
-                        autoComplete="off"
-                        style={{ width: "40%" }}
-                        value={this.state.time}
-                        onChange={this.handleInputTime}
-                        onKeyDown={this.checKey} />
-                    <label>Minutes</label>
 
-                    <input type="number" name="totalTime" placeholder="totalTime"
-                        className={this.state.errors.totalTime ? "inputError" : null}
-                        autoComplete="off"
-                        style={{ width: "40%" }}
-                        value={this.state.totalTime}
-                        onChange={this.handleInputTotalTime}
-                        onKeyDown={this.checKey} />
-                    <label>Minutes</label>
+
+
 
                     {/* <input type="number" name="difficulty" placeholder="difficulty"
                     autocomplete="off"

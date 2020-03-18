@@ -100,7 +100,7 @@
     transition: flex .5s ease-in;
     flex-direction: column;
     height: auto;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
 
     p {
@@ -112,7 +112,7 @@
             padding-right: 5px;
         }
         input {
-            padding-left: 10px;
+            padding-left: 5px;
             background-color: rgba(255, 255, 255, 0.644);
             border: 1px solid white;
         }
@@ -122,10 +122,7 @@
             border: 1px solid white;
             height: 22px;
             margin-left: 3px;
-            padding-left: 6px;
-            option {
-                padding-left: 10px;
-            }
+            padding-left: 1px;
         }
         [type="checkbox"] {
             position: absolute;
@@ -149,6 +146,10 @@
           }
     }
 
+}
+
+.timeLabel {
+    font-size: 12px;
 }
 
 .newTodoWrap {
