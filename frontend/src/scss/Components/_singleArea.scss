@@ -80,7 +80,8 @@
 .areaSummary {
     margin-top: 0%;
     padding-bottom: 5px;
-    border-bottom: 1px solid darken($backcolor, $amount: 20);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.329);
+    margin-bottom: 8px;
 }
 
 .newTodoWrap {

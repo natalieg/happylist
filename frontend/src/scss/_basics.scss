@@ -13,10 +13,23 @@ body {
     // background-blend-mode: overlay;
     background-position: top center;
     background-size: cover;
-    //background: rgb(222, 164, 190);
-    //background: linear-gradient(317deg, rgba(222, 164, 190, 1) 0%, rgba(176, 198, 224, 1) 59%, rgba(255, 255, 255, 1) 100%);
     background-attachment: fixed;
     overflow-x: hidden;
+}
+
+button:not(.navBtn) {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 8px;
+    font-size: 16px;
+    margin: 4px auto;
+    border: none;
+    border-radius: 4px;
+    .fas {
+        font-size: 80%;
+        margin: auto 4px;
+    }
 }
 
 .newTodo {

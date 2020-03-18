@@ -70,6 +70,13 @@ const listSchema = new Schema({
             allParts: {
                 type: Number
             },
+            sessionGoal: {
+                type: Number,
+                default: 1
+            },
+            sessionGoalType: {
+                type: String
+            },
             partTime: {
                 type: Number
             },
@@ -90,6 +97,10 @@ const todoSchema = new Schema({
         type: String,
         require: true
     },
+    timeBased: {
+        type: Boolean,
+        default: false
+    },
     allParts: {
         type: Number,
         default: 1
@@ -101,6 +112,13 @@ const todoSchema = new Schema({
     partName: {
         type: String,
         default: "Part(s)"
+    },
+    sessionGoal: {
+        type: Number,
+        default: 1
+    },
+    sessionGoalType: {
+        type: String
     },
     partTime: {
         type: Number,
