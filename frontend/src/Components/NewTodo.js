@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import apis from '../api';
 import ErrorMessage from './message/ErrorMessage';
+import Tooltip from '@material-ui/core/Tooltip'
+import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 export default class NewTodo extends Component {
     constructor(props) {
@@ -11,6 +15,7 @@ export default class NewTodo extends Component {
             todoName: '',
             parts: 1,
             partName: "Parts",
+            sessionGoal: 1,
             time: 10,
             totalTime: 10,
             difficulty: '',
@@ -65,6 +70,7 @@ export default class NewTodo extends Component {
 
     // setTimeout is necessary for the fadein to work
     componentDidMount() {
+        this.taskTitleInput.focus();
         setTimeout(() => {
             this.setState({ divClass: "ani2" })
         }, 0
@@ -86,6 +92,11 @@ export default class NewTodo extends Component {
     handleInputPartName = (e) => {
         const value = e.target.value;
         this.setState({ partName: value })
+    }
+
+    handleInputSessionGoal = (e) => {
+        const value = e.target.value;
+        this.setState({ sessionGoal: value })
     }
 
     // Single Time input calculates
@@ -129,7 +140,7 @@ export default class NewTodo extends Component {
         this.state.reloadTodo()
         this.state.updateAreas()
     }
-    
+
     checKey = (e) => {
         if (e.key === "Enter") {
             this.onSubmit()
@@ -137,7 +148,6 @@ export default class NewTodo extends Component {
     }
 
     render() {
-
         return (
             <div className="newTodoWrap">
                 <div className="errorMessages">
@@ -146,35 +156,76 @@ export default class NewTodo extends Component {
                 </div>
                 <div className={`${this.state.divClass} newTodo`}>
 
-                    <input type="text" name="todoName" placeholder="Taskname"
-                        className={this.state.errors.todoName ? "inputError" : null}
+                    <input
+                        ref={(input) => { this.taskTitleInput = input; }}
+                        type="text" name="todoName" placeholder="Taskname"
+                        className={`${this.state.errors.todoName ? "inputError" : null} taskNameInput`}
                         autoComplete="off"
                         value={this.state.todoName}
                         onChange={this.handleInputName}
                         onKeyDown={this.checKey} />
 
-                    <input type="number" name="parts" placeholder="parts" min="0"
-                        className={this.state.errors.partsStr ? "inputError" : null}
-                        autoComplete="off"
-                        style={{ width: "42%" }}
-                        value={this.state.parts}
-                        onChange={this.handleInputParts} 
-                        onKeyDown={this.checKey}/>
+                    <p className="taskGoal">
+                        {/* FIXME: STYLING */}
+                        <Tooltip title="Goal for this Task" arrow placement="left">
+                            <span>
+                                <i className="fas fa-trophy"></i>
+                                <input type="number" name="parts" placeholder="parts" min="0"
+                                    className={this.state.errors.partsStr ? "inputError" : null}
+                                    autoComplete="off"
+                                    style={{ width: "20%" }}
+                                    value={this.state.parts}
+                                    onChange={this.handleInputParts}
+                                    onKeyDown={this.checKey} />
+                                <input type="text" name="partName" placeholder="partname"
+                                    autoComplete="off"
+                                    style={{ width: "30%" }}
+                                    value={this.state.partName}
+                                    onChange={this.handleInputPartName}
+                                    onKeyDown={this.checKey} />
+                            </span>
+                        </Tooltip>
+                        {/* FIXME: POSITION */}
+                        <Tooltip title="is it a time goal?" arrow placement="top-end">
+                            <span>
+                                <input id="timeGoalCheck" type="checkbox" className="checkbox" />
+                                <label htmlFor="timeGoalCheck"></label>
+                            </span>
+                        </Tooltip>
+                    </p>
+                    <Tooltip title="How much do you want to do in a session?" arrow placement="left">
+                        <p>
 
-                    <input type="text" name="partName" placeholder="partname"
-                        autoComplete="off"
-                        style={{ width: "42%" }}
-                        value={this.state.partName}
-                        onChange={this.handleInputPartName} 
-                        onKeyDown={this.checKey}/>
+                            <i className="fas fa-puzzle-piece" />
+                            <input
+                                name="sessionGoal"
+                                type="number"
+                                autoComplete="off"
+                                style={{ width: "20%" }}
+                                value={this.state.sessionGoal}
+                                onChange={this.handleInputSessionGoal}
+                                onKeyDown={this.checKey} />
+                            <select
+                                style={{ width: "52%" }}
+                                name="sessionGoalType">
+                                <option value={this.state.partName}>{this.state.partName}</option>
+                                <option value="Minutes">Minutes</option>
+                                <option value="Hours">Hours</option>
+                            </select>
+                        </p>
+                    </Tooltip>
+
+                    <p>
+                        <i className="fas fa-clock"></i>
+                    </p>
 
                     <input type="number" name="time" placeholder="time"
                         className={this.state.errors.timeStr ? "inputError" : null}
                         autoComplete="off"
                         style={{ width: "40%" }}
                         value={this.state.time}
-                        onChange={this.handleInputTime} 
-                        onKeyDown={this.checKey}/>
+                        onChange={this.handleInputTime}
+                        onKeyDown={this.checKey} />
                     <label>Minutes</label>
 
                     <input type="number" name="totalTime" placeholder="totalTime"
@@ -182,8 +233,8 @@ export default class NewTodo extends Component {
                         autoComplete="off"
                         style={{ width: "40%" }}
                         value={this.state.totalTime}
-                        onChange={this.handleInputTotalTime} 
-                        onKeyDown={this.checKey}/>
+                        onChange={this.handleInputTotalTime}
+                        onKeyDown={this.checKey} />
                     <label>Minutes</label>
 
                     {/* <input type="number" name="difficulty" placeholder="difficulty"
