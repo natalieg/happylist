@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import isEmail from 'validator/lib/isEmail';
 
 
-
 export default class  ContactForm extends Component {
    state = {
             name: '',
@@ -44,7 +43,7 @@ export default class  ContactForm extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="contactFormContainer">
                 <form action="">
                     <h2>Contact Us</h2>
                     <p>Write us!!</p>
@@ -71,20 +70,8 @@ export default class  ContactForm extends Component {
                         />
                     </label>
 
-                    <label htmlFor="password"><b>Password</b>
-                        <input 
-                            type="password" 
-                            placeholder="Enter Password" 
-                            name="password" 
-                            value={this.state.password}
-                            required
-                            onChange={e => this.handleChange(e)}
-                        />
-                    </label>
-
                     <label htmlFor="message"><b>Message</b>
-                        <input 
-                            type="text" 
+                        <textarea 
                             placeholder="Enter Message" 
                             name="message" 
                             value={this.state.message}
