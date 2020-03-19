@@ -4,17 +4,49 @@ import ErrorMessage from './message/ErrorMessage';
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core/styles';
 
+const background = "grey";
+const fontCol = "white"
+
+// FIXME LATER - better way to re-use styling
 const LightTooltip = withStyles(theme => ({
     arrow: {
-        color: theme.palette.common.white,
-      },
+        color: background,
+    },
     tooltip: {
         position: "relative",
         left: "10px",
-      backgroundColor: theme.palette.common.white,
-      color: 'rgba(0, 0, 0, 0.87)',
-      boxShadow: theme.shadows[1],
-      fontSize: 18,
+        backgroundColor: background,
+        color: fontCol,
+        boxShadow: theme.shadows[1],
+        fontSize: 16,
+    },
+}))(Tooltip);
+
+const TimeGoalTip = withStyles(theme => ({
+    arrow: {
+        color: background,
+    },
+    tooltip: {
+        position: "relative",
+        left: "20px",
+        backgroundColor: background,
+        color: fontCol, 
+        boxShadow: theme.shadows[1],
+        fontSize: 16,
+    },
+}))(Tooltip);
+
+const TimeTip = withStyles(theme => ({
+    arrow: {
+        color: background,
+    },
+    tooltip: {
+        position: "relative",
+        left: "10px",
+        backgroundColor: background,
+        color: fontCol,
+        boxShadow: theme.shadows[1],
+        fontSize: 16,
     },
 }))(Tooltip);
 
@@ -31,22 +63,24 @@ export default class NewTodo extends Component {
             time: 10,
             sessionTime: 10,
             totalTime: 10,
+            timedGoal: false,
             difficulty: '',
             divClass: "ani1",
             reloadTodo: props.reloadTodo,
-            loading: false,
             errors: {},
             errorText: "",
             numError: false,
             numErrorText: "",
-            updateAreas: props.updateAreas
+            updateAreas: props.updateAreas,
+            focusTimeGoal: false,
+            focusSessionTime: false,
+
+            loading: false,
         }
     }
 
     onSubmit = (e) => {
-        const data = this.state
-        const errors = this.validate(data); // do not do enything else if we have errors 
-        this.setState({ errors });
+        const errors = this.validate(); // do not do enything else if we have errors 
 
         if (Object.keys(errors).length === 0) {
             this.setState({ loading: true });
@@ -55,7 +89,8 @@ export default class NewTodo extends Component {
         };
     };
 
-    validate = (data) => {
+    validate = () => {
+        const data = this.state
         this.setState({ numError: false, numErrorText: "" })
         const errors = {}; // the errors var will be empty if we don`t have errors 
         let numErr = "" // String for the Number errors
@@ -78,6 +113,7 @@ export default class NewTodo extends Component {
             this.setState({ numError: true, numErrorText: numErr })
         }
 
+        this.setState({ errors });
         return errors;
     };
 
@@ -108,8 +144,15 @@ export default class NewTodo extends Component {
     }
 
     handleInputSessionGoal = (e) => {
-        const value = e.target.value;
-        this.setState({ sessionGoal: value })
+        const value = parseInt(e.target.value);
+        const sessionTimeCalc = value * this.state.time;
+        this.setState({
+            sessionTime: sessionTimeCalc,
+            sessionGoal: value
+        })
+        if (value > this.state.parts) {
+            this.setState({ parts: value, totalTime: sessionTimeCalc });
+        }
     }
 
     // Single Time input calculates
@@ -117,8 +160,12 @@ export default class NewTodo extends Component {
     handleInputTime = (e) => {
         const value = parseInt(e.target.value);
         const calcTime = value * this.state.parts;
-        this.setState({ totalTime: calcTime })
-        this.setState({ time: value })
+        const calcSessionTime = value * this.state.sessionGoal;
+        this.setState({
+            time: value,
+            sessionTime: calcSessionTime,
+            totalTime: calcTime
+        })
     }
 
     // Session Time
@@ -145,6 +192,12 @@ export default class NewTodo extends Component {
     handleInputDifficulty = (e) => {
         const value = e.target.value;
         this.setState({ difficulty: value })
+    }
+
+    changeTimedGoalType = (e) => {
+        const value = e.target.checked;
+        console.log(value)
+        this.setState({timedGoal: value});
     }
 
     // sending and saving data to DB
@@ -176,12 +229,14 @@ export default class NewTodo extends Component {
         return (
             <div className="newTodoWrap">
                 <div className="errorMessages">
-                    {this.state.errors.todoName && <ErrorMessage text={this.state.errors.todoName} />}
+                    {this.state.errors.todoName && 
+                    <ErrorMessage text={this.state.errors.todoName} />}
                     {this.state.numError ? `Please Check: ${this.state.numErrorText}` : null}
                 </div>
                 <div className={`${this.state.divClass} newTodo`}>
 
                     <input
+                        id="taskNameInput"
                         ref={(input) => { this.taskTitleInput = input; }}
                         type="text" name="todoName" placeholder="Taskname"
                         className={`${this.state.errors.todoName ? "inputError" : null} taskNameInput`}
@@ -193,16 +248,24 @@ export default class NewTodo extends Component {
                     <p className="taskGoal">
                         {/* FIXME: STYLING */}
                         <LightTooltip title="Goal for this Task" arrow placement="left">
-                            <span>
+                            <span className="span">
                                 <i className="fas fa-trophy"></i>
-                                <input type="number" name="parts" placeholder="parts" min="0"
-                                    className={this.state.errors.partsStr ? "inputError" : null}
+                                <input
+                                    id="goalInput"
+                                    type="number" name="parts" placeholder="parts" min="0"
+                                    className={`${this.state.errors.partsStr ? "inputError" : null}
+                                    ${this.state.focusTimeGoal ? "focus" : null}`}
                                     autoComplete="off"
                                     style={{ width: "20%" }}
                                     value={this.state.parts}
                                     onChange={this.handleInputParts}
-                                    onKeyDown={this.checKey} />
-                                <input type="text" name="partName" placeholder="partname"
+                                    onKeyDown={this.checKey}
+                                    onFocus={() => this.setState({ focusTimeGoal: true })}
+                                    onBlur={() => this.setState({ focusTimeGoal: false })}
+                                />
+                                <input
+                                    id="partNameInput"
+                                    type="text" name="partName" placeholder="partname"
                                     autoComplete="off"
                                     style={{ width: "30%" }}
                                     value={this.state.partName}
@@ -210,41 +273,53 @@ export default class NewTodo extends Component {
                                     onKeyDown={this.checKey} />
                             </span>
                         </LightTooltip>
-                        {/* FIXME: POSITION */}
-                        <Tooltip title="is it a time goal?" arrow placement="top-end">
+                        <TimeGoalTip title="is it a time goal?" arrow placement="top-end">
                             <span>
-                                <input id="timeGoalCheck" type="checkbox" className="checkbox" />
+                                <input id="timeGoalCheck" 
+                                type="checkbox" 
+                                className="checkbox" 
+                                value={this.state.timedGoal}
+                                onChange={this.changeTimedGoalType}
+                                />
                                 <label htmlFor="timeGoalCheck"></label>
                             </span>
-                        </Tooltip>
+                        </TimeGoalTip>
                     </p>
-                    <Tooltip title="How much do you want to do in a session?" arrow placement="left">
+                    <LightTooltip title="How much do you want to do in a session?" arrow placement="left">
                         <p>
                             <i className="fas fa-puzzle-piece" />
                             <input
+                                id="sessionGoalInput"
                                 name="sessionGoal"
                                 type="number"
                                 autoComplete="off"
+                                min="0"
                                 style={{ width: "20%" }}
+                                className={`${this.state.focusSessionTime ? "focus" : null}`}
                                 value={this.state.sessionGoal}
                                 onChange={this.handleInputSessionGoal}
-                                onKeyDown={this.checKey} />
+                                onKeyDown={this.checKey} 
+                                onFocus={() => this.setState({ focusSessionTime: true })}
+                                onBlur={() => this.setState({ focusSessionTime: false })}
+                                />
                             <select
+                                id="sessionNameInput"
                                 style={{ width: "33%" }}
                                 name="sessionGoalType">
-                                <option value={this.state.partName}>{this.state.partName}</option>
+                                {this.state.timedGoal ? null : <option value={this.state.partName}>{this.state.partName}</option>}
                                 <option value="Minutes">Minutes</option>
                                 <option value="Hours">Hours</option>
                             </select>
                         </p>
-                    </Tooltip>
+                    </LightTooltip>
 
-                    <p>
-                        <Tooltip title="Time per Part" arrow placement="top">
-
-                            <span>
+                    <p className="time">
+                        <TimeTip title="Time per Part" arrow placement="top">
+                            <span className="span">
                                 <i className="fas fa-clock"></i>
-                                <input type="number" name="time" placeholder="top"
+                                <input
+                                    id="timeInput"
+                                    type="number" name="time" placeholder="time for part"
                                     className={this.state.errors.timeStr ? "inputError" : null}
                                     autoComplete="off"
                                     style={{ width: "20%" }}
@@ -253,27 +328,39 @@ export default class NewTodo extends Component {
                                     onKeyDown={this.checKey} />
                                 {/* <label className="timeLabel">min</label> */}
                             </span>
-                        </Tooltip>
-                        <Tooltip title="Session Time" arrow placement="top">
+                        </TimeTip>
+                        <TimeTip title="Session Time" arrow placement="top">
                             <span>
-                                <input type="number" name="totalTime" placeholder="totalTime"
+                                <input
+                                    id="sessionTimeInput"
+                                    type="number" name="totalTime" placeholder="totalTime"
                                     // TODO: ERROR CHECKING
                                     autoComplete="off"
                                     style={{ width: "20%" }}
+                                    className={`${this.state.focusSessionTime ? "focus" : null}`}
                                     value={this.state.sessionTime}
                                     onChange={this.handleInputSessionTime}
-                                    onKeyDown={this.checKey} />
+                                    onKeyDown={this.checKey} 
+                                    onFocus={() => this.setState({ focusSessionTime: true })}
+                                    onBlur={() => this.setState({ focusSessionTime: false })}
+                                    />
                             </span>
-                        </Tooltip>
+                        </TimeTip>
                         <Tooltip title="Overall Time" arrow placement="top">
                             <span>
-                                <input type="number" name="totalTime" placeholder="totalTime"
-                                    className={this.state.errors.totalTime ? "inputError" : null}
+                                <input
+                                    id="totalTimeInput"
+                                    type="number" name="totalTime" placeholder="totalTime"
+                                    className={`${this.state.errors.totalTime ? "inputError" : null}
+                                    ${this.state.focusTimeGoal ? "focus" : null}`}
                                     autoComplete="off"
                                     style={{ width: "25%" }}
                                     value={this.state.totalTime}
                                     onChange={this.handleInputTotalTime}
-                                    onKeyDown={this.checKey} />
+                                    onKeyDown={this.checKey}
+                                    onFocus={() => this.setState({ focusTimeGoal: true })}
+                                    onBlur={() => this.setState({ focusTimeGoal: false })}
+                                />
                                 <label className="timeLabel">min</label>
                             </span>
                         </Tooltip>
@@ -287,7 +374,7 @@ export default class NewTodo extends Component {
                     autocomplete="off"
                     value={this.state.difficulty}
                     onChange={this.handleInputDifficulty} /> */}
-                    <button onClick={this.onSubmit}>Save</button>
+                    <button onClick={this.onSubmit} style={{width: "50%"}}>Save</button>
                 </div>
             </div>
         )

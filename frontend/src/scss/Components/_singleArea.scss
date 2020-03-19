@@ -2,7 +2,7 @@
 .singleAreaWrapper {
     position: relative;
     width: 25%;
-    min-width: 200px;
+    min-width: 300px;
     min-height: 50px;
     height: 100%;
 
@@ -269,3 +269,12 @@
         padding-left: 5px;
     }
 }
+
+.focus {
+    background-color: rgb(233, 218, 136) !important;
+}   
+
+.blue {
+    background-color: darkblue
+}
+
