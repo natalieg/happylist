@@ -114,7 +114,9 @@ router.delete('/deleteArea', async (req, res, next) => {
 
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
-    let { todoName, parts, partName, time, totalTime, difficulty, userId, areaId } = req.body;
+    let { todoName, parts, partName, time, totalTime, difficulty, 
+        timedGoal, sessionGoal, sessionTime,
+        userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
     let color = await AreaModel.findOne({ _id: areaId }, { color: 1, _id: 0 })
@@ -127,7 +129,10 @@ router.post('/newTodo', async (req, res, next) => {
         difficulty: difficulty,
         userId: userId,
         areaId: areaId,
-        areaColor: color.color
+        areaColor: color.color,
+        timedGoal: timedGoal, 
+        sessionGoal: sessionGoal,
+        sessionTime: sessionTime
     })
     newTodo.save()
         .then(response => {
@@ -168,11 +173,16 @@ router.post('/generateList', async (req, res, next) => {
             todoId: todo._id,
             todoName: todo.todoName,
             partNumber: todo.finishedParts,
+            partName: todo.partName,
             allParts: todo.allParts,
             partTime: todo.partTime,
+            color: todo.areaColor,
+            timedGoal: todo.timedGoal,
+            sessionGoal: todo.sessionGoal,
+            sessionTime: todo.sessionTime,
             state: false,
-            color: todo.areaColor
         })
+        console.log("REVAMP", todo.sessionGoal, todo.sessionTime, todo.timedGoal)
     });
     let newList = {
         //FIXME LATER

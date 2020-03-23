@@ -92,6 +92,7 @@ export default class NewTodo extends Component {
         };
     };
 
+    // TODO: check for the new input fields esp when its a timed goal
     validate = () => {
         const data = this.state
         this.setState({ numError: false, numErrorText: "" })

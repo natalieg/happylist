@@ -13,20 +13,25 @@ export default class SingleTodo extends React.Component {
             color: props.color,
             state: props.state,
             partNumber: props.partNumber,
+            partName: props.partName,
             allParts: props.allParts,
+            timedGoal: props.timedGoal,
+            sessionGoal: props.sessionGoal,
+            sessionTime: props.sessionTime,
             todoClassName: '',
             dragging: props.dragging,
             changeState: props.changeState,
             reloadList: props.reloadList,
             hoverActive: false,
-            ctrlActive: false
+            goalIncrease: true,
+            goalDecrease: true
         }
     }
 
 
     changeTodoState = (e) => {
         const value = e.target.checked;
-        const partNumber = value ? this.state.partNumber + 1 : this.state.partNumber - 1
+        const partNumber = value ? this.state.partNumber + this.state.sessionGoal : this.state.partNumber - this.state.sessionGoal
         const data =
         {
             todoId: this.state.id,
@@ -59,11 +64,11 @@ export default class SingleTodo extends React.Component {
     }
 
     increaseTaskNumber = () => {
-        this.updateTaskNumber(1)
+        this.updateTaskNumber(this.state.sessionGoal)
     }
 
     decreaseTaskNumber = () => {
-        this.updateTaskNumber(-1)
+        this.updateTaskNumber(- this.state.sessionGoal)
     }
 
     updateTaskNumber = (value) => {
@@ -85,70 +90,107 @@ export default class SingleTodo extends React.Component {
         this.saveInDb(data)
     }
 
+    increaseSessionGoal = () => {
+        const sessionGoalIncr = this.state.sessionGoal + 1
+        const partNumberIncr = this.state.partNumber + 1;
+        this.setState({ sessionGoal: sessionGoalIncr, partNumber: partNumberIncr })
+        if (partNumberIncr >= this.state.allParts) {
+            this.setState({ goalIncrease: false })
+        } 
+        const data = {
+            todoId: this.state.id,
+            partNumber: partNumberIncr
+        }
+        this.saveInDb(data);
+    }
+
+
+    decreaseSessionGoal = () => {
+        const sessionGoalDec = this.state.sessionGoal - 1
+        const partNumberDec = this.state.partNumber - 1;
+        this.setState({ sessionGoal: sessionGoalDec, partNumber: partNumberDec })
+        const data = {
+            todoId: this.state.id,
+            partNumber: partNumberDec
+        }
+        this.saveInDb(data);
+    }
+
 
     render() {
         return (
-            <div key={this.state.id} className="singleTodo"
-                tabIndex="0"
-
+            <div className="singleTodoWrapper"
                 onMouseEnter={this.handleMouseOver}
                 onMouseLeave={this.handleMouseOut}>
-
-                <input type="checkbox"
-                    className="checkbox"
-                    value={this.state.state}
-                    checked={this.state.state}
-                    onChange={this.changeTodoState} />
-                <label className={this.state.state ? "todoComplete" : "todoIncomplete"}>
-                    <span className="todoLabel">{this.state.todoName}</span>
-                </label>
-                {this.state.hoverActive && !this.state.state ?
-                    <span>
-                        {this.state.partNumber > 0 &&
-                            <i className="fas fas1 fa-chevron-circle-down"
-                                onClick={this.decreaseTaskNumber}></i>
-                        }
-                        <i className="fas fas2 fa-chevron-circle-up"
-                            onClick={this.increaseTaskNumber}></i></span>
-                    : null
-                }
-                <span className="partDisplay">{this.state.partNumber}/{this.state.allParts}
-                </span>
+                <div key={this.state.id} className="singleTodo"
+                    tabIndex="0">
+                    <input type="checkbox"
+                        className="checkbox"
+                        value={this.state.state}
+                        checked={this.state.state}
+                        onChange={this.changeTodoState} />
+                    <label className={this.state.state ? "todoComplete" : "todoIncomplete"}>
+                        <span className="todoLabel">{this.state.todoName}</span>
+                        {/* FIXME remove the time later just for testing */}
+                        <span className="sessionGoal">{this.state.sessionGoal} {this.state.partName} {this.state.sessionTime}</span>
+                    </label>
+                    <span className="partDisplay">{this.state.partNumber}/{this.state.allParts}
+                    </span>
 
 
-                {/* <div className="todoColorRef"
+                    {/* <div className="todoColorRef"
                     style={{ backgroundColor: this.state.color }}></div> */}
-                <PieChart
-                    className="pieChart"
-                    cx={50}
-                    cy={50}
-                    data={[
-                        {
-                            color: this.state.color,
-                            title: 'One',
-                            value: this.state.partNumber
-                        },
-                        {
-                            color: "white",
-                            title: 'Two',
-                            value: this.state.allParts - this.state.partNumber
-                        }
-                    ]}
-                    label={false}
-                    lengthAngle={360}
-                    lineWidth={100}
-                    paddingAngle={0}
-                    radius={50}
-                    rounded={false}
-                    startAngle={0}
-                    style={{
-                        height: '25px'
-                    }}
-                    viewBoxSize={[
-                        20,
-                        20
-                    ]}
-                />
+                    <PieChart
+                        className="pieChart"
+                        cx={50}
+                        cy={50}
+                        data={[
+                            {
+                                color: this.state.color,
+                                title: 'One',
+                                value: this.state.partNumber
+                            },
+                            {
+                                color: "white",
+                                title: 'Two',
+                                value: this.state.allParts - this.state.partNumber
+                            }
+                        ]}
+                        label={false}
+                        lengthAngle={360}
+                        lineWidth={100}
+                        paddingAngle={0}
+                        radius={50}
+                        rounded={false}
+                        startAngle={0}
+                        style={{
+                            height: '25px'
+                        }}
+                        viewBoxSize={[
+                            20,
+                            20
+                        ]}
+                    />
+
+                </div>
+                {(this.state.hoverActive && this.state.state) &&
+                    <div className="flag">
+                        <div className="arrow-left"></div>
+                        <div className="flagContent">
+                            <span className="sessionGoalSpan">+{this.state.sessionGoal}</span>
+                        </div>
+                        <div className="extra">
+                            <span className="extraText">did more?</span>
+                            <span className="extraBtns">
+                                {this.state.goalIncrease &&
+                                    <i className="fas fa-plus-square" onClick={this.increaseSessionGoal}></i>
+                                }
+                                <i class="fas fa-minus-square" onClick={this.decreaseSessionGoal}></i>
+                            </span>
+
+                        </div>
+                    </div>
+                }
 
             </div>
         )
