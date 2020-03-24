@@ -360,7 +360,7 @@ export default class NewTodo extends Component {
                         </p>
                         :
                         <p className="time">
-                            <TimeTip title="Time per Part" arrow placement="top">
+                            <TimeTip title={`Time per ${this.state.partName}`}  arrow placement="top">
                                 <span className="span">
                                     <i className="fas fa-clock"></i>
                                     <input

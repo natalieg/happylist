@@ -31,12 +31,17 @@ export default class SingleTodo extends React.Component {
 
     changeTodoState = (e) => {
         const value = e.target.checked;
-        const partNumber = value ? this.state.partNumber + this.state.sessionGoal : this.state.partNumber - this.state.sessionGoal
+        const partNumber = value ? this.state.partNumber + this.state.sessionGoal : this.state.partNumber - this.state.sessionGoal;
+        console.log("CHANGE TODO STATE partnumber", partNumber,"sesisongoal ", this.state.sessionGoal)
+        if(partNumber >= this.state.allParts){
+            this.setState({goalIncrease: false})
+        }
         const data =
         {
             todoId: this.state.id,
             state: value,
-            partNumber: partNumber
+            partNumber: partNumber,
+            sessionGoal: this.state.sessionGoal,
         }
         this.saveInDb(data);
         this.setState({
@@ -97,10 +102,14 @@ export default class SingleTodo extends React.Component {
         if (partNumberIncr >= this.state.allParts) {
             this.setState({ goalIncrease: false })
         } 
+        console.log("goalincr", sessionGoalIncr)
         const data = {
             todoId: this.state.id,
+            state: this.state.state,
+            sessionGoal: sessionGoalIncr,
             partNumber: partNumberIncr
         }
+        console.log("DATA", data)
         this.saveInDb(data);
     }
 
@@ -108,9 +117,11 @@ export default class SingleTodo extends React.Component {
     decreaseSessionGoal = () => {
         const sessionGoalDec = this.state.sessionGoal - 1
         const partNumberDec = this.state.partNumber - 1;
-        this.setState({ sessionGoal: sessionGoalDec, partNumber: partNumberDec })
+        this.setState({ sessionGoal: sessionGoalDec, partNumber: partNumberDec, goalIncrease: true })
         const data = {
             todoId: this.state.id,
+            state: this.state.state,
+            sessionGoal: sessionGoalDec,
             partNumber: partNumberDec
         }
         this.saveInDb(data);
@@ -185,7 +196,7 @@ export default class SingleTodo extends React.Component {
                                 {this.state.goalIncrease &&
                                     <i className="fas fa-plus-square" onClick={this.increaseSessionGoal}></i>
                                 }
-                                <i class="fas fa-minus-square" onClick={this.decreaseSessionGoal}></i>
+                                <i className="fas fa-minus-square" onClick={this.decreaseSessionGoal}></i>
                             </span>
 
                         </div>

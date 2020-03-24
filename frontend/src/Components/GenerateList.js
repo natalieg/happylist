@@ -46,6 +46,8 @@ export default class GenerateList extends Component {
                         tempTime = tempTime + todo.sessionTime
                     }
                 });
+                //FIXME loeschen
+                console.log("TEMPTODOLIST", tempTodos)
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
@@ -121,7 +123,6 @@ export default class GenerateList extends Component {
         })
     }
 
-
     /*
     Creating a new Todo List
     */
@@ -138,7 +139,6 @@ export default class GenerateList extends Component {
         // Generate List and save data in DB
         await apis.generateList({
             areaIds: areaIds,
-            // hideComplete: this.state.hideComplete,
             showSettings: this.state.showSettings,
             maxNumber: this.state.userMaxTasks
         })
@@ -158,6 +158,7 @@ export default class GenerateList extends Component {
                         sessionTime: todo.sessionTime,
                         state: false
                     })
+                    console.log("generatelist todo", todo)
                 })
                 this.setState({
                     todoList: []
@@ -170,8 +171,6 @@ export default class GenerateList extends Component {
                     isLoading: false
                 })
             })
-        // FIXME ? Hide settings when generating?
-        //this.setState({showSettings: false})
     }
 
     /* Drag & Drop */
