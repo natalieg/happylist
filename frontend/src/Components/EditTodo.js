@@ -99,6 +99,10 @@ export default class EditTodo extends Component {
 
     render() {
         return (
+            // TODO changes after revamp of tasks
+            // TODO timed task
+            // TODO sessiongoal
+            // TODO maybe add icons?
             <div className="editTodo">
                 EDIT <i className="far fa-save icon" onClick={this.onSubmit} />
                 <i className="far fa-trash-alt icon" onClick={this.deleteTask} />

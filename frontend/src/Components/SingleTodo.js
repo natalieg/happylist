@@ -143,7 +143,7 @@ export default class SingleTodo extends React.Component {
                     <label className={this.state.state ? "todoComplete" : "todoIncomplete"}>
                         <span className="todoLabel">{this.state.todoName}</span>
                         {/* FIXME remove the time later just for testing */}
-                        <span className="sessionGoal">{this.state.sessionGoal} {this.state.partName} {this.state.sessionTime}</span>
+                        <span className="sessionGoal">{this.state.sessionGoal} {this.state.partName}</span>
                     </label>
                     <span className="partDisplay">{this.state.partNumber}/{this.state.allParts}
                     </span>

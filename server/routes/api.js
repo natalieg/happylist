@@ -177,11 +177,9 @@ router.post('/generateList', async (req, res, next) => {
         if (todo.sessionGoal > goalDif) {
             tempSessionGoal = goalDif;
         }
-        // FIXME delete clg later
-        let todoName = "DB " + todo.todoName 
         tempList.push({
             todoId: todo._id,
-            todoName: todoName,
+            todoName: todo.todoName,
             partNumber: todo.finishedParts,
             partName: todo.partName,
             allParts: todo.allParts,
@@ -230,16 +228,23 @@ router.post('/saveCurrentTodo', async (req, res, next) => {
     )
     let todo = await TodoModel.findById(todoId)
     let finished = false;
+    let tempSessionGoal = todo.sessionGoal;
+    let goalDif = todo.allParts - partNumber;
+
+    if(todo.sessionGoal > goalDif){
+        tempSessionGoal = goalDif;
+    }
+    
     if (todo.allParts == partNumber) {
         finished = true
     }
     await todo.update({
         finishedParts: partNumber,
+        sessionGoal: tempSessionGoal,
         finished: finished
     })
         .then(response => {
             console.log(response)
-            console.log("AAAREAAs", todo.areaId)
             incompleteTodoCount(todo.areaId)
             res.send({ msg: 'Updated Todo' })
         })
