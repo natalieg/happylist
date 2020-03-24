@@ -46,7 +46,6 @@ export default class  ContactForm extends Component {
             <div className="contactFormContainer">
                 <form action="">
                     <h2>Contact Us</h2>
-                    <p>Write us!!</p>
                     
                     <label htmlFor="name"><b>Name</b>
                         <input
