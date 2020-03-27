@@ -137,15 +137,15 @@ export default class NewTodo extends Component {
 
     // Handles Input for Goalnumber, this can be
     // either a number of x or minutes
+    // FIXME change Session and not sessiongoal
     handleInputParts = (e) => {
         const value = e.target.value;
         const timeCalc = value * this.state.time;
-        this.setState({ totalTime: timeCalc })
-        this.setState({ parts: value })
-        if (this.state.timedGoal) {
-            const calcSessionGoal = value / this.state.partsForTimedGoals;
-            this.setState({ sessionGoal: calcSessionGoal })
-        }
+        const sessionCalc = value / this.state.sessionGoal;
+        this.setState({ 
+            totalTime: timeCalc, 
+            parts: value,  
+            partsForTimedGoals: sessionCalc  })
     }
 
     handleInputPartName = (e) => {
@@ -203,8 +203,11 @@ export default class NewTodo extends Component {
     handleInputTotalTime = (e) => {
         const value = parseInt(e.target.value);
         const timeCalc = value / this.state.parts;
-        this.setState({ time: timeCalc })
-        this.setState({ totalTime: value })
+        const sessionTimeCalc = timeCalc * this.state.sessionGoal
+        this.setState({ 
+            time: timeCalc, 
+            sessionTime: sessionTimeCalc,
+            totalTime: value  })
     }
 
     handlePartsForTimedGoals = (e) => {
@@ -218,13 +221,16 @@ export default class NewTodo extends Component {
         this.setState({ difficulty: value })
     }
 
+    // FIXME add sessioncalc
     changeTimedGoalType = (e) => {
         const value = e.target.checked;
         this.setState({ timedGoal: value });
         if (value) {
+            const sessionCalc = this.state.parts / this.state.sessionGoal;
             this.setState({
                 partName: "Minutes",
                 time: 1,
+                partsForTimedGoals: sessionCalc
             })
         } else {
             this.setState({

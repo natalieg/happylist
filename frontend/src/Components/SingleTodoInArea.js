@@ -10,7 +10,8 @@ export default class SingleTodoInArea extends Component {
             todo: props.todo,
             todoId: props.todo._id,
             hoverActive: false,
-            editActive: false,
+            //FIXME delete true later
+            editActive: true,
             reloadData: props.reloadData,
             updateArea: props.updateArea,
             ctrlActive: false,
@@ -74,11 +75,15 @@ export default class SingleTodoInArea extends Component {
                         allParts={this.state.todo.allParts}
                         partName={this.state.todo.partName}
                         partTime={this.state.todo.partTime}
+                        sessionTime={this.state.todo.sessionTime}
                         totalTime={this.state.todo.totalTime}
                         hideEdit={this.handleEditMode}
                         reloadTodo={this.handleLoadData}
                         reloadData={this.state.reloadData}
                         updateArea={this.state.updateArea}
+                        timedGoal={this.state.todo.timedGoal}
+                        sessionGoal={this.state.todo.sessionGoal}
+                        partsForTimedGoals={this.state.todo.totalTime / this.state.todo.sessionGoal}
                     />
                 }
             </div>
