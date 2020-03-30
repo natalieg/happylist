@@ -3,74 +3,91 @@ import isEmail from 'validator/lib/isEmail';
 
 
 export default class  ContactForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+   state = {
             name: '',
             email: '',
+            password: '',
             message: ''
 
         }
         //this.state = {value: ''};
 
+    
+    handleChange = e => {
+        this.setState({
+            [e.target.name]:e.target.value
+        });
     }
-    handleChange = (e) => {
-        this.setState({value: e.target.value})
-    }
-    handleSubmit = (e) => {
+    handleSubmitData = (e) => {
         e.preventDefault();
-
+        console.log(this.state)
+        //console.log("send button was clicked")
+        this.setState({
+            name: '',
+            email: '',
+            password: '',
+            message: ''
+        });
     }
-    validate = data => {
-        const errors = {};
-          if (!isEmail(data.email)) errors.email = 'Email is required';
-          if (!data.password) errors.password = 'Password is required';
-        return errors;
-    };
+    // CANCEL / DELETE FUNCTION - IF REQUIRED
+    // handleCancelData = () => {
+    //     console.log("cancel button was clicked")
+    // }
+
+    // validate = data => {
+    //     const errors = {};
+    //       if (!isEmail(data.email)) errors.email = 'Email is required';
+    //       if (!data.password) errors.password = 'Password is required';
+    //     return errors;
+    // };
 
     render() {
         return (
-            <form action="" onSubmit = {this.handleSubmit}>
-                <div className="container" onSubmit = {this.handleSubmit}>
-                    <h3>Register</h3>
-                    <p>Please fill in this form to create an account.</p>
-                    <hr/>
+            <div className="contactFormContainer">
+                <form action="">
+                    <h2>Contact Us</h2>
                     
-                    <label htmlFor="name"><b>Name</b></label><br />
-                    <input
-                        type="text" 
-                        placeholder="Enter Name" 
-                        name="name" 
-                        required 
-                        onChange ={this.handleChange}
-                    />
+                    <label htmlFor="name"><b>Name</b>
+                        <input
+                            type="text" 
+                            placeholder="Enter Name" 
+                            name="name" 
+                            value={this.state.name}
+                            required
+                            onChange ={e => this.handleChange(e)}
+                        />
+                    </label>
 
-                    <label htmlFor="email"><b>Email</b></label><br />
-                    <input 
-                        type="email" 
-                        placeholder="Enter Email" 
-                        name="email" 
-                        required 
-                        onChange={this.handleChange}
-                    />
+                    <label htmlFor="email"><b>Email</b>
+                        <input 
+                            type="email" 
+                            placeholder="Enter Email" 
+                            name="email" 
+                            value={this.state.email}
+                            required
+                            onChange={e => this.handleChange(e)}
+                        />
+                    </label>
 
-                    <label htmlFor="message"><b>Message</b></label><br />
-                    <input 
-                        type="text" 
-                        placeholder="Enter Message" 
-                        name="message" 
-                        required
-                        onChange={this.handleChange}
-                    />
+                    <label htmlFor="message"><b>Message</b>
+                        <textarea 
+                            placeholder="Enter Message" 
+                            name="message" 
+                            value={this.state.message}
+                            required
+                            onChange={e => this.handleChange(e)}
+                        />
+                    </label>
 
-                    <hr/>
-
-                    <button type="submit" className="registerbtn">Send</button> 
-                    <button type="submit" className="registerbtn">Cancel</button>
-
-                </div>    
-            </form>
-        );
+                   <button 
+                        type="submit" 
+                        className="btn" 
+                        onClick={e => this.handleSubmitData(e)}>
+                        Send
+                   </button>  
+                </form>
+            </div>
+        )
     }
 }
 
