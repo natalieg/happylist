@@ -99,7 +99,7 @@ router.post('/editArea', async (req, res, next) => {
 
 // Delete Area
 router.delete('/deleteArea', async (req, res, next) => {
-    let {areaId} = req.body;
+    let { areaId } = req.body;
     console.log("DELETE ID", areaId)
     console.log("BODY", req.body)
     await TodoModel.deleteMany({ areaId: areaId })
@@ -114,7 +114,9 @@ router.delete('/deleteArea', async (req, res, next) => {
 
 // Create new ToDo
 router.post('/newTodo', async (req, res, next) => {
-    let { todoName, parts, partName, time, totalTime, difficulty, userId, areaId } = req.body;
+    let { todoName, parts, partName, time, totalTime, difficulty,
+        timedGoal, sessionGoal, sessionTime,
+        userId, areaId } = req.body;
     // FIXME LATER
     userId = "b6cb5d75-c313-4295-a28f-91541d6470d3"
     let color = await AreaModel.findOne({ _id: areaId }, { color: 1, _id: 0 })
@@ -127,7 +129,10 @@ router.post('/newTodo', async (req, res, next) => {
         difficulty: difficulty,
         userId: userId,
         areaId: areaId,
-        areaColor: color.color
+        areaColor: color.color,
+        timedGoal: timedGoal,
+        sessionGoal: sessionGoal,
+        sessionTime: sessionTime
     })
     newTodo.save()
         .then(response => {
@@ -164,14 +169,26 @@ router.post('/generateList', async (req, res, next) => {
 
     let tempList = []
     generatedList.forEach(todo => {
+        // TODO Sessiongoal should never be too high for the full goal
+        // the sessiongoal should never be too high for the 
+        // complete goal 
+        const goalDif = todo.allParts - todo.finishedParts;
+        let tempSessionGoal = todo.sessionGoal;
+        if (todo.sessionGoal > goalDif) {
+            tempSessionGoal = goalDif;
+        }
         tempList.push({
             todoId: todo._id,
             todoName: todo.todoName,
             partNumber: todo.finishedParts,
+            partName: todo.partName,
             allParts: todo.allParts,
             partTime: todo.partTime,
+            color: todo.areaColor,
+            timedGoal: todo.timedGoal,
+            sessionGoal: tempSessionGoal,
+            sessionTime: todo.sessionTime,
             state: false,
-            color: todo.areaColor
         })
     });
     let newList = {
@@ -198,28 +215,36 @@ router.post('/generateList', async (req, res, next) => {
 //Save current Todo
 router.post('/saveCurrentTodo', async (req, res, next) => {
     let user = userId; // Fixme Later
-    let { todoId, state, partNumber } = req.body;
+    let { todoId, state, partNumber, sessionGoal } = req.body;
     await ListModel.updateOne(
         { userId: user, "todos.todoId": todoId },
         {
             $set: {
                 "todos.$.state": state,
-                "todos.$.partNumber": partNumber
+                "todos.$.partNumber": partNumber,
+                "todos.$.sessionGoal": sessionGoal
             }
         }
     )
     let todo = await TodoModel.findById(todoId)
     let finished = false;
+    let tempSessionGoal = todo.sessionGoal;
+    let goalDif = todo.allParts - partNumber;
+
+    if(todo.sessionGoal > goalDif){
+        tempSessionGoal = goalDif;
+    }
+    
     if (todo.allParts == partNumber) {
         finished = true
     }
     await todo.update({
         finishedParts: partNumber,
+        sessionGoal: tempSessionGoal,
         finished: finished
     })
         .then(response => {
             console.log(response)
-            console.log("AAAREAAs", todo.areaId)
             incompleteTodoCount(todo.areaId)
             res.send({ msg: 'Updated Todo' })
         })

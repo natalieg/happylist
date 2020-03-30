@@ -38,14 +38,16 @@ export default class GenerateList extends Component {
                 let tempTime = 0;
                 let tempAllTime = 0;
                 tempTodos.forEach(todo => {
-                    tempAllTime = tempAllTime + todo.partTime;
+                    tempAllTime = tempAllTime + todo.sessionTime;
                     tempAllTasks++
                     if (todo.state) {
                         tempFinished++
                     } else {
-                        tempTime = tempTime + todo.partTime
+                        tempTime = tempTime + todo.sessionTime
                     }
                 });
+                //FIXME loeschen
+                console.log("TEMPTODOLIST", tempTodos)
                 if (tempTodos.length > 0) {
                     this.setState({
                         todoList: tempTodos,
@@ -121,7 +123,6 @@ export default class GenerateList extends Component {
         })
     }
 
-
     /*
     Creating a new Todo List
     */
@@ -138,7 +139,6 @@ export default class GenerateList extends Component {
         // Generate List and save data in DB
         await apis.generateList({
             areaIds: areaIds,
-            // hideComplete: this.state.hideComplete,
             showSettings: this.state.showSettings,
             maxNumber: this.state.userMaxTasks
         })
@@ -151,9 +151,14 @@ export default class GenerateList extends Component {
                         partNumber: todo.finishedParts,
                         allParts: todo.allParts,
                         partTime: todo.partTime,
+                        partName: todo.partName,
                         color: todo.areaColor,
+                        timedGoal: todo.timedGoal,
+                        sessionGoal: todo.sessionGoal,
+                        sessionTime: todo.sessionTime,
                         state: false
                     })
+                    console.log("generatelist todo", todo)
                 })
                 this.setState({
                     todoList: []
@@ -166,8 +171,6 @@ export default class GenerateList extends Component {
                     isLoading: false
                 })
             })
-        // FIXME ? Hide settings when generating?
-        //this.setState({showSettings: false})
     }
 
     /* Drag & Drop */
@@ -255,7 +258,11 @@ export default class GenerateList extends Component {
                                 todoName={todo.todoName}
                                 color={todo.color}
                                 partNumber={todo.partNumber}
+                                partName={todo.partName}
                                 allParts={todo.allParts}
+                                timedGoal={todo.timedGoal}
+                                sessionGoal={todo.sessionGoal}
+                                sessionTime={todo.sessionTime}
                                 state={todo.state}
                                 dragging={this.state.isDragging}
                                 reloadList={this.loadSavedList}
@@ -278,11 +285,12 @@ export default class GenerateList extends Component {
                 {this.state.showSettings &&
                     <div className="settings">
                         <div className="row">
-                            <div><label>Time</label></div>
+                            {/* TODO show when functionality is actually implemented */}
+                            {/* <div><label>Time</label></div> */}
                             <div><label>Tasks</label></div>
                         </div>
                         <div className="row">
-                            <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div>
+                            {/* <div><input type="number" onChange={this.handleInputTime} value={this.state.userTime} /></div> */}
                             <div><input type="number" onChange={this.handleInputTask} value={this.state.userMaxTasks} /></div>
                         </div>
                         <div className="selectAreasDiv">

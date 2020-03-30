@@ -27,6 +27,14 @@ const archiveSchema = new Schema({
                 type: String,
                 require: true
             },
+            timedGoal: {
+                type: Boolean,
+                default: false
+            },
+           sessionGoal: {
+                type: Number,
+                default: 1
+            },
             startDate: {
                 type: Date
             },
@@ -67,8 +75,23 @@ const listSchema = new Schema({
             partNumber: {
                 type: Number
             },
+            partName: {
+                type: String,
+                default: "Part(s)"
+            },
             allParts: {
                 type: Number
+            },
+            sessionGoal: {
+                type: Number,
+                default: 1
+            },
+            sessionTime: {
+                type: Number,
+                default: 10
+            },
+            sessionGoalType: {
+                type: String
             },
             partTime: {
                 type: Number
@@ -90,6 +113,10 @@ const todoSchema = new Schema({
         type: String,
         require: true
     },
+    timedGoal: {
+        type: Boolean,
+        default: false
+    },
     allParts: {
         type: Number,
         default: 1
@@ -102,12 +129,21 @@ const todoSchema = new Schema({
         type: String,
         default: "Part(s)"
     },
+    sessionGoal: {
+        type: Number,
+        default: 1
+    },
     partTime: {
         type: Number,
-        default: 20
+        default: 10
+    },
+    sessionTime: {
+        type: Number,
+        default: 10
     },
     totalTime: {
         type: Number,
+        default: 10
     },
     difficulty: {
         type: Number,

@@ -162,7 +162,7 @@ export default class SingleArea extends Component {
                             <h2>{this.state.area.areaName}</h2>
                             {/* FIXME props taskcount works but not state taskcount ??? */}
                             <p className='areaSummary'>Tasks: {this.props.taskcount}</p>
-                            <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}>Add ToDo</button>
+                            <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}><i className="fas fa-plus"></i> Task</button>
                         </div>
                         <div className="newTodoArea">
                             {this.state.newTodoVisible ?
