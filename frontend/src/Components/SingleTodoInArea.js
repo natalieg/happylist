@@ -11,7 +11,7 @@ export default class SingleTodoInArea extends Component {
             todoId: props.todo._id,
             hoverActive: false,
             //FIXME delete true later
-            editActive: true,
+            editActive: false,
             reloadData: props.reloadData,
             updateArea: props.updateArea,
             ctrlActive: false,
