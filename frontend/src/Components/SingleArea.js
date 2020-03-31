@@ -39,8 +39,8 @@ export default class SingleArea extends Component {
         })
     }
 
-    componentDidUpdate(){
-        if(this.state.editActive){
+    componentDidUpdate() {
+        if (this.state.editActive) {
             this.areaTitleInput.focus();
         }
     }
@@ -73,7 +73,7 @@ export default class SingleArea extends Component {
         if (!isActive) {
             console.log(`status is ${isActive}`)
             this.setState({ newTodoVisible: false });
-        } 
+        }
     }
 
     handleMouseOver = () => {
@@ -162,7 +162,10 @@ export default class SingleArea extends Component {
                             <h2>{this.state.area.areaName}</h2>
                             {/* FIXME props taskcount works but not state taskcount ??? */}
                             <p className='areaSummary'>Tasks: {this.props.taskcount}</p>
-                            <button value={this.state.area.btnValue} onClick={this.toggleNewTodo}><i className="fas fa-plus"></i> Task</button>
+                            <button value={this.state.area.btnValue}
+                                onClick={this.toggleNewTodo}>
+                                {this.state.newTodoVisible ? <i className="fas fa-minus"/> :  <i className="fas fa-plus"/>}
+                                Task</button>
                         </div>
                         <div className="newTodoArea">
                             {this.state.newTodoVisible ?

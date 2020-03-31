@@ -32,9 +32,12 @@ export default class SingleTodo extends React.Component {
     changeTodoState = (e) => {
         const value = e.target.checked;
         const partNumber = value ? this.state.partNumber + this.state.sessionGoal : this.state.partNumber - this.state.sessionGoal;
-        console.log("CHANGE TODO STATE partnumber", partNumber,"sesisongoal ", this.state.sessionGoal)
-        if(partNumber >= this.state.allParts){
-            this.setState({goalIncrease: false})
+        console.log("CHANGE TODO STATE partnumber", partNumber, "sesisongoal ", this.state.sessionGoal)
+        if (partNumber >= this.state.allParts) {
+            this.setState({ goalIncrease: false })
+        }
+        if (partNumber <= 0) {
+            this.setState({ goalDecrease: false })
         }
         const data =
         {
@@ -101,7 +104,10 @@ export default class SingleTodo extends React.Component {
         this.setState({ sessionGoal: sessionGoalIncr, partNumber: partNumberIncr })
         if (partNumberIncr >= this.state.allParts) {
             this.setState({ goalIncrease: false })
-        } 
+        }
+        if (sessionGoalIncr > 0){
+            this.setState({goalDecrease: true})
+        }
         console.log("goalincr", sessionGoalIncr)
         const data = {
             todoId: this.state.id,
@@ -123,6 +129,9 @@ export default class SingleTodo extends React.Component {
             state: this.state.state,
             sessionGoal: sessionGoalDec,
             partNumber: partNumberDec
+        }
+        if (sessionGoalDec <= 0) {
+            this.setState({ goalDecrease: false });
         }
         this.saveInDb(data);
     }
@@ -196,7 +205,9 @@ export default class SingleTodo extends React.Component {
                                 {this.state.goalIncrease &&
                                     <i className="fas fa-plus-square" onClick={this.increaseSessionGoal}></i>
                                 }
-                                <i className="fas fa-minus-square" onClick={this.decreaseSessionGoal}></i>
+                                {this.state.goalDecrease &&
+                                    <i className="fas fa-minus-square" onClick={this.decreaseSessionGoal}></i>
+                                }
                             </span>
 
                         </div>

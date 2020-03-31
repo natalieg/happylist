@@ -277,3 +277,16 @@
 .focus {
     background-color: rgb(233, 218, 136) !important;
 }   
+
+.colorPickerNewArea {
+    margin: 5px;
+    width: 210px !important;
+    span div {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+
+.colorValueInput {
+    margin-top: 50px;
+}

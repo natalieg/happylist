@@ -21,6 +21,7 @@
 
 .list {
     width: 80%;
+    min-width: 650px;
     max-width: 800px;
     margin: 0 auto;
 
@@ -257,4 +258,18 @@
     //background: linear-gradient(284deg, rgba(34,193,195,1) 0%, rgba(34,193,195,1) 100%);
     background: linear-gradient(317deg, rgba(34, 192, 195, 0.37) 0%, rgba(34, 192, 195, 0.657) 55%, rgb(38, 236, 170) 100%);
 
+}
+
+// Responsive
+
+@media only screen and (max-width:600px){
+    .list {
+        min-width: 400px;
+        width: 100%;
+    }
+    // TODO temp solution to hide the flags, at a later point the flags should be rendered
+    // differently when on mobile or when the screen is very small
+    .flag {
+        display: none;
+    }
 }

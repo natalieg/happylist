@@ -71,12 +71,13 @@ export default class NewArea extends Component {
                     placeholder="Area Name"
                 />
                 <Circle
-                    className="colorPicker"
+                    className="colorPickerNewArea"
                     color={ this.state.color }
                     onChangeComplete={ this.handleClickColor }
       />
                     <input
                     name="color"
+                    className="colorValueInput"
                     type="text"
                     value={this.state.color}
                     onChange={this.handleInputColor}
