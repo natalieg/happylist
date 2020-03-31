@@ -10,7 +10,6 @@ export default class SingleTodoInArea extends Component {
             todo: props.todo,
             todoId: props.todo._id,
             hoverActive: false,
-            //FIXME delete true later
             editActive: false,
             reloadData: props.reloadData,
             updateArea: props.updateArea,
@@ -55,6 +54,7 @@ export default class SingleTodoInArea extends Component {
             <div className={`singleTodoArea ${(this.state.todo.finished && !this.state.editActive) ? "todoComplete" : "todoIncomplete"}`}
                 onMouseEnter={this.handleMouseOver}
                 onMouseLeave={this.handleMouseOut}
+                onDoubleClick={this.handleEditMode}
                 key={this.state.todo._id}>
                 {!this.state.editActive &&
                     this.state.todo.todoName
@@ -64,7 +64,7 @@ export default class SingleTodoInArea extends Component {
                         onClick={this.handleEditMode} />
                    
                 }
-                <span className="todoProgress">{this.calcProgress()}%</span>
+                {!this.state.hoverActive&& <span className="todoProgress">{this.calcProgress()}%</span>}
 
                 {this.state.editActive &&
                     <EditTodo

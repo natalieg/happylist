@@ -93,6 +93,10 @@ export default class NewTodo extends Component {
     };
 
     // TODO: check for the new input fields esp when its a timed goal
+    // TODO check sessiongoal
+    // TODO check sessiontime
+
+    // TODO Timed Sessionminutes
     validate = () => {
         const data = this.state
         this.setState({ numError: false, numErrorText: "" })
@@ -104,16 +108,24 @@ export default class NewTodo extends Component {
             errors.partsStr = 'Parts';
             numErr += 'Parts, '
         };
+        if (data.sessionGoal <= 0 || (data.sessionGoal % 1) !== 0) {
+            errors.sessionGoal = 'Sessiongoal';
+            numErr += 'Sessiongoal, '
+        }
         if (data.time <= 0 || (data.time % 1) !== 0) {
             errors.timeStr = 'Time ';
             numErr += 'Time, '
+        }
+        if (data.sessionTime <= 0 || (data.sessionTime % 1) !== 0) {
+            errors.sessionTime = 'Sessiontime ';
+            numErr += 'Sessiontime, '
         }
         if (data.totalTime <= 0 || (data.totalTime % 1) !== 0) {
             errors.totalTime = 'TotalTime'
             numErr += 'Total Time'
         };
 
-        if (errors.partsStr || errors.timeStr || errors.totalTime) {
+        if (errors.partsStr || errors.timeStr || errors.totalTime || errors.sessionGoal || errors.sessionTime) {
             this.setState({ numError: true, numErrorText: numErr })
         }
 
@@ -137,15 +149,15 @@ export default class NewTodo extends Component {
 
     // Handles Input for Goalnumber, this can be
     // either a number of x or minutes
-    // FIXME change Session and not sessiongoal
     handleInputParts = (e) => {
         const value = e.target.value;
         const timeCalc = value * this.state.time;
-        const sessionCalc = value / this.state.sessionGoal;
-        this.setState({ 
-            totalTime: timeCalc, 
-            parts: value,  
-            partsForTimedGoals: sessionCalc  })
+        const sessionCalc = parseInt(value / this.state.sessionGoal);
+        this.setState({
+            totalTime: timeCalc,
+            parts: value,
+            partsForTimedGoals: sessionCalc
+        })
     }
 
     handleInputPartName = (e) => {
@@ -167,7 +179,7 @@ export default class NewTodo extends Component {
             if (value > this.state.parts) {
                 this.setState({ partsForTimedGoals: 1 });
             } else {
-                const calcPartsForTimedGoals = this.state.parts / value;
+                const calcPartsForTimedGoals = parseInt(this.state.parts / value);
                 this.setState({ partsForTimedGoals: calcPartsForTimedGoals });
             }
         }
@@ -204,10 +216,11 @@ export default class NewTodo extends Component {
         const value = parseInt(e.target.value);
         const timeCalc = value / this.state.parts;
         const sessionTimeCalc = timeCalc * this.state.sessionGoal
-        this.setState({ 
-            time: timeCalc, 
+        this.setState({
+            time: timeCalc,
             sessionTime: sessionTimeCalc,
-            totalTime: value  })
+            totalTime: value
+        })
     }
 
     handlePartsForTimedGoals = (e) => {
@@ -221,7 +234,6 @@ export default class NewTodo extends Component {
         this.setState({ difficulty: value })
     }
 
-    // FIXME add sessioncalc
     changeTimedGoalType = (e) => {
         const value = e.target.checked;
         this.setState({ timedGoal: value });
@@ -330,6 +342,7 @@ export default class NewTodo extends Component {
                     <LightTooltip title="How much do you want to do in a session?" arrow placement="left">
                         <p>
                             <i className="fas fa-puzzle-piece" />
+                            {/* TODO Validation */}
                             <input
                                 id="sessionGoalInput"
                                 name="sessionGoal"
@@ -337,7 +350,9 @@ export default class NewTodo extends Component {
                                 autoComplete="off"
                                 min="0"
                                 style={{ width: "20%" }}
-                                className={`${this.state.focusSessionTime ? "focus" : null}`}
+                                className={`
+                                ${this.state.errors.sessionGoal ? "inputError" : null}
+                                ${this.state.focusSessionTime ? "focus" : null}`}
                                 value={this.state.sessionGoal}
                                 onChange={this.handleInputSessionGoal}
                                 onKeyDown={this.checKey}
@@ -366,7 +381,7 @@ export default class NewTodo extends Component {
                         </p>
                         :
                         <p className="time">
-                            <TimeTip title={`Time per ${this.state.partName}`}  arrow placement="top">
+                            <TimeTip title={`Time per ${this.state.partName}`} arrow placement="top">
                                 <span className="span">
                                     <i className="fas fa-clock"></i>
                                     <input
@@ -389,7 +404,9 @@ export default class NewTodo extends Component {
                                         // TODO: ERROR CHECKING
                                         autoComplete="off"
                                         style={{ width: "20%" }}
-                                        className={`${this.state.focusSessionTime ? "focus" : null}`}
+                                        className={`
+                                        ${this.state.errors.sessionTime ? "inputError" : null}
+                                        ${this.state.focusSessionTime ? "focus" : null}`}
                                         value={this.state.sessionTime}
                                         onChange={this.handleInputSessionTime}
                                         onKeyDown={this.checKey}
@@ -398,7 +415,7 @@ export default class NewTodo extends Component {
                                     />
                                 </span>
                             </TimeTip>
-                            <Tooltip title="Overall Time" arrow placement="top">
+                            <TimeTip title="Overall Time" arrow placement="top">
                                 <span>
                                     <input
                                         id="totalTimeInput"
@@ -415,7 +432,7 @@ export default class NewTodo extends Component {
                                     />
                                     <label className="timeLabel">min</label>
                                 </span>
-                            </Tooltip>
+                            </TimeTip>
                         </p>
                     }
 

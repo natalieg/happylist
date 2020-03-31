@@ -1,4 +1,13 @@
 .editTodo {
+    .fa-save {
+        color: black;
+        position: absolute;
+        right: 22px;
+    }
+    .fa-trash-alt {
+        position: absolute;
+        right: 55px !important;
+    }
     p {
         position: relative;
         width: 95%;
@@ -16,9 +25,12 @@
             margin-right: 4px;
             color: rgb(190, 141, 16);
         }
+        .todoName {
+            margin-left: 25px;
+        }
         .timeCheck {
             position: absolute;
-            right: 12px;
+            left: -1px;
             top: 6px;
             padding-left: 5px;     
             transition: .5s    
@@ -30,8 +42,8 @@
         }
         .fa-slash {
             position: absolute;
-            top: 6px;
-            right: 10px;
+            top: 5px;
+            left: 2px;
         }
         .active {
             color: black;
