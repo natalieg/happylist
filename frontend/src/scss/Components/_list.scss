@@ -37,6 +37,7 @@
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+    min-width: 420px;
 
     .button {
         padding: 5px;
@@ -52,6 +53,7 @@
 }
 
 .dragContainer {
+    min-width: 380px;
     width: 50%;
     margin: 4px auto;
 }

@@ -203,9 +203,12 @@
     transition: .5s;
     position: relative;
     .icon {
+        position: absolute;
+        right: 3px;
         transition: .3s;
         width: 16px;
         height: 16px;
+        padding: 2px;
     }
     .icon:hover {
         transform: scale(1.2);
@@ -221,14 +224,9 @@
 
 .fa-edit {
     position: absolute;
-    right: 50px;
+    right: 40px;
     z-index: 5;
     top: 4px
-}
-
-.fa-trash-alt {
-    position: absolute;
-    right: 15px;
 }
 
 .editTodo {
@@ -237,11 +235,6 @@
     padding: 3px;
     input {
         font-size: 15px;
-    }
-    .fa-save {
-        color: black;
-        position: absolute;
-        right: 70px;
     }
 }
 

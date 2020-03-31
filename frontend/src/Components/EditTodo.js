@@ -27,6 +27,10 @@ export default class EditTodo extends Component {
         }
     }
 
+    componentDidMount(){
+        this.taskNameInput.focus();
+    }
+
     handleSendData = async () => {
         const data = this.state;
         await apis.editTodo(data).then(response => {
@@ -159,10 +163,11 @@ export default class EditTodo extends Component {
         const value = parseInt(e.target.value);
         const timeCalc = value / this.state.allParts;
         const sessionTimeCalc = timeCalc * this.state.sessionGoal
-        this.setState({ 
-            partTime: timeCalc, 
-            totalTime: value, 
-            sessionTime: sessionTimeCalc })
+        this.setState({
+            partTime: timeCalc,
+            totalTime: value,
+            sessionTime: sessionTimeCalc
+        })
     }
 
     // FIXME check
@@ -180,20 +185,24 @@ export default class EditTodo extends Component {
                 <i className="far fa-trash-alt icon" onClick={this.deleteTask} />
                 {/* Name, goaltype */}
                 <p>
-                    <input name="todoName"
-                        placeholder="Taskname"
-                        autoComplete="off"
-                        style={{ width: "80%" }}
-                        value={this.state.todoName}
-                        onChange={this.handleInputName}
-                        onKeyDown={this.checKey} />
                     {!this.state.timedGoal && <i className="fas fa-slash inactive"></i>}
                     <i className={`fas fa-clock timeCheck ${this.state.timedGoal ? "active" : "inactive"}`}
                         onClick={this.changeTimedGoalType} />
+                    <input name="todoName"
+                        ref={(input)=>{this.taskNameInput = input;}}
+                        className="todoName"
+                        placeholder="Taskname"
+                        autoComplete="off"
+                        style={{ width: "81%" }}
+                        value={this.state.todoName}
+                        onChange={this.handleInputName}
+                        onKeyDown={this.checKey} />
+
                 </p>
                 {/* Task goal, progress */}
                 <p>
                     <i className="fas fa-trophy"></i>
+                    {/* TODO finished parts shouldnt be higher than all parts */}
                     <input name="partNumber"
                         type="number"
                         autoComplete="off"
@@ -202,7 +211,6 @@ export default class EditTodo extends Component {
                         onChange={this.handleFinishedParts}
                         onKeyDown={this.checKey} />
                     /
-                    {/* TODO error check: allparts darf nicht kleiner sein als "partNumber" */}
                     <input name="allParts"
                         type="number"
                         className={`${(this.state.focusTimeGoal && !this.state.timedGoal) ? "focus" : null}`}
@@ -245,7 +253,6 @@ export default class EditTodo extends Component {
                 </p>
 
                 {/* Time Information for normal Goal */}
-                {/* TODO */}
                 {!this.state.timedGoal &&
                     <p>
                         <i className="fas fa-clock"></i>
@@ -258,7 +265,6 @@ export default class EditTodo extends Component {
                             value={this.state.partTime}
                             onChange={this.handleInputTime}
                             onKeyDown={this.checKey} />
-                        {/* TODO SessionTime */}
                         <input
                             id="sessionTimeInput"
                             type="number" name="totalTime" placeholder="totalTime" min="0"
