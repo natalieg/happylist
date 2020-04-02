@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PieChart from 'react-minimal-pie-chart';
 import apis from '../api'
 

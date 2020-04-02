@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import isEmail from 'validator/lib/isEmail';
-
 
 export default class  ContactForm extends Component {
    state = {
