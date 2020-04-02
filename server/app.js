@@ -9,7 +9,7 @@ const connectDB = require('./config/db')
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
-dotenv.config({path: './config/config.env'})
+dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
@@ -21,9 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
+
+//FIXME Test
+app.set('view engine', 'jade');
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
