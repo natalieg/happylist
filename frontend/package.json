@@ -9,7 +9,7 @@
     "concurrently": "^5.1.0",
     "css-loader": "^3.2.0",
     "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-addons-css-transition-group": "^15.6.2",
